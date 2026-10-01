@@ -5,7 +5,7 @@ type: topic
 title: Rekursja i „dziel i rządź”, MergeSort
 short: Rekursja i dziel i rządź
 desc: Jak działa rekursja, wieże Hanoi, generowanie permutacji, zasada „dziel i rządź”, sortowanie przez scalanie i rozwiązywanie równań rekurencyjnych (twierdzenie o rekurencji uniwersalnej).
-sources: asd4.pdf; asd5.pdf (§1 MergeSort); asd6.pdf (rekursja a stos); Dziel-RzadzC.pdf; Wyklady 2009/wyklad_2.pdf (rekurencja, tw. o rekurencji uniwersalnej)
+sources: 2026/2027 (M. Sydow): sortOne4-pl.pdf (MergeSort), recursion6-pl.pdf · 2025/2026: asd4.pdf; asd5.pdf (§1 MergeSort); asd6.pdf (rekursja a stos); Dziel-RzadzC.pdf; Wyklady 2009/wyklad_2.pdf (rekurencja, tw. o rekurencji uniwersalnej)
 exercises: asd 05.pdf (zad. 3), asd 06.pdf (zad. 2)
 ---
 
@@ -334,44 +334,41 @@ Interpretacja: porównujemy rząd narzutu f(n) z $n^{\log_b a}$ — wyższy z ni
 
 === summary ===
 
-## Wersja 2026/2027 (M. Sydow)
+:::exam Co trzeba umieć
+Zadanie dopuszczeniowe 2: **liczba porównań w MergeSort** i ciągi przy **ostatnim** `merge()`. Rekurencja: Hanoi, Fibonacci, 3 schematy, twierdzenie uniwersalne.
+:::
 
-- mergeSort(S, len): m = len/2 (lewa krótsza), merge z `<`; merge: W = A = Θ(n), S = Θ(n); mergeSort Θ(len log len).
-- Hanoi: hanoi(n) = 2·hanoi(n−1) + 1 = 2ⁿ − 1. Fibonacci rekurencyjnie — wykładniczo wiele wywołań; wzór Bineta.
-- t(n/2) + c → Θ(log n); 2t(n/2) + c → Θ(n); 2t(n/2) + cn → Θ(n log n).
-- Tw. uniwersalne: f vs n^(log_b a): mniejszy → Θ(n^(log_b a)); równy → ·log n; większy (+ regularność) → Θ(f).
+## MergeSort (wersja ze slajdów)
 
+- podział: **m = len/2** → lewa część $S[0:m]$ **krótsza** przy nieparzystej długości (7 → 3 | 4),
+- `merge`: porównuj pierwsze elementy, bierz mniejszy (`a1[i] < a2[j]`, przy równych bierze z **prawego**), resztę przepisz **bez porównań**.
 
-## Rekursja
+:::example Liczenie porównań
+Sumuj porównania każdego `merge` od dołu. Jeden `merge` ciągów długości $p$, $q$: od $\min(p,q)$ do $p+q-1$ porównań. Ostatni merge = posortowana lewa | posortowana prawa połowa.
+:::
 
-- funkcja wywołuje samą siebie; **przypadek bazowy** + **krok zmniejszający** problem.
-- każde wywołanie ma lokalne kopie zmiennych → **stos wywołań**; pamięć = głębokość rekursji.
+:::formula Złożoność
+$$W=A=\Theta(n\log n) \qquad S_{\text{merge}}(n)=\Theta(n)$$
+Na listach dowiązaniowych merge nie potrzebuje dodatkowej pamięci.
+:::
 
-## Przykłady
+## Rekurencja
 
-- **dwójkowy(x):** cyfra x%2, najpierw rekursja dla x/2, potem wypisanie.
-- **Hanoi:** n−1 na pomocniczy, największy na cel, n−1 na cel; **H(n) = 2H(n−1) + 1 = 2ⁿ − 1**.
-- **Permutacje:** n! wyników, czas Θ(n!), pamięć O(n).
+| Równanie ($n=2^k$) | Rozwiązanie | Przykład |
+|---|---|---|
+| $t(n)=t(n/2)+c$ | $\Theta(\log n)$ | binSearch |
+| $t(n)=2t(n/2)+c$ | $\Theta(n)$ | maksimum rekurencyjnie |
+| $t(n)=2t(n/2)+cn$ | $\Theta(n\log n)$ | mergeSort |
 
-## Dziel i rządź
+:::formula Ważne wzory
+$$\text{hanoi}(n)=2\,\text{hanoi}(n-1)+1=2^n-1 \qquad F(n)=\tfrac{1}{\sqrt5}\big(\varphi^n-\psi^n\big)$$
+**Tw. uniwersalne** $T(n)=aT(n/b)+f(n)$: porównaj $f$ z $n^{\log_b a}$ — mniejsze → $\Theta(n^{\log_b a})$; równe → $\Theta(n^{\log_b a}\log n)$; większe (+ regularność) → $\Theta(f)$.
+:::
 
-małe dane → wprost; duże → podziel, rozwiąż podproblemy, scal.
-
-## MergeSort
-
-- podział na połowy, rekursja, **scalanie** (≤ p + q − 1 porównań).
-- T(n) = T(⌊n/2⌋) + T(⌈n/2⌉) + n − 1 = **n log₂ n + O(n)** (także pesymistycznie).
-- pamięć **O(n)**, **stabilny**.
-
-## Twierdzenie o rekurencji uniwersalnej: T(n) = aT(n/b) + f(n)
-
-| f(n) vs n^(log_b a) | T(n) |
-|---|---|
-| wolniej | Θ(n^(log_b a)) |
-| tak samo | Θ(n^(log_b a) log n) |
-| szybciej (+ warunek regularności) | Θ(f(n)) |
-
-Nie dotyczy T(n) = T(n−1) + … — tu rozwijamy.
+:::warn Typowe błędy
+- lewa połowa **dłuższa** — u Sydowa jest **krótsza**,
+- liczenie porównań przy przepisywaniu reszty ciągu.
+:::
 
 === tasks ===
 

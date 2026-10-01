@@ -9,6 +9,10 @@ sources: Dziel-Rzadz-FFT.pdf
 exercises: brak zestawu na ćwiczeniach — zadania od autora strony
 ---
 
+:::info Poza programem 2026/2027
+Cały ten temat (Karacuba, FFT) pochodzi z wykładów 2025/2026 i **nie należy do programu 2026/2027** — to materiał dodatkowy, nie będzie go na sprawdzianach.
+:::
+
 ## Szkolne mnożenie jest kwadratowe
 
 Mnożąc „w słupku” dwie liczby n-cyfrowe, mnożymy **każdą cyfrę przez każdą**:
@@ -190,29 +194,16 @@ W praktyce FFT liczy na liczbach zmiennoprzecinkowych — wynik trzeba **zaokrą
 
 === summary ===
 
-## Mnożenie
+:::info Poza programem 2026/2027
+Mnożenie Karacuby i FFT pochodzą z wykładów 2025/2026 — **nie ma ich na slajdach M. Sydowa** ani w zakresie sprawdzianów 2026/2027. Temat zostaje jako materiał dodatkowy.
+:::
 
-- szkolne: **n²** mnożeń cyfr; wielomiany: cᵢ = Σⱼ aⱼbᵢ₋ⱼ.
-- podział A = Aₗ + x^(n/2)Aₕ; 4 iloczyny → T(n) = 4T(n/2) = **n²** (brak zysku).
+## W pigułce
 
-## Karacuba
-
-- L = AₗBₗ, H = AₕBₕ, S = (Aₗ + Aₕ)(Bₗ + Bₕ), środek = **S − L − H**.
-- **A·B = L + x^(n/2)(S − L − H) + xⁿH**.
-- K(n) = 3K(n/2) ⇒ **n^(log₂ 3) ≈ n^1,585**; opłaca się od ~320 bitów.
-- (1 + 2x)(3 + 4x): L = 3, H = 8, S = 21, M = 10 → 3 + 10x + 8x².
-
-## Interpolacja
-
-- wielomian stopnia n ⇔ wartości w n + 1 punktach; C(x) = A(x)B(x) punktowo.
-- Horner O(n) na punkt; Lagrange O(n²).
-
-## FFT (Cooley–Tukey 1965)
-
-- punkty: n-te pierwiastki z jedności; (ωₙⁱ)² = ωₙ/₂ⁱ; ω^(n/2) = −1.
-- **A(x) = Aₑ(x²) + x·Aₒ(x²)**; T(n) = 2T(n/2) + n = **O(n log n)**.
-- interpolacja: **rₜ = S(ω⁻ᵗ)/n** — też FFT.
-- mnożenie wielomianów: 2× FFT + n mnożeń + FFT⁻¹ ≈ 3n log n + n.
+- **Dziel i rządź** dla mnożenia: liczby $n$-cyfrowe dzielimy na połowy.
+- Szkolne: 4 mnożenia połówek → $\Theta(n^2)$.
+- **Karacuba:** 3 mnożenia zamiast 4 → $T(n)=3T(n/2)+O(n)=\Theta(n^{\log_2 3})\approx n^{1{,}585}$.
+- **FFT:** mnożenie wielomianów przez wartości w pierwiastkach z jedynki → $O(n\log n)$.
 
 === tasks ===
 

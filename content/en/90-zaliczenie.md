@@ -97,7 +97,7 @@ Recommendations by the site author — not part of the rules.
 
 1. **Don't skip classes** — the limit is only 2 unexcused absences.
 2. **After every lecture** (at the latest the day before the class) go through the slides: the definitions in the "Definition" boxes and the list "What you must know" — that is how you collect entry-quiz points.
-3. From mid-semester, **practise tracing algorithms by hand** from the practical-test scope — the [Tests 2026/2027](page:exams) page has ready-made sets with solutions.
+3. From mid-semester, **practise tracing algorithms by hand** from the practical-test scope — the [Tests 2026/2027](page:exams) page has ready-made sets with solutions. Full mock tests and entry quizzes: [Practice tests](page:mock).
 4. Volunteer at the board — **activity** points can't be lost.
 5. Before the knowledge test, learn the **exact definitions by heart** (correctness, complexity, notations) — see topics [2](topic:t02) and [3](topic:t03), sections "2026/2027 lecture version".
 

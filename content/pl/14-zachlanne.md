@@ -5,12 +5,16 @@ type: topic
 title: Programowanie zachłanne — Huffman, plecak, Dijkstra, Prim, Kruskal
 short: Algorytmy zachłanne
 desc: Kiedy wybór najlepszy lokalnie daje optimum globalne, a kiedy nie. Wybór zajęć, kody Huffmana, problem plecakowy, najkrótsze ścieżki (Dijkstra) i minimalne drzewo rozpinające (Prim, Kruskal).
-sources: ProgramowanieZachlanne.pdf; wyklad_11.pdf (Metoda zachłanna I); wyklad_10.pdf (Find-Union)
+sources: 2026/2027 (M. Sydow): shortestPaths12-pl.pdf, mst-pl.pdf · 2025/2026: ProgramowanieZachlanne.pdf; wyklad_11.pdf (Metoda zachłanna I); wyklad_10.pdf (Find-Union)
 exercises: asd 12.pdf (zad. 1–3)
 ---
 
 :::exam Sprawdzian 2026/2027
 Ten temat powstał na podstawie wykładów 2025/2026. **Na sprawdzianach 2026/2027 obowiązują wersje ze slajdów M. Sydowa** — znajdziesz je w sekcji [„Wersja z wykładu 2026/2027”](topic:t14#wersja-z-wykładu-2026-2027-m-sydow-znajdowanie-najkrótszych-) na końcu tematu (kod przepisany ze slajdów). Zadania dopuszczeniowe i zadania treningowe: [Sprawdziany 2026/2027](page:exams).
+:::
+
+:::info Poza programem 2026/2027
+Huffman, problem plecakowy i wybór zajęć to materiał 2025/2026 — **poza programem 2026/2027**. Obowiązujące: najkrótsze ścieżki i MST (sekcje na końcu tematu).
 :::
 
 ## Problemy optymalizacyjne i strategia zachłanna
@@ -335,33 +339,44 @@ Definicje drzewa i lasu rozpinającego, rozcięcia i cyklu; własność rozcięc
 
 === summary ===
 
-## Wersja 2026/2027 (M. Sydow)
+:::exam Co trzeba umieć
+**Kruskal** (sprawdzian praktyczny): krawędzie w kolejności akceptacji, **remisy — alfabetycznie**. Prim, Dijkstra (wartości `distance`, `parent`), relaksacja, wybór algorytmu.
+:::
 
-- relax(u, v): jeśli u.distance + w < v.distance → zmień distance i parent.
-- Topo-sort: DFS, malejące f; możliwe ⇔ brak cykli.
-- DAG O(n + m); Dijkstra (wagi ≥ 0, PQ) O((n + m) log n); Bellman-Ford (n−1 rund) O(nm) + wykrywanie ujemnych cykli.
-- MST: własność rozcięcia (najlżejsza krawędź rozcięcia jest „przydatna”) i cyklu (najcięższa w cyklu — zbędna). Prim (PQ, `dist` = waga krawędzi do drzewa) O((n + m) log n); Kruskal (sortowanie + union-find) O(m log m); remisy — alfabetycznie.
+## Minimalne drzewo rozpinające (MST)
 
+:::formula Własności
+**Rozcięcia:** najlżejsza krawędź rozcięcia należy do pewnego MST. **Cyklu:** najcięższa krawędź cyklu jest zbędna.
+:::
 
-## Zachłanność
-
-- w każdym kroku najlepszy lokalnie wybór, bez cofania; **trzeba udowodnić** poprawność.
-- kontrprzykład: most (10, 5, 2, 1) — zachłannie 19 min, optimum 17.
-
-## Poprawne algorytmy zachłanne
-
-| Problem | Reguła wyboru | Koszt |
+| | idea | złożoność |
 |---|---|---|
-| wybór zajęć | najwcześniejszy **koniec** | O(n log n) |
-| plecak ciągły | największe **v/w** | O(n log n) |
-| Huffman | scal **dwa najrzadsze** | O(n log n); posortowane — stos+kolejka O(n) |
-| Dijkstra (wagi ≥ 0) | niegotowy z najmniejszym **d** | O(n²) lub O((n+m) log n) |
-| Prim | najtańsza krawędź **z drzewa na zewnątrz** | O(m log n) |
-| Kruskal | najtańsza krawędź **bez cyklu** (Find-Union) | O(m log m) |
+| **Kruskal** | krawędzie rosnąco po wadze; bierz, jeśli nie tworzy cyklu (**union-find**) | $O(m\log m)$ |
+| **Prim** | rośnij drzewo od $s$; PQ z wagą najlżejszej krawędzi do drzewa (`dist`) | $O((n+m)\log n)$ |
 
-- **Fano:** żadne słowo kodowe nie jest prefiksem innego; kody = liście drzewa.
-- plecak **0/1** — zachłanność zawodzi.
-- Dijkstra: d[v], p[v], relaksacja d[w] := min(d[w], d[u] + c(u,w)).
+## Najkrótsze ścieżki z jednego źródła
+
+:::formula Relaksacja krawędzi (u, v)
+$$\text{if } u.d + w(u,v) < v.d:\quad v.d = u.d + w(u,v),\;\; v.\text{parent}=u$$
+:::
+
+| wariant | kiedy | złożoność |
+|---|---|---|
+| DAG | graf acykliczny (sortowanie topologiczne: DFS, malejące `f`) | $O(n+m)$ |
+| **Dijkstra** | wagi **nieujemne**; PQ po `distance` | $O((n+m)\log n)$ |
+| Bellman-Ford | dowolne wagi; $n-1$ rund relaksacji + wykrycie ujemnego cyklu | $O(nm)$ |
+
+$\mu(s,v)=+\infty$ — nieosiągalny; $-\infty$ — ścieżka przez ujemny cykl.
+
+:::warn Typowe błędy
+- Kruskal bez reguły **alfabetycznej** przy równych wagach (zmienia odpowiedź!),
+- Dijkstra przy ujemnych wagach,
+- w Dijkstrze relaksacja ostra (`>`): przy remisie rodzic się **nie** zmienia.
+:::
+
+:::info Poza programem 2026/2027
+Huffman, problem plecakowy i wybór zajęć z tego tematu to materiał z 2025/2026 (nie ma ich na slajdach M. Sydowa).
+:::
 
 === tasks ===
 

@@ -5,7 +5,7 @@ type: topic
 title: Graphs — representations, depth-first and breadth-first search, Find-Union
 short: Graphs, DFS, BFS
 desc: What a graph is, adjacency lists and matrix, the general graph traversal scheme, DFS with a stack, BFS with a queue, stepwise refinement and the Find-Union (disjoint sets) structure.
-sources: asd11.pdf; Wyklady 2009/wyklad_2.pdf (graphs), asd 09 wyklad_7.pdf (DFS, BFS); wyklad_10.pdf (Find-Union structure)
+sources: 2026/2027 (M. Sydow): graphsOne10-pl.pdf, graphsTwo10b-pl.pdf · 2025/2026: asd11.pdf; Wyklady 2009/wyklad_2.pdf (graphs), asd 09 wyklad_7.pdf (DFS, BFS); wyklad_10.pdf (Find-Union structure)
 exercises: no separate problem set — tasks by the site author (weighted graphs are in topic 14)
 ---
 
@@ -304,31 +304,45 @@ Definitions of graphs, paths and cycles; connectivity, strong/weak connectivity,
 
 === summary ===
 
-## 2026/2027 version (M. Sydow)
+:::exam What you must know
+**BFS/DFS** on a given graph (neighbours alphabetically): order, distances `d` (BFS), times `d/f` (DFS from 0), edge classification. Definitions of graphs, trees, representations.
+:::
 
-- Tree ⇔ connected with n−1 edges ⇔ acyclic with n−1 edges ⇔ exactly one elementary path.
-- Memory: adjacency matrix Θ(n²), lists Θ(n + m), incidence matrix Θ(n·m).
-- BFS (queue): d, p; DFS (recursion): d/f from time = 0; both O(|V| + |E|).
-- Edges T/F/B/C; directed DFS: v white → T, grey → B, black → F or C.
+## Definitions (short)
 
+- **graph** $G=(V,E)$, an edge = an unordered pair; **digraph** — ordered (arc).
+- **simple path** — no repeated edges; **elementary** — no repeated vertices; **cycle** — length ≥ 3, $v_0=v_l$.
+- **connected** — every 2 vertices joined by a path; **strongly connected** (digraph) — paths both ways.
+- **tree** — connected + acyclic ⇔ $n-1$ edges and acyclic ⇔ exactly one elementary path between every pair.
 
-## Graphs
+## Representations
 
-- G = (V, E), n = |V|, m = |E|; undirected: m ≤ n(n−1)/2, directed: m ≤ n(n−1).
-- **adjacency lists** O(n + m) — sparse graphs; **matrix** O(n²) — dense, edge test O(1).
+| | memory |
+|---|---|
+| adjacency matrix | $\Theta(n^2)$ |
+| adjacency lists | $\Theta(n+m)$ |
+| incidence matrix | $\Theta(n\cdot m)$ |
 
-## Graph traversal
+## BFS and DFS
 
-- scheme: visit p; while there is an unvisited edge from a visited v — follow it; every vertex and edge once → **O(n + m)**.
-- **DFS** — candidates on a **stack** (deep, with backtracking); **BFS** — in a **queue** (in layers).
-- BFS gives shortest paths (number of edges): dist[w] = dist[v] + 1.
-- **stepwise refinement**.
+| | structure | attributes | complexity |
+|---|---|---|---|
+| BFS | **queue** | `d` = distance, `p` = parent | $O(n+m)$ |
+| DFS (recursive) | **stack** / recursion | `d` = `time++` on entry, `f` = `time++` on exit | $O(n+m)$ |
 
-## Find-Union
+:::formula Edge classification (u, v) in DFS
+white $v$ → **tree** · grey → **back** · black → **forward** or **cross**.
+**Undirected** graph: only tree and back edges.
+:::
 
-- find(x), union(A, B) on disjoint sets.
-- array of names: union O(n); lists with balancing: n−1 unions O(n log n); **trees + balancing + path compression: almost O(1)** (O(m α(n))).
-- use: Kruskal's algorithm, connected components.
+:::tip Binary tree traversals
+pre-order (node, L, R), in-order (L, node, R), post-order (L, R, node) — see [topic 10](topic:t10).
+:::
+
+:::warn Common mistakes
+- unvisited neighbours in the wrong order (always increasing / alphabetical),
+- in DFS `time` starts at **0** and grows on entry **and** on exit.
+:::
 
 === tasks ===
 

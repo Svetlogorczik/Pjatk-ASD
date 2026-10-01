@@ -32,6 +32,10 @@ The practical test has about 10 tasks, mainly on **knowing how algorithms work**
 
 Full scope of the practical test: orders of functions / O notation, binSearch, selection sort, insertion sort, mergeSort, quickSort/partition, countSort, radixSort, minHeap, BST, in/pre/post-order, BFS/DFS, Kruskal.
 
+:::tip Test yourself
+Full mock tests (2 variants of the practical test, a mock knowledge test) and 13 entry quizzes: [Practice tests](page:mock).
+:::
+
 ## 1. Binary Search
 
 ```pseudo

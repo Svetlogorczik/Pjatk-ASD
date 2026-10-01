@@ -5,7 +5,7 @@ type: topic
 title: Sorting — the problem and simple algorithms (Selection, Insertion)
 short: Simple sorting
 desc: What sorting is, what we count, what "in place" and "stable" mean. SelectionSort and InsertionSort step by step, with complexity analysis.
-sources: asd2.pdf (§2 Sorting); Dziel-RzadzC.pdf (recursive InsertionSort); Wyklady 2009/wyklad_5.pdf (The sorting problem I), asd 08 wyklad_6.pdf (stability)
+sources: 2026/2027 (M. Sydow): sortOne4-pl.pdf · 2025/2026: asd2.pdf (§2 Sorting); Dziel-RzadzC.pdf (recursive InsertionSort); Wyklady 2009/wyklad_5.pdf (The sorting problem I), asd 08 wyklad_6.pdf (stability)
 exercises: asd 05.pdf (task 1)
 ---
 
@@ -243,33 +243,43 @@ The essence of the sorting problem and its uses; selectionSort, insertionSort, m
 
 === summary ===
 
-## 2026/2027 version (M. Sydow)
+:::exam What you must know
+The array after successive passes of selection/insertion sort; W and A analysis; comparison with MergeSort.
+:::
 
-- Selection: W = A = len(len−1)/2 = Θ(len²) — also for sorted input.
-- Insertion: W = n(n−1)/2 (reverse sorted), sorted: n − 1, A = ¼n² + Θ(n).
+## Selection sort
 
+Find the minimum of the unsorted part, swap it with its first element (`indexOfMin` + `swap`), `i++`.
 
-## Terms
+## Insertion sort
 
-- Sorting: a permutation giving a non-decreasing sequence; dominant operation — **comparison**.
-- **In place:** S(n) = O(1). **Stable:** equal keys keep their order.
-- Average analysis: every permutation equally likely.
+"Push" `arr[next]` left while `temp < arr[curr-1]`; the first `next+1` elements are sorted.
 
-## SelectionSort
+```pseudo
+for(next = 1; next < len; next++){
+  curr = next; temp = arr[next];
+  while((curr > 0) && (temp < arr[curr - 1])){
+    arr[curr] = arr[curr - 1]; curr--;
+  }
+  arr[curr] = temp;
+}
+```
 
-- pass i: find the min of a[i..n−1], swap with a[i].
-- W = A = n(n−1)/2, Δ = δ = 0, **n − 1 swaps** (optimal), S = O(1), **unstable**.
+## Complexities (operation: comparison)
 
-## InsertionSort
+| | W | A | best | memory | stable |
+|---|---|---|---|---|---|
+| Selection | $\frac{n(n-1)}{2}$ | $=W$ | $=W$ (even for sorted) | $O(1)$ | no |
+| Insertion | $\frac{n(n-1)}{2}$ (reverse sorted) | $\frac14 n^2+\Theta(n)$ | $n-1$ (sorted) | $O(1)$ | yes |
 
-- a[0..i−1] sorted; insert x = a[i], shifting larger ones right.
-- best n − 1, average ≈ n²/4, worst n(n−1)/2 comparisons; S = O(1); **stable**.
-- number of shifts = number of **inversions**; great for almost sorted data.
-- recursively: split 1 ; n−1, T(n) = T(n−1) + n − 1.
+:::tip Remember
+Insertion "adapts the amount of work" to how sorted the data is; on average 2× faster than Selection, but still $\Theta(n^2)$.
+:::
 
-## In class
-
-Array state after every pass + boundary of the sorted part + number of comparisons.
+:::warn Common mistakes
+- in insertion also count the comparison that **stops** the shifting,
+- selection swaps even when the minimum is already in place (the array does not change).
+:::
 
 === tasks ===
 

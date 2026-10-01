@@ -5,7 +5,7 @@ type: topic
 title: Struktury liniowe — stos, kolejka, listy
 short: Stos, kolejka, listy
 desc: Abstrakcyjne struktury danych, stos (LIFO) i kolejka (FIFO), aksjomaty operacji, listy dwukierunkowe z atrapami, odwrotna notacja polska, sito Eratostenesa i sortowanie list przez scalanie z kolejką.
-sources: asd6.pdf (stos); asd7.pdf (listy); Wyklady 2009/asd 09 wyklad_7.pdf (lista, stos, kolejka, wyrażenia)
+sources: 2026/2027 (M. Sydow): listsAndArrays7-pl.pdf · 2025/2026: asd6.pdf (stos); asd7.pdf (listy); Wyklady 2009/asd 09 wyklad_7.pdf (lista, stos, kolejka, wyrażenia)
 exercises: asd 07.pdf (zad. 1–3)
 ---
 
@@ -272,39 +272,45 @@ splice(a,b,t){
 
 === summary ===
 
-## Wersja 2026/2027 (M. Sydow)
+:::exam Co trzeba umieć
+Definicja **ADS**; interfejsy stosu, kolejki, deque; implementacje na liście i tablicy ze złożonościami; listy vs tablice.
+:::
 
-- ADS = zestaw operacji (interfejs). Stos: push/pop/top (LIFO). Kolejka: inject/out/front (FIFO). Deque: first/last/pushFront/pushBack/popFront/popBack.
-- Stos: lista 1-kier./tablica; kolejka: lista 1-kier./tablica cykliczna; deque: lista 2-kier./tablica cykliczna — wszystko O(1).
-- splice(a, b, t) na liście 2-kier. — O(1).
+:::def Abstrakcyjna struktura danych
+Zdefiniowana przez **zestaw operacji** (interfejs), bez wnikania w implementację.
+:::
 
+## Interfejsy
 
-## ADT
+| ADS | operacje | zasada |
+|---|---|---|
+| stos | `push(e)`, `pop()`, `top()` | LIFO |
+| kolejka | `inject(e)`, `out()`, `front()` | FIFO |
+| deque | `first`, `last`, `pushFront/Back`, `popFront/Back` | oba końce |
 
-Najpierw operacje i ich zachowanie, potem implementacja.
+## Implementacje — wszystko $O(1)$
 
-## Stos (LIFO)
+| ADS | lista | tablica |
+|---|---|---|
+| stos | jednokierunkowa | zwykła |
+| kolejka | jednokierunkowa + wskaźnik na koniec | **cykliczna** (indeksy mod n) |
+| deque | **dwukierunkowa** | cykliczna |
 
-- `push, pop, top, size, isEmpty` — wszystkie **O(1)** (tablica lub lista).
-- zastosowania: rekursja, QuickSort bez rekursji, ONP, DFS, „cofnij”.
-- prawa: top(push(s,e)) = e; pop(push(s,e)) = s; ¬empty(s) ⇒ push(pop(s), top(s)) = s.
+## Listy a tablice
 
-## Kolejka (FIFO)
+| | tablica | lista dowiązaniowa |
+|---|---|---|
+| dostęp po indeksie | $O(1)$ | $O(n)$ |
+| wstawienie w środek | $O(n)$ | $O(1)$ (przy znanym węźle) |
+| rozmiar | stały | dynamiczny |
+| pamięć | minimalna | + dowiązania |
 
-- `inject (in), front (first), pop (out), isEmpty` — **O(1)** (lista z głową i ogonem lub tablica cykliczna).
-- zastosowania: BFS, bufory, Huffman.
-- prawa: empty(q) ⇒ first(in(q,e)) = e; ¬empty(q) ⇒ first(in(q,e)) = first(q); ¬empty(q) ⇒ out(in(q,e)) = in(out(q),e).
+**splice(a, b, t)** — wytnij podlistę (a…b) i wstaw za t; na liście dwukierunkowej $O(1)$; większość modyfikacji to jej przypadek szczególny.
 
-## ONP
-
-liczba → push; operator → b = pop, a = pop, push(a op b). `2 3 + 4 *` = 20.
-
-## Listy
-
-- Locate, Retrieve, Insert, Delete; końce: Push/Pop/Front i Inject/Eject/Rear.
-- Inject+Front+Pop = kolejka; Front+Push+Pop = stos.
-- lista dwukierunkowa z **atrapami**: wstaw/usuń O(1), dostęp do pozycji p — O(p).
-- sito Eratostenesa na liście; MergeSort list z kolejką — O(n log n).
+:::warn Typowe błędy
+- kolejka na zwykłej tablicy (przesuwanie = $O(n)$),
+- `popBack` na liście jednokierunkowej to $O(n)$ — dlatego deque na dwukierunkowej.
+:::
 
 === tasks ===
 

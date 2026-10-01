@@ -5,7 +5,7 @@ type: topic
 title: Recursion and "divide and conquer", MergeSort
 short: Recursion, divide & conquer
 desc: How recursion works, the Towers of Hanoi, generating permutations, the divide-and-conquer principle, merge sort and solving recurrences (the master theorem).
-sources: asd4.pdf; asd5.pdf (§1 MergeSort); asd6.pdf (recursion and the stack); Dziel-RzadzC.pdf; Wyklady 2009/wyklad_2.pdf (recursion, master theorem)
+sources: 2026/2027 (M. Sydow): sortOne4-pl.pdf (MergeSort), recursion6-pl.pdf · 2025/2026: asd4.pdf; asd5.pdf (§1 MergeSort); asd6.pdf (recursion and the stack); Dziel-RzadzC.pdf; Wyklady 2009/wyklad_2.pdf (recursion, master theorem)
 exercises: asd 05.pdf (task 3), asd 06.pdf (task 2)
 ---
 
@@ -334,44 +334,41 @@ Interpretation: compare the order of the overhead f(n) with $n^{\log_b a}$ — t
 
 === summary ===
 
-## 2026/2027 version (M. Sydow)
+:::exam What you must know
+Qualifying task 2: **number of comparisons in MergeSort** and the sequences in the **last** `merge()`. Recursion: Hanoi, Fibonacci, 3 schemes, the master theorem.
+:::
 
-- mergeSort(S, len): m = len/2 (left shorter), merge with `<`; merge: W = A = Θ(n), S = Θ(n); mergeSort Θ(len log len).
-- Hanoi: hanoi(n) = 2·hanoi(n−1) + 1 = 2ⁿ − 1. Recursive Fibonacci — exponentially many calls; Binet's formula.
-- t(n/2) + c → Θ(log n); 2t(n/2) + c → Θ(n); 2t(n/2) + cn → Θ(n log n).
-- Master theorem: f vs n^(log_b a): smaller → Θ(n^(log_b a)); equal → ·log n; larger (+ regularity) → Θ(f).
+## MergeSort (slide version)
 
+- split: **m = len/2** → the left part $S[0:m]$ is **shorter** for odd length (7 → 3 | 4),
+- `merge`: compare the first elements, take the smaller (`a1[i] < a2[j]`; for equal ones it takes from the **right**), copy the rest **without comparisons**.
+
+:::example Counting comparisons
+Add up the comparisons of each `merge` bottom-up. One `merge` of lengths $p$, $q$: from $\min(p,q)$ to $p+q-1$ comparisons. The last merge = sorted left | sorted right half.
+:::
+
+:::formula Complexity
+$$W=A=\Theta(n\log n) \qquad S_{\text{merge}}(n)=\Theta(n)$$
+On linked lists merge needs no extra memory.
+:::
 
 ## Recursion
 
-- a function calls itself; **base case** + **step reducing** the problem.
-- every call has local copies of variables → **call stack**; memory = recursion depth.
+| Equation ($n=2^k$) | Solution | Example |
+|---|---|---|
+| $t(n)=t(n/2)+c$ | $\Theta(\log n)$ | binSearch |
+| $t(n)=2t(n/2)+c$ | $\Theta(n)$ | recursive maximum |
+| $t(n)=2t(n/2)+cn$ | $\Theta(n\log n)$ | mergeSort |
 
-## Examples
+:::formula Key formulas
+$$\text{hanoi}(n)=2\,\text{hanoi}(n-1)+1=2^n-1 \qquad F(n)=\tfrac{1}{\sqrt5}\big(\varphi^n-\psi^n\big)$$
+**Master theorem** $T(n)=aT(n/b)+f(n)$: compare $f$ with $n^{\log_b a}$ — smaller → $\Theta(n^{\log_b a})$; equal → $\Theta(n^{\log_b a}\log n)$; larger (+ regularity) → $\Theta(f)$.
+:::
 
-- **binary(x):** digit x%2, first recurse on x/2, then print.
-- **Hanoi:** n−1 to the auxiliary, the largest to the target, n−1 to the target; **H(n) = 2H(n−1) + 1 = 2ⁿ − 1**.
-- **Permutations:** n! results, time Θ(n!), memory O(n).
-
-## Divide and conquer
-
-small data → directly; large → split, solve subproblems, combine.
-
-## MergeSort
-
-- split into halves, recursion, **merging** (≤ p + q − 1 comparisons).
-- T(n) = T(⌊n/2⌋) + T(⌈n/2⌉) + n − 1 = **n log₂ n + O(n)** (also in the worst case).
-- memory **O(n)**, **stable**.
-
-## Master theorem: T(n) = aT(n/b) + f(n)
-
-| f(n) vs n^(log_b a) | T(n) |
-|---|---|
-| slower | Θ(n^(log_b a)) |
-| the same | Θ(n^(log_b a) log n) |
-| faster (+ regularity condition) | Θ(f(n)) |
-
-Does not apply to T(n) = T(n−1) + … — unroll instead.
+:::warn Common mistakes
+- a **longer** left half — in Sydow's version it is **shorter**,
+- counting comparisons while copying the rest of a sequence.
+:::
 
 === tasks ===
 

@@ -5,7 +5,7 @@ type: topic
 title: Poprawność algorytmów — specyfikacja, niezmienniki, własność stopu
 short: Poprawność algorytmów
 desc: Jak udowodnić, że algorytm robi to, co ma robić. Warunki początkowe i końcowe, poprawność częściowa i całkowita, metoda niezmienników i funkcja malejąca.
-sources: asd1.pdf (§2 Analiza algorytmów, §3 Niezmienniki); Wyklady 2009/wyklad_1.pdf (poprawność)
+sources: 2026/2027 (M. Sydow): correctness1-pl.pdf · 2025/2026: asd1.pdf (§2 Analiza algorytmów, §3 Niezmienniki); Wyklady 2009/wyklad_1.pdf (poprawność)
 exercises: asd 02.pdf, asd 02a.pdf, asd 03.pdf (zad. 1–2)
 ---
 
@@ -293,45 +293,41 @@ Zwraca **maksimum** z len pierwszych liczb tablicy. Dowód całkowitej poprawno�
 
 === summary ===
 
-## Wersja 2026/2027 (M. Sydow)
-
-- **Specyfikacja** = (nazwa + argumenty) + **warunek początkowy** + **warunek końcowy**.
-- **Całkowita poprawność** = **własność stopu** + **częściowa poprawność** (dla każdych poprawnych danych).
-- **Częściowa:** *jeżeli* się zatrzyma, *to* wynik poprawny (nie gwarantuje stopu).
-- **Niezmiennik pętli:** prawdziwy przed iteracją ⇒ prawdziwy po niej (jak krok indukcyjny).
-- **Stop:** licznik rośnie o **stałą**, granica **stała i skończona**.
-
+:::exam Co trzeba umieć
+Definicje **na pamięć**; specyfikacja zadania; dowód **stopu**; niezmiennik pętli (zadanie dopuszczeniowe 7: aᵇ).
+:::
 
 ## Definicje
 
-- **Specyfikacja:** warunek początkowy **α** (o danych) i końcowy **β** (o wynikach); zapis **{α} K {β}**.
-- **Częściowa poprawność:** jeśli α i algorytm się zakończy ⇒ β.
-- **Określoność:** brak błędów wykonania (dzielenie przez 0, zły indeks).
-- **Własność stopu:** dla danych spełniających α algorytm się zatrzymuje.
-- **Całkowita poprawność** = częściowa poprawność + stop.
+:::def Specyfikacja
+**nazwa + argumenty** · **warunek początkowy** (poprawne dane wejściowe) · **warunek końcowy** (poprawny wynik jako funkcja danych).
+:::
 
-## Metoda niezmienników (pętla `while W do K`)
+:::def Poprawność
+- **całkowita** = dla **każdych** poprawnych danych: **stop** + **wynik poprawny**,
+- **częściowa**: *jeżeli* się zatrzyma, *to* wynik poprawny (stopu nie gwarantuje),
+- **własność stopu**: zatrzymuje się po skończonej liczbie kroków.
+:::
 
-1. **Start:** α ⇒ g
-2. **Obrót:** {g ∧ W} K {g}
-3. **Koniec:** g ∧ ¬W ⇒ β
+:::def Niezmiennik pętli
+Predykat: prawdziwy **przed** iteracją ⇒ prawdziwy **po** niej. Jak indukcja: baza (przed pierwszą iteracją) + krok.
+:::
 
-**Stop:** funkcja malejąca — wartość naturalna, ostro maleje w każdym obrocie.
+## Schemat dowodu poprawności całkowitej
 
-## Przykłady z wykładu
+1. **Stop:** licznik rośnie o **stałą**, granica jest **stała i skończona** ⇒ skończenie wiele iteracji.
+2. **Niezmiennik:** zapisz warunek końcowy → wpleć licznik pętli → sprawdź „przed pierwszą iteracją”.
+3. **Koniec pętli:** niezmiennik + zaprzeczony warunek pętli ⇒ warunek końcowy.
 
-| Algorytm | Niezmiennik | Funkcja malejąca |
-|---|---|---|
-| Max w tablicy | `naj = MAX(A[0..i−1])` | n − i |
-| sqrt liniowy | p² ≤ n | n − p² (lub ⌊√n⌋ − p) |
-| sqrt binarny | l² ≤ n ∧ (r+1)² > n ∧ l ≤ r | r − l |
+:::formula Przykłady niezmienników
+$$\text{maksimum: } \forall_{0\le j<i}\; x\ge Arr[j] \qquad \text{potęga: } \text{result}=a^i \wedge i\le b$$
+:::
 
-- p = ⌊√n⌋ ⇔ p² ≤ n < (p+1)².
-- sqrt liniowy: ~√n obrotów; binarny: ~log₂ n obrotów.
-
-## Schemat odpowiedzi na ćwiczeniach
-
-α, β → funkcja malejąca (stop) → niezmiennik (start/obrót/koniec) → całkowita poprawność → złożoność (ile razy maleje funkcja malejąca).
+:::warn Typowe błędy
+- brak przypadku **pustej tablicy** w specyfikacji (len = 0),
+- „i rośnie” to za mało — musi rosnąć o **stałą**, a granica być **skończona**,
+- niezmiennik bez licznika pętli nic nie dowodzi.
+:::
 
 === tasks ===
 

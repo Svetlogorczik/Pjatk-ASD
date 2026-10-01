@@ -9,6 +9,10 @@ sources: Dziel-Rzadz-FFT.pdf
 exercises: no class problem set — tasks by the site author
 ---
 
+:::info Outside the 2026/2027 programme
+This whole topic (Karatsuba, FFT) comes from the 2025/2026 lectures and is **not in the 2026/2027 programme** — extra material, not in the tests.
+:::
+
 ## Schoolbook multiplication is quadratic
 
 Multiplying two n-digit numbers "in columns", we multiply **every digit by every digit**:
@@ -190,29 +194,16 @@ In practice FFT works with floating-point numbers — the result must be **round
 
 === summary ===
 
-## Multiplication
+:::info Outside the 2026/2027 programme
+Karatsuba multiplication and FFT come from the 2025/2026 lectures — **they are not on M. Sydow's slides** nor in the 2026/2027 test scope. The topic stays as extra material.
+:::
 
-- schoolbook: **n²** digit multiplications; polynomials: cᵢ = Σⱼ aⱼbᵢ₋ⱼ.
-- split A = Aₗ + x^(n/2)Aₕ; 4 products → T(n) = 4T(n/2) = **n²** (no gain).
+## In a nutshell
 
-## Karatsuba
-
-- L = AₗBₗ, H = AₕBₕ, S = (Aₗ + Aₕ)(Bₗ + Bₕ), middle = **S − L − H**.
-- **A·B = L + x^(n/2)(S − L − H) + xⁿH**.
-- K(n) = 3K(n/2) ⇒ **n^(log₂ 3) ≈ n^1.585**; pays off from ~320 bits.
-- (1 + 2x)(3 + 4x): L = 3, H = 8, S = 21, M = 10 → 3 + 10x + 8x².
-
-## Interpolation
-
-- a polynomial of degree n ⇔ its values at n + 1 points; C(x) = A(x)B(x) pointwise.
-- Horner O(n) per point; Lagrange O(n²).
-
-## FFT (Cooley–Tukey 1965)
-
-- points: n-th roots of unity; (ωₙⁱ)² = ωₙ/₂ⁱ; ω^(n/2) = −1.
-- **A(x) = Aₑ(x²) + x·Aₒ(x²)**; T(n) = 2T(n/2) + n = **O(n log n)**.
-- interpolation: **rₜ = S(ω⁻ᵗ)/n** — also an FFT.
-- polynomial multiplication: 2× FFT + n multiplications + inverse FFT ≈ 3n log n + n.
+- **Divide and conquer** for multiplication: split $n$-digit numbers into halves.
+- School method: 4 multiplications of halves → $\Theta(n^2)$.
+- **Karatsuba:** 3 multiplications instead of 4 → $T(n)=3T(n/2)+O(n)=\Theta(n^{\log_2 3})\approx n^{1.585}$.
+- **FFT:** multiplying polynomials via values at roots of unity → $O(n\log n)$.
 
 === tasks ===
 

@@ -5,12 +5,16 @@ type: topic
 title: Priority queues, heaps and HeapSort
 short: Heaps and HeapSort
 desc: The priority queue, a binary heap in an array, upheap and downheap, building a heap in linear time, heap sort and leftist trees (heaps).
-sources: asd10.pdf; Wyklady 2009/wyklad_9 kopce binarne.pdf; wyklad_10.pdf (priority queue — leftist heap)
+sources: 2026/2027 (M. Sydow): priorityQueue8-pl.pdf · 2025/2026: asd10.pdf; Wyklady 2009/wyklad_9 kopce binarne.pdf; wyklad_10.pdf (priority queue — leftist heap)
 exercises: asd 10.pdf ("ASD 10b": tasks 1–3)
 ---
 
 :::exam 2026/2027 tests
 This topic was written from the 2025/2026 lectures. **The 2026/2027 tests use the versions from M. Sydow's slides** — you will find them in the section ["2026/2027 lecture version"](topic:t12#2026-2027-lecture-version-m-sydow-priority-queue) at the end of the topic (code copied from the slides). Qualifying tasks and practice tasks: [Tests 2026/2027](page:exams).
+:::
+
+:::info Outside the 2026/2027 programme
+In 2026/2027 the heap is a **min** heap (`delMin`), indices from 1. The max heap (`deletemax`) and the **leftist heap** later in this topic are 2025/2026 material — **outside the programme**.
 :::
 
 ## The priority queue
@@ -243,35 +247,38 @@ Definition of a priority queue and a binary heap; analysis of naive implementati
 
 === summary ===
 
-## 2026/2027 version (M. Sydow)
+:::exam What you must know
+Qualifying task 5: **min-heap** in an array from index 1 — a) after successive `insert`s, b) + `delMin`, c) after `construct`.
+:::
 
-- PQ: insert(e, p), findMin, delMin. Heap: complete tree, parent ≤ children; array from 1: parent i/2, sons 2i, 2i+1.
-- insert (upheap) O(log n), findMin O(1), delMin (last to root + downheap) O(log n); construct: downHeap(i) for i = n/2..1 → O(n).
-- HeapSort Θ(n log n); merge on a binary heap O(n).
+:::def Priority queue
+`insert(e, p)`, `findMin()`, `delMin()` — a smaller number = a higher priority.
+:::
 
+:::def Binary heap (min)
+A **complete** tree (filled level by level from the left) + **parent ≤ children** ⇒ the minimum at the root, height $\Theta(\log n)$.
+:::
 
-## Priority queue
+:::formula Heap in an array (index 0 unused)
+$$\text{parent}(i)=\lfloor i/2\rfloor \qquad \text{left}(i)=2i \qquad \text{right}(i)=2i+1$$
+:::
 
-- construct, insert, deletemax (or deletemin).
-- unsorted array: insert O(1), deletemax O(n); sorted: the other way round; **heap: O(log n) both, construct O(n)**.
+## Operations step by step
 
-## Heap
+| operation | how | complexity |
+|---|---|---|
+| `insert(x)` | at the end + **upheap**: swap with the parent while parent > x | $O(\log n)$ |
+| `findMin()` | the root | $O(1)$ |
+| `delMin()` | last → root + **downheap**: swap with the **smaller** son while it is smaller | $O(\log n)$ |
+| `construct` | `for(i = n/2; i > 0; i--) downHeap(i)` | $O(n)$ |
 
-- condition: parent ≥ child ⇒ max at the root; it is **not** a BST.
-- complete: levels full, the last one from the left; **h = ⌊log n⌋**.
-- array from 1: children **2k, 2k+1**, parent **⌊k/2⌋** (from 0: 2k+1, 2k+2, (k−1)/2).
-- **insert:** at the end + **upheap** (up), O(log n).
-- **deletemax:** root ← last, **downheap** (down, to the larger child), 2⌊log n⌋ comparisons.
-- **construct:** downheap for i = n/2 … 1 — **O(n)**.
+**HeapSort:** n × insert, then n × delMin → $\Theta(n\log n)$. Naive: unsorted insert $O(1)$ / delMin $O(n)$; sorted — the other way round. Merge on a binary heap — $O(n)$ (binomial heap: $O(\log n)$).
 
-## HeapSort
-
-construct + (n−1) × deletemax to the end of the array; **W ≤ 2n log n + O(n)**, in place, always n log n, unstable.
-
-## Leftist heap
-
-- odl(left) ≥ odl(right); right path ≤ log(n+1).
-- **merge** along right paths + swapping children; insert and deletemax via merge — O(log n).
+:::warn Common mistakes
+- the result of `construct` ≠ the result of n × `insert` (both are valid heaps!),
+- with equal sons downheap takes the **left** one (strict comparison),
+- indexing from 0 instead of 1.
+:::
 
 === tasks ===
 

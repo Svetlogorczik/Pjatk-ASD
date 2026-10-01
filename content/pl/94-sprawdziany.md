@@ -32,6 +32,10 @@ Na sprawdzianie praktycznym jest ok. 10 zadań, głównie na **znajomość dzia�
 
 Pełny zakres sprawdzianu praktycznego: rzędy funkcji / notacja O, binSearch, selection sort, insertion sort, mergeSort, quickSort/partition, countSort, radixSort, minHeap, BST, in/pre/post-order, BFS/DFS, Kruskal.
 
+:::tip Sprawdź się
+Pełne próbne sprawdziany (2 warianty praktycznego, próbny sprawdzian wiedzy) i 13 wejściówek: [Testy próbne](page:mock).
+:::
+
 ## 1. Binary Search
 
 ```pseudo

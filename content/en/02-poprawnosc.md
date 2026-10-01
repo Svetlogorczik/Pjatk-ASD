@@ -5,7 +5,7 @@ type: topic
 title: Correctness of algorithms — specification, invariants, termination
 short: Correctness of algorithms
 desc: How to prove that an algorithm does what it should. Pre- and postconditions, partial and total correctness, the invariant method and the decreasing function.
-sources: asd1.pdf (§2 Analysis of algorithms, §3 Invariants); Wyklady 2009/wyklad_1.pdf (correctness)
+sources: 2026/2027 (M. Sydow): correctness1-pl.pdf · 2025/2026: asd1.pdf (§2 Analysis of algorithms, §3 Invariants); Wyklady 2009/wyklad_1.pdf (correctness)
 exercises: asd 02.pdf, asd 02a.pdf, asd 03.pdf (tasks 1–2)
 ---
 
@@ -293,45 +293,41 @@ It returns the **maximum** of the first len numbers of the array. Proof of total
 
 === summary ===
 
-## 2026/2027 version (M. Sydow)
-
-- **Specification** = (name + arguments) + **precondition** + **postcondition**.
-- **Total correctness** = **stop property** + **partial correctness** (for every correct input).
-- **Partial:** *if* it stops, *then* the result is correct (does not guarantee stopping).
-- **Loop invariant:** true before an iteration ⇒ true after it (like the inductive step).
-- **Stop:** the counter grows by a **constant**, the bound is **constant and finite**.
-
+:::exam What you must know
+Definitions **by heart**; writing a specification; proving the **stop property**; loop invariant (qualifying task 7: aᵇ).
+:::
 
 ## Definitions
 
-- **Specification:** precondition **α** (about the input) and postcondition **β** (about the results); notation **{α} K {β}**.
-- **Partial correctness:** if α and the algorithm terminates ⇒ β.
-- **Definedness:** no run-time errors (division by 0, bad index).
-- **Termination (stop property):** for data satisfying α the algorithm stops.
-- **Total correctness** = partial correctness + termination.
+:::def Specification
+**name + arguments** · **precondition** (correct input) · **postcondition** (correct result as a function of the input).
+:::
 
-## The invariant method (loop `while W do K`)
+:::def Correctness
+- **total** = for **every** correct input: **stops** + **correct result**,
+- **partial**: *if* it stops, *then* the result is correct (stopping not guaranteed),
+- **stop property**: stops after a finite number of steps.
+:::
 
-1. **Start:** α ⇒ g
-2. **Iteration:** {g ∧ W} K {g}
-3. **End:** g ∧ ¬W ⇒ β
+:::def Loop invariant
+A predicate: true **before** an iteration ⇒ true **after** it. Like induction: base (before the first iteration) + step.
+:::
 
-**Termination:** a decreasing function — a natural value strictly decreasing in every iteration.
+## Proof scheme for total correctness
 
-## Lecture examples
+1. **Stop:** the counter grows by a **constant**, the bound is **constant and finite** ⇒ finitely many iterations.
+2. **Invariant:** write the postcondition → weave in the loop counter → check "before the first iteration".
+3. **Loop exit:** invariant + negated loop condition ⇒ postcondition.
 
-| Algorithm | Invariant | Decreasing function |
-|---|---|---|
-| Max of an array | `best = MAX(A[0..i−1])` | n − i |
-| linear sqrt | p² ≤ n | n − p² (or ⌊√n⌋ − p) |
-| binary sqrt | l² ≤ n ∧ (r+1)² > n ∧ l ≤ r | r − l |
+:::formula Example invariants
+$$\text{maximum: } \forall_{0\le j<i}\; x\ge Arr[j] \qquad \text{power: } \text{result}=a^i \wedge i\le b$$
+:::
 
-- p = ⌊√n⌋ ⇔ p² ≤ n < (p+1)².
-- linear sqrt: ~√n iterations; binary: ~log₂ n iterations.
-
-## Answer scheme for classes
-
-α, β → decreasing function (termination) → invariant (start/iteration/end) → total correctness → complexity (how many times the decreasing function decreases).
+:::warn Common mistakes
+- no **empty array** case in the specification (len = 0),
+- "i grows" is not enough — it must grow by a **constant**, and the bound must be **finite**,
+- an invariant without the loop counter proves nothing.
+:::
 
 === tasks ===
 

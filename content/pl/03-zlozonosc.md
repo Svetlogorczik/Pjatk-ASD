@@ -5,7 +5,7 @@ type: topic
 title: Złożoność obliczeniowa — jak mierzyć szybkość algorytmu
 short: Złożoność obliczeniowa
 desc: Operacja dominująca, złożoność pesymistyczna i oczekiwana, wrażliwość, notacje O, Ω, Θ, hierarchia funkcji i dlaczego algorytmy wykładnicze są bezużyteczne.
-sources: asd2.pdf (§0.1, §1); Algorytmika.pdf (złożoność); Wyklady 2009/wyklad_1.pdf (notacja asymptotyczna)
+sources: 2026/2027 (M. Sydow): complexity2-pl.pdf · 2025/2026: asd2.pdf (§0.1, §1); Algorytmika.pdf (złożoność); Wyklady 2009/wyklad_1.pdf (notacja asymptotyczna)
 exercises: asd 01.pdf („Ćwiczenia 4”: zad. 1–5)
 ---
 
@@ -334,48 +334,42 @@ Algorytmy o złożoności czasowej wyższej niż wielomianowa uważa się za **n
 
 === summary ===
 
-## Wersja 2026/2027 (M. Sydow)
+:::exam Co trzeba umieć
+Przed każdą analizą: **operacja dominująca** + **rozmiar danych**. Definicje W, A, S i **5 notacji**; dowód z definicji (np. $n^2+5n+2=O(n^2)$, ale nie $O(n)$).
+:::
 
-- Przed analizą: **operacje dominujące** + **rozmiar danych**.
-- **W(n) = sup{t(d) : d ∈ Dₙ}**, **A(n) = Σ pₙₖ·k = E(Xₙ)**, **S(n)** (SW, SA); stała pamięć: S(n) = O(1).
-- 5 notacji: Θ (=), O (≤), Ω (≥), o (<), ω (>); O: ∃c>0 ∃n₀ ∀n≥n₀ f ≤ c·g; Θ: O w obie strony.
-- Granica f/g: ∞ → ω, stała > 0 → Θ, 0 → o.
-- find: W(n) = n, A(n) = (n+1)/2, SA(n) = O(1).
+## Pojęcia
 
+- **Operacja dominująca** — jej liczba jest proporcjonalna do wszystkich operacji (każda pętla musi ją zawierać).
+- **Rozmiar danych** — funkcja argumentów (czasem kilka zmiennych, np. $n$ i $m$).
 
-## Podstawy
+:::formula Miary złożoności
+$$W(n)=\sup\{t(d) : d\in D_n\} \qquad A(n)=\sum_k p_{nk}\cdot k = E(X_n)$$
+$S(n)$ — pamięć; stała pamięć: $S(n)=O(1)$. Dla $A(n)$ potrzebny **model losowości danych**.
+:::
 
-- **Złożoność** = zużycie zasobów (czas, dodatkowa pamięć) jako funkcja **rozmiaru danych n**.
-- **Operacja dominująca** — liczba wszystkich operacji jest do niej proporcjonalna (sortowanie: porównania).
-- Liczby: rozmiar = **liczba cyfr/bitów** (d ≈ log n).
+## Notacja asymptotyczna
 
-## Miary
-
-| Symbol | Nazwa | Wzór |
+| Zapis | jak | definicja |
 |---|---|---|
-| W(n) | pesymistyczna | sup { t(d) : d ∈ Dₙ } |
-| A(n) | oczekiwana | Σ k·pₙₖ |
-| Δ(n) | wrażliwość pesymistyczna | sup { t(d₁) − t(d₂) } |
-| δ(n) | wrażliwość oczekiwana | dev(Xₙ) |
+| $f=O(g)$ | ≤ | $\exists_{c>0}\exists_{n_0}\forall_{n\ge n_0}\, f(n)\le c\,g(n)$ |
+| $f=\Omega(g)$ | ≥ | $\exists_{c>0}\exists_{n_0}\forall_{n\ge n_0}\, f(n)\ge c\,g(n)$ |
+| $f=\Theta(g)$ | = | $f=O(g)\wedge g=O(f)$ |
+| $f=o(g)$ | < | $\forall_{c>0}\exists_{n_0}\forall_{n\ge n_0}\, f(n)\le c\,g(n)$ |
+| $f=\omega(g)$ | > | $\forall_{c>0}\exists_{n_0}\forall_{n\ge n_0}\, f(n)\ge c\,g(n)$ |
 
-Wyszukiwanie sekwencyjne ze strażnikiem: W = n+1, A = (n+1)/2, Δ = n, δ ≈ 0,29n.
+**Granica** $\lim f/g$: $\infty$ → $\omega$; stała $>0$ → $\Theta$; $0$ → $o$.
 
-## Notacje
+:::formula Hierarchia rzędów
+$$1 \prec \log n \prec \sqrt n \prec n \prec n\log n \prec n^2 \prec n^3 \prec 2^n \prec n!$$
+Liczy się **dominujący składnik**; podstawa logarytmu bez znaczenia; $\log n \prec n^{0{,}0001}$; każda wykładnicza $\succ$ każda potęga.
+:::
 
-- f = **O(g)**: ∃ c > 0, n₀: f(n) ≤ c·g(n) dla n > n₀.
-- f = **Ω(g)** ⇔ g = O(f); f = **Θ(g)** ⇔ O i Ω.
-- 1 ≺ log n ≺ √n ≺ n ≺ n log n ≺ n² ≺ n³ ≺ 2ⁿ ≺ n!.
-- stałe i niższe składniki pomijamy; podstawa logarytmu nieważna; log n! = Θ(n log n).
-
-## Liczenie złożoności kodu
-
-- sekwencja → **suma** (wygrywa największa), pętla k razy → **razy k**, pętle zagnieżdżone → iloczyn, dzielenie licznika → log n.
-- szybszy komputer p×: czas / p; dla 2ⁿ rozmiar rośnie tylko o log₂ p.
-- c = t / f(x); czas dla y: c·f(y).
-
-## Wykładnicze = nierealizowalne
-
-2ⁿ dla n = 100 przy 10⁹ op/s ≈ 4·10¹¹ wieków. Szybszy sprzęt nie pomaga — pomaga lepszy algorytm.
+:::warn Typowe błędy
+- „=” w $f=O(g)$ to nie równość — nie wolno pisać $O(f)=n$,
+- brak operacji dominującej / rozmiaru danych = analiza niepełna,
+- dla liczb rozmiar danych to liczba **bitów** — pętla „n razy” jest wykładnicza względem bitów.
+:::
 
 === tasks ===
 

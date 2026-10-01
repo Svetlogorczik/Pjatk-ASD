@@ -5,9 +5,13 @@ type: topic
 title: What is an algorithm? Introduction to algorithmics
 short: Introduction to algorithmics
 desc: What an algorithm is, the algorithmic domain, three versions of Euclid's algorithm, pseudocode and the maths you need from the very first class.
-sources: Algorytmika.pdf; asd1.pdf (§1 Pseudo-code); Wyklady 2009/wyklad_1.pdf
+sources: 2026/2027 (M. Sydow): correctness1-pl.pdf (organizacja, pseudokod) · 2025/2026: Algorytmika.pdf; asd1.pdf (§1 Pseudo-code); Wyklady 2009/wyklad_1.pdf
 exercises: asd 00.pdf (Exercise 0)
 ---
+
+:::info Outside the 2026/2027 programme
+Euclid's algorithm, the algorithmic domain and part of the maths come from the 2025/2026 lectures — **they are not on the 2026/2027 slides**. Binding material: the pseudocode section and the [summary](topic:t01).
+:::
 
 ## Algorithm — what is it all about?
 
@@ -244,39 +248,34 @@ The order "who grows faster" (slowest first): **log n ≺ √n ≺ n ≺ n log n
 
 === summary ===
 
-## Key terms
+:::exam What you must know
+What an algorithm is, what pseudocode is (and its conventions), and the 3 parts of the course.
+:::
 
-- **Algorithm** — a finite, unambiguous step-by-step recipe for solving a problem.
-- **Algorithmics** — designing and analysing algorithms (correctness + cost) and choosing data structures.
-- **Algorithmic domain** — objects + allowed operations and relations. What we can compute, and how fast, depends on it.
-- **Unsolvable** problems exist (Greek constructions with compass and straightedge only; the Post problem — undecidable, Turing).
+## Algorithm and algorithmics
 
-## Euclid — GCD(m, n)
+- **Algorithm** — a precise description (list of steps) of how to do something. The word comes from *al-Khwarizmi* (780–850).
+- **Algorithmics** is "the heart of computer science"; its role grows in the *big data* era.
 
-| Version | Step | Worst-case cost |
-|---|---|---|
-| 1. subtraction | GCD(m, n) = GCD(n − m, m) | up to ~n iterations (exponential in the number of digits) |
-| 2. modulo | GCD(m, n) = GCD(n mod m, m) | ~log_φ n iterations (linear in the number of digits) |
-| 3. binary | parity, /2, ·2, − | also logarithmic |
+## Pseudocode (lecture conventions)
 
-- Worst data for version 2: **neighbouring Fibonacci numbers**; (Fₙ₋₁, Fₙ) → n − 2 iterations; e.g. (55, 89) → 9 iterations.
-- Fₙ ≈ φⁿ/√5, φ ≈ 1.618 → for 30-digit numbers ≤ ~148 iterations.
+| Element | Notation |
+|---|---|
+| variables | no declarations |
+| arrays | `[ ]`, indexed **from 0** |
+| operators | `=`, `==`, `<`, `&&`, `||`, `!`, `+=`, `++` |
+| control | `if / else`, `while`, `for`, `return` |
+| compound arguments | passed by reference |
 
-## Pseudocode
+## Three parts of the course
 
-- `:=` assignment, `=` comparison; `for i := a to b` includes b; arrays from 0 to n−1.
-- `Dane:` / `Wynik:` = input / output conditions.
+1. **Analysis** — given code: what does it do and how efficiently?
+2. **Design** — given a **specification**: design a correct and efficient algorithm.
+3. **Data structures** — efficient organisation of data and operations.
 
-## Complexity — glossary
-
-- **dominant** operation; **worst-case** (malicious data) and **average** (typical data) complexity; **space** complexity; complexity of a **problem** = complexity of the best algorithm.
-- input size: array → length, number → digits/bits, graph → |V| + |E|.
-
-## Maths for the classes
-
-- log_a b = c ⇔ aᶜ = b; log(xy) = log x + log y; log xᵏ = k log x; log_a x = log_b x / log_b a.
-- digits of x: ⌊log₁₀ x⌋ + 1; bits: ⌊log₂ x⌋ + 1.
-- limits of polynomial fractions: divide by the highest power; log n ≺ √n ≺ n ≺ n log n ≺ n² ≺ 2ⁿ ≺ n!.
+:::info Outside the 2026/2027 programme
+Euclid, the algorithmic domain and logarithms in this topic come from 2025/2026 — useful background, but not directly on the 2026/2027 slides.
+:::
 
 === tasks ===
 

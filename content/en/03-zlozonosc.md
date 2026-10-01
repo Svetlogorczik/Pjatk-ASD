@@ -5,7 +5,7 @@ type: topic
 title: Computational complexity — measuring the speed of an algorithm
 short: Computational complexity
 desc: The dominant operation, worst-case and expected complexity, sensitivity, the O, Ω, Θ notations, the hierarchy of functions and why exponential algorithms are useless.
-sources: asd2.pdf (§0.1, §1); Algorytmika.pdf (complexity); Wyklady 2009/wyklad_1.pdf (asymptotic notation)
+sources: 2026/2027 (M. Sydow): complexity2-pl.pdf · 2025/2026: asd2.pdf (§0.1, §1); Algorytmika.pdf (complexity); Wyklady 2009/wyklad_1.pdf (asymptotic notation)
 exercises: asd 01.pdf ("Ćwiczenia 4": tasks 1–5)
 ---
 
@@ -334,48 +334,42 @@ Algorithms with time complexity higher than polynomial are considered **impracti
 
 === summary ===
 
-## 2026/2027 version (M. Sydow)
+:::exam What you must know
+Before every analysis: **dominant operation** + **data size**. Definitions of W, A, S and the **5 notations**; proof from the definition (e.g. $n^2+5n+2=O(n^2)$ but not $O(n)$).
+:::
 
-- Before the analysis: **dominant operations** + **data size**.
-- **W(n) = sup{t(d) : d ∈ Dₙ}**, **A(n) = Σ pₙₖ·k = E(Xₙ)**, **S(n)** (SW, SA); constant memory: S(n) = O(1).
-- 5 notations: Θ (=), O (≤), Ω (≥), o (<), ω (>); O: ∃c>0 ∃n₀ ∀n≥n₀ f ≤ c·g; Θ: O both ways.
-- Limit of f/g: ∞ → ω, constant > 0 → Θ, 0 → o.
-- find: W(n) = n, A(n) = (n+1)/2, SA(n) = O(1).
+## Concepts
 
+- **Dominant operation** — its count is proportional to all operations (every loop must contain it).
+- **Data size** — a function of the arguments (sometimes several variables, e.g. $n$ and $m$).
 
-## Basics
+:::formula Complexity measures
+$$W(n)=\sup\{t(d) : d\in D_n\} \qquad A(n)=\sum_k p_{nk}\cdot k = E(X_n)$$
+$S(n)$ — memory; constant memory: $S(n)=O(1)$. $A(n)$ needs a **model of data randomness**.
+:::
 
-- **Complexity** = resource usage (time, extra memory) as a function of the **input size n**.
-- **Dominant operation** — the number of all operations is proportional to it (sorting: comparisons).
-- Numbers: size = **number of digits/bits** (d ≈ log n).
+## Asymptotic notation
 
-## Measures
-
-| Symbol | Name | Formula |
+| Notation | like | definition |
 |---|---|---|
-| W(n) | worst case | sup { t(d) : d ∈ Dₙ } |
-| A(n) | expected | Σ k·pₙₖ |
-| Δ(n) | worst-case sensitivity | sup { t(d₁) − t(d₂) } |
-| δ(n) | expected sensitivity | dev(Xₙ) |
+| $f=O(g)$ | ≤ | $\exists_{c>0}\exists_{n_0}\forall_{n\ge n_0}\, f(n)\le c\,g(n)$ |
+| $f=\Omega(g)$ | ≥ | $\exists_{c>0}\exists_{n_0}\forall_{n\ge n_0}\, f(n)\ge c\,g(n)$ |
+| $f=\Theta(g)$ | = | $f=O(g)\wedge g=O(f)$ |
+| $f=o(g)$ | < | $\forall_{c>0}\exists_{n_0}\forall_{n\ge n_0}\, f(n)\le c\,g(n)$ |
+| $f=\omega(g)$ | > | $\forall_{c>0}\exists_{n_0}\forall_{n\ge n_0}\, f(n)\ge c\,g(n)$ |
 
-Sequential search with a sentinel: W = n+1, A = (n+1)/2, Δ = n, δ ≈ 0.29n.
+**Limit** $\lim f/g$: $\infty$ → $\omega$; constant $>0$ → $\Theta$; $0$ → $o$.
 
-## Notations
+:::formula Hierarchy of orders
+$$1 \prec \log n \prec \sqrt n \prec n \prec n\log n \prec n^2 \prec n^3 \prec 2^n \prec n!$$
+The **dominant term** counts; the log base does not matter; $\log n \prec n^{0.0001}$; every exponential $\succ$ every power.
+:::
 
-- f = **O(g)**: ∃ c > 0, n₀: f(n) ≤ c·g(n) for n > n₀.
-- f = **Ω(g)** ⇔ g = O(f); f = **Θ(g)** ⇔ both O and Ω.
-- 1 ≺ log n ≺ √n ≺ n ≺ n log n ≺ n² ≺ n³ ≺ 2ⁿ ≺ n!.
-- drop constants and lower terms; log base irrelevant; log n! = Θ(n log n).
-
-## Computing the complexity of code
-
-- sequence → **sum** (the largest wins), loop k times → **times k**, nested loops → product, halving counter → log n.
-- p× faster computer: time / p; for 2ⁿ the size grows only by log₂ p.
-- c = t / f(x); time for y: c·f(y).
-
-## Exponential = infeasible
-
-2ⁿ for n = 100 at 10⁹ op/s ≈ 4·10¹¹ centuries. Faster hardware does not help — a better algorithm does.
+:::warn Common mistakes
+- "=" in $f=O(g)$ is not equality — never write $O(f)=n$,
+- no dominant operation / data size = incomplete analysis,
+- for numbers the data size is the number of **bits** — a loop "n times" is exponential in the bits.
+:::
 
 === tasks ===
 

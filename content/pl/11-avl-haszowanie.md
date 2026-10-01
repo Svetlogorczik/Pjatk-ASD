@@ -5,12 +5,16 @@ type: topic
 title: Drzewa AVL i tablice haszujące
 short: AVL i haszowanie
 desc: Jak utrzymać drzewo BST w równowadze — współczynnik zrównoważenia i rotacje AVL; minimalna i maksymalna liczba węzłów; słownik w tablicy haszującej — funkcja haszująca, łańcuchy, adresowanie otwarte.
-sources: Wyklady 2009/asd 10 wyklad_8.pdf (słownik: tablica haszująca, BST, AVL); Asd9.pdf (wstęp: drzewa AVL)
+sources: 2026/2027 (M. Sydow): dictionary9-pl.pdf · 2025/2026: Wyklady 2009/asd 10 wyklad_8.pdf (słownik: tablica haszująca, BST, AVL); Asd9.pdf (wstęp: drzewa AVL)
 exercises: asd 09.pdf (zad. 1–3)
 ---
 
 :::exam Sprawdzian 2026/2027
 Ten temat powstał na podstawie wykładów 2025/2026. **Na sprawdzianach 2026/2027 obowiązują wersje ze slajdów M. Sydowa** — znajdziesz je w sekcji [„Wersja z wykładu 2026/2027”](topic:t11#wersja-z-wykładu-2026-2027-m-sydow-słowniki-tablice-mieszają) na końcu tematu (kod przepisany ze slajdów). Zadania dopuszczeniowe i zadania treningowe: [Sprawdziany 2026/2027](page:exams).
+:::
+
+:::info Poza programem 2026/2027
+**Rotacje** AVL oraz szczegóły haszowania z 2025/2026 są **poza programem 2026/2027** — na sprawdzianie wystarczy definicja AVL i liczenie bf (sekcja na końcu tematu).
 :::
 
 ## Po co równoważyć drzewa?
@@ -192,26 +196,41 @@ Tablice mieszające; własności funkcji mieszającej; analiza operacji słownik
 
 === summary ===
 
-## Wersja 2026/2027 (M. Sydow)
+:::exam Co trzeba umieć
+Tablice mieszające (funkcja, kolizje, α); **AVL: policz bf wszystkich węzłów i oceń, czy to AVL**. Rotacji nie ma w programie 2026/2027.
+:::
 
-- Hash: U → [0..m−1]; kolizje: mieszanie wielokrotne / łańcuchowa; α = n/m; operacje O(α); hash = key mod m.
-- AVL: bf(x) = h(lewe) − h(prawe) ∈ {−1, 0, 1}; wysokość O(log n), W = O(log n); naprawa rotacjami O(1).
+## Tablice mieszające
 
+:::def Funkcja mieszająca
+$\text{hash}: U\to[0,\dots,m-1]$ — szybka (czas stały) i **równomiernie** rozkładająca klucze. Przykład: $\text{hash}(key)=key \bmod m$.
+:::
+
+- **Kolizja:** $k_1\ne k_2$, ale $\text{hash}(k_1)=\text{hash}(k_2)$.
+- **Mieszanie wielokrotne** — szukaj kolejnego miejsca (max $m$ elementów) · **łańcuchowa** — lista w każdym miejscu.
+
+:::formula Współczynnik obciążenia
+$$\alpha=\frac{n}{m} \qquad \text{operacje słownika: } O(\alpha)$$
+Większe $m$ — szybciej, ale więcej pamięci. Operacje słownika **uporządkowanego** (min, następnik…) — liniowo.
+:::
 
 ## AVL
 
-- BST, w którym dla każdego węzła **|h(L) − h(R)| ≤ 1**; **BF = h(L) − h(R) ∈ {−1, 0, 1}**.
-- max węzłów przy wysokości h: **2ʰ⁺¹ − 1**; min: **N(h) = N(h−1) + N(h−2) + 1**, N(0) = 1, N(1) = 2 (1, 2, 4, 7, 12, 20, 33) = Fₕ₊₃ − 1 ⇒ **h = O(log n)** (< 1,44 log₂ n).
-- insert: BST insert + przeliczenie BF w górę + **jedna** (pojedyncza lub podwójna) rotacja.
-- przypadki: **LL** → rotacja w prawo; **RR** → w lewo; **LR** → lewo na synu + prawo; **RL** → prawo na synu + lewo.
-- delete: BST delete + rotacje w górę (może być wiele); syn z BF = 0 → pojedyncza rotacja.
+:::def Drzewo AVL
+BST, w którym dla każdego węzła $bf(x)=h(\text{lewe})-h(\text{prawe})\in\{-1,0,1\}$.
+:::
 
-## Haszowanie
+- Wysokość AVL: $O(\log n)$ ⇒ **wszystkie operacje** $W=O(\log n)$.
+- Po insert/delete sprawdzamy bf **w górę** od zmienionego węzła; przy $\pm2$ naprawa rotacją ($O(1)$).
 
-- h(k) = k mod m; kolizje; α = n/m.
-- **łańcuchy:** lista w każdej komórce; średnio O(1 + α).
-- **adresowanie otwarte:** liniowe (h(k)+i), kwadratowe, podwójne; usuwanie = znacznik „usunięte”.
-- średnio O(1), ale brak porządku (min, max, następnik — kosztowne).
+:::example Jak liczyć bf
+Wysokość pustego poddrzewa = −1, liścia = 0. Licz od liści w górę; każdy węzeł: wysokość lewego − wysokość prawego.
+:::
+
+:::warn Typowe błędy
+- odwrócony znak bf (to **lewe − prawe**),
+- „drzewo zrównoważone” w korzeniu nie znaczy AVL — sprawdź **każdy** węzeł.
+:::
 
 === tasks ===
 

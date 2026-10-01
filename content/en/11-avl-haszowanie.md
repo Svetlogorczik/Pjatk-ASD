@@ -5,12 +5,16 @@ type: topic
 title: AVL trees and hash tables
 short: AVL and hashing
 desc: How to keep a BST balanced — the balance factor and AVL rotations; the minimum and maximum number of nodes; a dictionary in a hash table — hash function, chaining, open addressing.
-sources: Wyklady 2009/asd 10 wyklad_8.pdf (dictionary: hash table, BST, AVL); Asd9.pdf (intro: AVL trees)
+sources: 2026/2027 (M. Sydow): dictionary9-pl.pdf · 2025/2026: Wyklady 2009/asd 10 wyklad_8.pdf (dictionary: hash table, BST, AVL); Asd9.pdf (intro: AVL trees)
 exercises: asd 09.pdf (tasks 1–3)
 ---
 
 :::exam 2026/2027 tests
 This topic was written from the 2025/2026 lectures. **The 2026/2027 tests use the versions from M. Sydow's slides** — you will find them in the section ["2026/2027 lecture version"](topic:t11#2026-2027-lecture-version-m-sydow-dictionaries-hash-tables-a) at the end of the topic (code copied from the slides). Qualifying tasks and practice tasks: [Tests 2026/2027](page:exams).
+:::
+
+:::info Outside the 2026/2027 programme
+AVL **rotations** and the hashing details from 2025/2026 are **outside the 2026/2027 programme** — for the test the AVL definition and computing bf are enough (section at the end of the topic).
 :::
 
 ## Why balance trees?
@@ -192,26 +196,41 @@ Hash tables; properties of a hash function; analysis of dictionary operations on
 
 === summary ===
 
-## 2026/2027 version (M. Sydow)
+:::exam What you must know
+Hash tables (function, collisions, α); **AVL: compute bf of all nodes and decide whether it is AVL**. Rotations are not in the 2026/2027 programme.
+:::
 
-- Hash: U → [0..m−1]; collisions: repeated hashing / chaining; α = n/m; operations O(α); hash = key mod m.
-- AVL: bf(x) = h(left) − h(right) ∈ {−1, 0, 1}; height O(log n), W = O(log n); fixed by O(1) rotations.
+## Hash tables
 
+:::def Hash function
+$\text{hash}: U\to[0,\dots,m-1]$ — fast (constant time) and distributing keys **uniformly**. Example: $\text{hash}(key)=key \bmod m$.
+:::
+
+- **Collision:** $k_1\ne k_2$, but $\text{hash}(k_1)=\text{hash}(k_2)$.
+- **Repeated hashing** — look for another slot (max $m$ elements) · **chaining** — a list in every slot.
+
+:::formula Load factor
+$$\alpha=\frac{n}{m} \qquad \text{dictionary operations: } O(\alpha)$$
+Larger $m$ — faster, but more memory. **Ordered** dictionary operations (min, successor…) — linear.
+:::
 
 ## AVL
 
-- a BST where for every node **|h(L) − h(R)| ≤ 1**; **BF = h(L) − h(R) ∈ {−1, 0, 1}**.
-- max nodes at height h: **2ʰ⁺¹ − 1**; min: **N(h) = N(h−1) + N(h−2) + 1**, N(0) = 1, N(1) = 2 (1, 2, 4, 7, 12, 20, 33) = Fₕ₊₃ − 1 ⇒ **h = O(log n)** (< 1.44 log₂ n).
-- insert: BST insert + recompute BF upwards + **one** (single or double) rotation.
-- cases: **LL** → right rotation; **RR** → left; **LR** → left on the child + right; **RL** → right on the child + left.
-- delete: BST delete + rotations upwards (possibly many); a child with BF = 0 → single rotation.
+:::def AVL tree
+A BST in which for every node $bf(x)=h(\text{left})-h(\text{right})\in\{-1,0,1\}$.
+:::
 
-## Hashing
+- AVL height: $O(\log n)$ ⇒ **all operations** $W=O(\log n)$.
+- After insert/delete check bf going **up** from the changed node; at $\pm2$ fix with a rotation ($O(1)$).
 
-- h(k) = k mod m; collisions; α = n/m.
-- **chaining:** a list in every cell; O(1 + α) on average.
-- **open addressing:** linear (h(k)+i), quadratic, double; deletion = a "deleted" marker.
-- O(1) on average, but no order (min, max, successor — expensive).
+:::example How to compute bf
+Empty subtree height = −1, leaf = 0. Go from the leaves up; every node: left height − right height.
+:::
+
+:::warn Common mistakes
+- the wrong sign of bf (it is **left − right**),
+- "balanced at the root" does not mean AVL — check **every** node.
+:::
 
 === tasks ===
 

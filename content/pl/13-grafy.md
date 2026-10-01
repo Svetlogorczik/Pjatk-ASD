@@ -5,7 +5,7 @@ type: topic
 title: Grafy — reprezentacje, przeszukiwanie w głąb i wszerz, Find-Union
 short: Grafy, DFS, BFS
 desc: Czym jest graf, listy i macierz sąsiedztwa, ogólny schemat przechodzenia grafu, DFS ze stosem, BFS z kolejką, metoda kolejnych uściśleń oraz struktura Find-Union (zbiory rozłączne).
-sources: asd11.pdf; Wyklady 2009/wyklad_2.pdf (grafy), asd 09 wyklad_7.pdf (DFS, BFS); wyklad_10.pdf (struktura Find-Union)
+sources: 2026/2027 (M. Sydow): graphsOne10-pl.pdf, graphsTwo10b-pl.pdf · 2025/2026: asd11.pdf; Wyklady 2009/wyklad_2.pdf (grafy), asd 09 wyklad_7.pdf (DFS, BFS); wyklad_10.pdf (struktura Find-Union)
 exercises: brak osobnego zestawu — zadania od autora strony (grafy ważone są w temacie 14)
 ---
 
@@ -304,31 +304,45 @@ Definicje grafów, dróg i cykli; spójność, silna/słaba spójność, składo
 
 === summary ===
 
-## Wersja 2026/2027 (M. Sydow)
+:::exam Co trzeba umieć
+**BFS/DFS** na danym grafie (sąsiedzi alfabetycznie): kolejność, odległości `d` (BFS), czasy `d/f` (DFS od 0), klasyfikacja krawędzi. Definicje grafów, drzew, reprezentacje.
+:::
 
-- Drzewo ⇔ spójny i n−1 krawędzi ⇔ acykliczny i n−1 krawędzi ⇔ dokładnie jedna droga elementarna.
-- Pamięć: macierz sąsiedztwa Θ(n²), listy Θ(n + m), macierz incydencji Θ(n·m).
-- BFS (kolejka): d, p; DFS (rekurencja): d/f od time = 0; oba O(|V| + |E|).
-- Krawędzie T/F/B/C; DFS skierowany: v biały → T, szary → B, czarny → F lub C.
+## Definicje (skrót)
 
+- **graf** $G=(V,E)$, krawędź = para nieuporządkowana; **digraf** — uporządkowana (łuk).
+- **droga prosta** — bez powtórzeń krawędzi; **elementarna** — bez powtórzeń wierzchołków; **cykl** — długość ≥ 3, $v_0=v_l$.
+- **spójny** — każde 2 wierzchołki połączone drogą; **silnie spójny** (digraf) — drogi w obie strony.
+- **drzewo** — spójny + acykliczny ⇔ $n-1$ krawędzi i acykliczny ⇔ dokładnie jedna droga elementarna między każdą parą.
 
-## Grafy
+## Reprezentacje
 
-- G = (V, E), n = |V|, m = |E|; nieskierowany: m ≤ n(n−1)/2, skierowany: m ≤ n(n−1).
-- **listy sąsiedztwa** O(n + m) — grafy rzadkie; **macierz** O(n²) — gęste, test krawędzi O(1).
+| | pamięć |
+|---|---|
+| macierz sąsiedztwa | $\Theta(n^2)$ |
+| listy sąsiedztwa | $\Theta(n+m)$ |
+| macierz incydencji | $\Theta(n\cdot m)$ |
 
-## Przechodzenie grafu
+## BFS i DFS
 
-- schemat: odwiedź p; dopóki jest nieodwiedzona krawędź z odwiedzonego v — przejdź nią; każdy wierzchołek i krawędź raz → **O(n + m)**.
-- **DFS** — kandydaci na **stosie** (w głąb, z powrotami); **BFS** — w **kolejce** (warstwami).
-- BFS daje najkrótsze ścieżki (liczba krawędzi): dist[w] = dist[v] + 1.
-- metoda **kolejnych uściśleń** (stepwise refinement).
+| | struktura | atrybuty | złożoność |
+|---|---|---|---|
+| BFS | **kolejka** | `d` = odległość, `p` = rodzic | $O(n+m)$ |
+| DFS (rekurencyjny) | **stos** / rekurencja | `d` = `time++` przy wejściu, `f` = `time++` przy wyjściu | $O(n+m)$ |
 
-## Find-Union
+:::formula Klasyfikacja krawędzi (u, v) w DFS
+biały $v$ → **drzewowa** · szary → **wsteczna** · czarny → **w przód** lub **poprzeczna**.
+Graf **nieskierowany**: tylko drzewowe i wsteczne.
+:::
 
-- find(x), union(A, B) na zbiorach rozłącznych.
-- tablica nazw: union O(n); listy z balansowaniem: n−1 union O(n log n); **drzewa + balansowanie + kompresja ścieżek: prawie O(1)** (O(m α(n))).
-- zastosowanie: algorytm Kruskala, składowe spójności.
+:::tip Obchody drzew binarnych
+pre-order (węzeł, L, P), in-order (L, węzeł, P), post-order (L, P, węzeł) — patrz [temat 10](topic:t10).
+:::
+
+:::warn Typowe błędy
+- nieodwiedzani sąsiedzi w złej kolejności (zawsze rosnąco / alfabetycznie),
+- w DFS `time` zaczyna się od **0** i rośnie przy wejściu **i** wyjściu.
+:::
 
 === tasks ===
 

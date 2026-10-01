@@ -32,6 +32,10 @@ desc: Типы задач допуска (binSearch, MergeSort, partition, Count
 
 Полный объём практического теста: порядки функций / нотация O, binSearch, selection sort, insertion sort, mergeSort, quickSort/partition, countSort, radixSort, minHeap, BST, in/pre/post-order, BFS/DFS, Kruskal.
 
+:::tip Проверьте себя
+Полные пробные тесты (2 варианта практического, пробный тест знаний) и 13 входных тестов: [Пробные тесты](page:mock).
+:::
+
 ## 1. Binary Search
 
 ```pseudo

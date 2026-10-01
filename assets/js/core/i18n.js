@@ -92,8 +92,8 @@
 
       lecture: 'Lecture',
       topicLabel: 'Topic {n}',
-      summaryBtn: 'Cheat notes',
-      summaryTitle: 'Short notes — {title}',
+      summaryBtn: 'Summary',
+      summaryTitle: 'Summary — {title}',
       summaryNone: 'There are no short notes for this topic yet.',
       exercisesBtn: 'Exercises',
       exercisesHeading: 'Exercises for this topic',

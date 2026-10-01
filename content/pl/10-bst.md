@@ -5,7 +5,7 @@ type: topic
 title: Słowniki, drzewa BST i obchodzenie drzew
 short: Słowniki i drzewa BST
 desc: Problem słownika i jego proste implementacje, drzewa poszukiwań binarnych (search, insert, min, max, następnik, delete), obchodzenie drzew preorder/inorder/postorder i sortowanie drzewem.
-sources: asd8.pdf; Asd9.pdf; Wyklady 2009/wyklad_2.pdf (drzewa), asd 10 wyklad_8.pdf (słownik, BST)
+sources: 2026/2027 (M. Sydow): dictionary9-pl.pdf, graphsTwo10b-pl.pdf (pre/in/post-order) · 2025/2026: asd8.pdf; Asd9.pdf; Wyklady 2009/wyklad_2.pdf (drzewa), asd 10 wyklad_8.pdf (słownik, BST)
 exercises: asd 08.pdf (zad. 1–3), asd 09 a.pdf (zad. 1–3)
 ---
 
@@ -313,37 +313,42 @@ Definicja słownika; analiza implementacji naiwnych; słownik uporządkowany; de
 
 === summary ===
 
-## Wersja 2026/2027 (M. Sydow)
+:::exam Co trzeba umieć
+**BST**: drzewo po insert/delete (wszystkie warianty), obchody **pre/in/post-order**; słownik i słownik uporządkowany; analiza.
+:::
 
-- Słownik: search/insert/delete; uporządkowany: + minimum, maximum, predecessor, successor.
-- Naiwnie: nieposortowane search O(n), insert O(1), delete O(n); posortowane O(log n), O(n), O(n).
-- BST: lewe ≤ x ≤ prawe; insert: `key >= node.key` → w prawo; delete: liść / 1 syn (podpinamy) / 2 synów (następnik lub poprzednik).
-- BST: A(n) = O(log n), W(n) = O(n). Obchody: pre (b, l, p), in (l, b, p), post (l, p, b).
+:::def Słownik / słownik uporządkowany
+`search(key)`, `insert(key, value)`, `delete(key)` (klucze unikatowe) · uporządkowany: + `minimum`, `maximum`, `predecessor`, `successor`.
+:::
 
+:::def BST
+Dla każdego węzła $x$: klucze w lewym poddrzewie $\le x \le$ klucze w prawym. Pola: `key, value, parent, left, right`.
+:::
 
-## Słownik
+## Operacje
 
-- operacje: construct, search, insert, delete na zbiorze S (element = rekord, szukamy po kluczu).
-- lista: O(n); lista samoorganizująca (element na początek); tablica posortowana: search log n, insert/delete O(n).
+- **insert:** schodź jak w search; `key < node.key` → w lewo, **w przeciwnym razie (także równy) w prawo**.
+- **min / max:** skrajnie w lewo / w prawo.
+- **successor:** jest prawe poddrzewo → jego minimum; wpp. najbliższy przodek, z którego schodziło się w lewo.
+- **delete:** liść → usuń · 1 syn → „podepnij” syna do rodzica · 2 synów → wstaw klucz **następnika** (lub **poprzednika** — w pseudokodzie slajdu) i usuń tamten węzeł.
 
-## BST
+## Obchody
 
-- porządek symetryczny: lewe poddrzewo < węzeł < prawe poddrzewo.
-- search: lewo/prawo aż do trafienia albo null; min — skrajnie lewo; max — skrajnie prawo.
-- insert: nowy liść tam, gdzie search wypada z drzewa.
-- następnik: min prawego poddrzewa albo ostatni przodek, przy którym skręciliśmy w lewo.
-- delete: liść — usuń; 1 syn — syn na miejsce; 2 synów — następnik (lub poprzednik) na miejsce.
-- koszt O(h): log n … n − 1; losowo średnio ~1,39 log n.
-
-## Obiegi
-
-| Obieg | Kolejność | Typowe użycie |
+| porządek | kolejność | wskazówka |
 |---|---|---|
-| preorder | korzeń, L, P | głębokości |
-| inorder | L, korzeń, P | BST → rosnąco (tw. o infiksie) |
-| postorder | L, P, korzeń | wysokości |
+| pre-order | węzeł, lewy, prawy | wypisz przy 1. napotkaniu |
+| in-order | lewy, węzeł, prawy | w BST daje ciąg **posortowany** |
+| post-order | lewy, prawy, węzeł | wypisz przy ostatnim napotkaniu |
 
-- preorder + inorder ⇒ drzewo jednoznacznie; ciąg jest inorder BST ⇔ ściśle rosnący.
+:::formula Złożoność (porównania ∝ wysokość drzewa)
+$$A(n)=O(\log n) \quad\text{(losowe BST)} \qquad W(n)=O(n) \quad\text{(jedna gałąź)}$$
+Naiwnie: nieposortowane search $O(n)$/insert $O(1)$; posortowane search $O(\log n)$/insert, delete $O(n)$.
+:::
+
+:::warn Typowe błędy
+- równy klucz wstawiony w lewo,
+- przy delete z dwoma synami pomylone poprzednik (max lewego) i następnik (min prawego).
+:::
 
 === tasks ===
 

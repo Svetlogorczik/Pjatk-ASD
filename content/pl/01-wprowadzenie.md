@@ -5,9 +5,13 @@ type: topic
 title: Czym jest algorytm? Wprowadzenie do algorytmiki
 short: Wprowadzenie do algorytmiki
 desc: Co to jest algorytm, dziedzina algorytmiczna, trzy wersje algorytmu Euklidesa, pseudokod i matematyka potrzebna od pierwszych zajęć.
-sources: Algorytmika.pdf; asd1.pdf (§1 Pseudo-kod); Wyklady 2009/wyklad_1.pdf
+sources: 2026/2027 (M. Sydow): correctness1-pl.pdf (organizacja, pseudokod) · 2025/2026: Algorytmika.pdf; asd1.pdf (§1 Pseudo-kod); Wyklady 2009/wyklad_1.pdf
 exercises: asd 00.pdf (Ćwiczenie 0)
 ---
+
+:::info Poza programem 2026/2027
+Algorytm Euklidesa, dziedzina algorytmiczna i część matematyki pochodzą z wykładów 2025/2026 — **nie ma ich na slajdach 2026/2027**. Obowiązujący materiał: sekcja o pseudokodzie i [konspekt](topic:t01).
+:::
 
 ## Algorytm — o co w ogóle chodzi?
 
@@ -244,39 +248,34 @@ Kolejność „kto rośnie szybciej” (od najwolniejszej): **log n ≺ √n ≺
 
 === summary ===
 
-## Najważniejsze pojęcia
+:::exam Co trzeba umieć
+Wiedzieć, czym jest algorytm, czym jest pseudokod (i jakie ma konwencje) oraz z jakich 3 części składa się kurs.
+:::
 
-- **Algorytm** — skończony, jednoznaczny przepis rozwiązania problemu krok po kroku.
-- **Algorytmika** — układanie i analiza algorytmów (poprawność + koszt) oraz dobór struktur danych.
-- **Dziedzina algorytmiczna** — obiekty + dozwolone operacje i relacje. Od niej zależy, co i jak szybko umiemy policzyć.
-- Istnieją problemy **nierozwiązywalne** (konstrukcje greckie tylko cyrklem i linijką; problem Posta — nierozstrzygalny, Turing).
+## Algorytm i algorytmika
 
-## Euklides — NWD(m, n)
+- **Algorytm** — dokładny opis (lista kroków), jak coś wykonać. Słowo od nazwiska *al-Khwarizmi* (780–850).
+- **Algorytmika** to „serce informatyki”; jej rola rośnie w epoce *big data*.
 
-| Wersja | Krok | Koszt (najgorszy) |
-|---|---|---|
-| 1. odejmowanie | NWD(m, n) = NWD(n − m, m) | nawet ~n obrotów (wykładniczo względem liczby cyfr) |
-| 2. modulo | NWD(m, n) = NWD(n mod m, m) | ~log_φ n obrotów (liniowo względem liczby cyfr) |
-| 3. binarny | parzystość, /2, ·2, − | też logarytmicznie |
+## Pseudokod (konwencje z wykładu)
 
-- Najgorsze dane dla wersji 2: **sąsiednie liczby Fibonacciego**; (Fₙ₋₁, Fₙ) → n − 2 obroty; np. (55, 89) → 9 obrotów.
-- Fₙ ≈ φⁿ/√5, φ ≈ 1,618 → dla liczb 30-cyfrowych ≤ ~148 obrotów.
+| Element | Zapis |
+|---|---|
+| zmienne | bez deklaracji |
+| tablice | `[ ]`, indeksowane **od 0** |
+| operatory | `=`, `==`, `<`, `&&`, `||`, `!`, `+=`, `++` |
+| sterowanie | `if / else`, `while`, `for`, `return` |
+| argumenty złożone | przekazywane przez referencję |
 
-## Pseudokod
+## Trzy części kursu
 
-- `:=` przypisanie, `=` porównanie; `for i := a to b` obejmuje b; tablice od 0 do n−1.
-- `Dane:` / `Wynik:` = warunki wejścia / wyjścia.
+1. **Analiza** — dany kod: co robi i jak efektywnie?
+2. **Projektowanie** — dana **specyfikacja**: zaprojektuj poprawny i efektywny algorytm.
+3. **Struktury danych** — efektywna organizacja danych i operacji.
 
-## Złożoność — słowniczek
-
-- operacja **dominująca**; złożoność **pesymistyczna** (najgorsze dane) i **średnia** (typowe dane); **pamięciowa**; złożoność **problemu** = złożoność najlepszego algorytmu.
-- rozmiar danych: tablica → długość, liczba → liczba cyfr/bitów, graf → |V| + |E|.
-
-## Matematyka na ćwiczenia
-
-- log_a b = c ⇔ aᶜ = b; log(xy) = log x + log y; log xᵏ = k log x; log_a x = log_b x / log_b a.
-- liczba cyfr x: ⌊log₁₀ x⌋ + 1; liczba bitów: ⌊log₂ x⌋ + 1.
-- granice ułamków wielomianów: dziel przez najwyższą potęgę; log n ≺ √n ≺ n ≺ n log n ≺ n² ≺ 2ⁿ ≺ n!.
+:::info Poza programem 2026/2027
+Euklides, dziedzina algorytmiczna i logarytmy z tego tematu to materiał z 2025/2026 — przydaje się jako tło, ale nie jest wprost na slajdach 2026/2027.
+:::
 
 === tasks ===
 

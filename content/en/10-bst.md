@@ -5,7 +5,7 @@ type: topic
 title: Dictionaries, BST trees and tree traversals
 short: Dictionaries and BST
 desc: The dictionary problem and its simple implementations, binary search trees (search, insert, min, max, successor, delete), preorder/inorder/postorder traversals and tree sort.
-sources: asd8.pdf; Asd9.pdf; Wyklady 2009/wyklad_2.pdf (trees), asd 10 wyklad_8.pdf (dictionary, BST)
+sources: 2026/2027 (M. Sydow): dictionary9-pl.pdf, graphsTwo10b-pl.pdf (pre/in/post-order) · 2025/2026: asd8.pdf; Asd9.pdf; Wyklady 2009/wyklad_2.pdf (trees), asd 10 wyklad_8.pdf (dictionary, BST)
 exercises: asd 08.pdf (tasks 1–3), asd 09 a.pdf (tasks 1–3)
 ---
 
@@ -313,37 +313,42 @@ Definition of a dictionary; analysis of naive implementations; ordered dictionar
 
 === summary ===
 
-## 2026/2027 version (M. Sydow)
+:::exam What you must know
+**BST**: the tree after insert/delete (all variants), **pre/in/post-order** traversals; dictionary and ordered dictionary; analysis.
+:::
 
-- Dictionary: search/insert/delete; ordered: + minimum, maximum, predecessor, successor.
-- Naive: unsorted search O(n), insert O(1), delete O(n); sorted O(log n), O(n), O(n).
-- BST: left ≤ x ≤ right; insert: `key >= node.key` → right; delete: leaf / 1 son (attach) / 2 sons (successor or predecessor).
-- BST: A(n) = O(log n), W(n) = O(n). Traversals: pre (c, l, r), in (l, c, r), post (l, r, c).
+:::def Dictionary / ordered dictionary
+`search(key)`, `insert(key, value)`, `delete(key)` (unique keys) · ordered: + `minimum`, `maximum`, `predecessor`, `successor`.
+:::
 
+:::def BST
+For every node $x$: keys in the left subtree $\le x \le$ keys in the right one. Fields: `key, value, parent, left, right`.
+:::
 
-## Dictionary
+## Operations
 
-- operations: construct, search, insert, delete on a set S (element = record, searched by key).
-- list: O(n); self-organising list (element to the front); sorted array: search log n, insert/delete O(n).
-
-## BST
-
-- symmetric order: left subtree < node < right subtree.
-- search: left/right until a hit or null; min — leftmost; max — rightmost.
-- insert: a new leaf where search falls out of the tree.
-- successor: min of the right subtree, or the last ancestor where we turned left.
-- delete: leaf — remove; 1 child — the child takes its place; 2 children — successor (or predecessor) takes its place.
-- cost O(h): log n … n − 1; random order ~1.39 log n on average.
+- **insert:** go down as in search; `key < node.key` → left, **otherwise (equal too) right**.
+- **min / max:** all the way left / right.
+- **successor:** a right subtree exists → its minimum; else the nearest ancestor from which we went left.
+- **delete:** leaf → remove · 1 son → "attach" the son to the parent · 2 sons → put in the key of the **successor** (or the **predecessor** — in the slide pseudocode) and remove that node.
 
 ## Traversals
 
-| Traversal | Order | Typical use |
+| order | sequence | hint |
 |---|---|---|
-| preorder | root, L, R | depths |
-| inorder | L, root, R | BST → increasing (inorder theorem) |
-| postorder | L, R, root | heights |
+| pre-order | node, left, right | output at the 1st visit |
+| in-order | left, node, right | in a BST gives a **sorted** sequence |
+| post-order | left, right, node | output at the last visit |
 
-- preorder + inorder ⇒ unique tree; a sequence is the inorder of a BST ⇔ strictly increasing.
+:::formula Complexity (comparisons ∝ tree height)
+$$A(n)=O(\log n) \quad\text{(random BST)} \qquad W(n)=O(n) \quad\text{(one branch)}$$
+Naive: unsorted search $O(n)$/insert $O(1)$; sorted search $O(\log n)$/insert, delete $O(n)$.
+:::
+
+:::warn Common mistakes
+- an equal key inserted to the left,
+- in a two-son delete confusing the predecessor (max of left) and the successor (min of right).
+:::
 
 === tasks ===
 

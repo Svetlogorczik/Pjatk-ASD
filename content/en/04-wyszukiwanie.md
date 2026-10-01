@@ -5,7 +5,7 @@ type: topic
 title: Searching and selection — sequential, binary, the k-th element
 short: Searching and selection
 desc: Sentinel and binary search, the lower bound for the maximum, min and max together, the second largest (tournament) and Hoare's algorithm for the k-th element.
-sources: asd3.pdf; Dziel-RzadzC.pdf (min-max); Wyklady 2009/wyklad_3.pdf and asd 07 wyklad_4.pdf (The search problem I and II)
+sources: 2026/2027 (M. Sydow): searching3-pl.pdf · 2025/2026: asd3.pdf; Dziel-RzadzC.pdf (min-max); Wyklady 2009/wyklad_3.pdf and asd 07 wyklad_4.pdf (The search problem I and II)
 exercises: asd 03.pdf (task 3), asd 05.pdf (task 4)
 ---
 
@@ -296,37 +296,46 @@ Takes the **first** element m of the subsequence S[l..r] and rearranges the elem
 
 === summary ===
 
-## 2026/2027 version (M. Sydow)
+:::exam What you must know
+Qualifying task 1: **binary search** — the successive indices `m` and the result. The `search` code from memory; jumps of k; order statistics, tournament, Hoare.
+:::
 
-- search: l = 0, r = len − 1, m = (l + r)/2; equal → m; S[m] > key → r = m − 1, else l = m + 1; absent → −1.
-- binary: W = A = Θ(log len), S = O(1) (assuming RAM); sequential W = len; jumps of k: linear, ~k times faster (k = √len).
-- second smallest: simple 2len − 1; tournament len − 1 + Θ(log len).
-- partition: W(n) = n + O(1), S = O(1); Hoare: A = Θ(n) regardless of k, W = Θ(n²).
+## Binary search (sorted sequence!)
 
+```pseudo
+search(S, len, key){
+  l = 0
+  r = len - 1
+  while(l <= r){
+    m = (l + r)/2
+    if(S[m] == key) return m
+    else
+      if(S[m] > key) r = m - 1
+      else l = m + 1
+  }
+  return -1
+}
+```
 
-## Searching
+:::example How to compute
+Table **l | r | m | S[m] | decision**; `m` is rounded **down**; no key → `-1` when `l > r`.
+:::
 
-| Method | Requirement | Complexity |
-|---|---|---|
-| sequential (with sentinel) | none | W = n + 1, A = (n+1)/2 |
-| binary | sorted array | ~⌈log₂ n⌉ iterations + 1 comparison |
-| jumps of √n | sorted | O(√n) |
-| interpolation | sorted, uniform distribution | average O(log log n), worst O(n) |
+## Complexities
 
-- Unordered data: n comparisons are necessary.
-- **SzukajBin:** `s := (l+p) div 2; if a > L[s] then l := s+1 else p := s`; invariant: a ∈ L ⇔ a ∈ L[l..p]; returns the **first** occurrence; decreasing function p − l.
+| Algorithm | Assumption | W | notes |
+|---|---|---|---|
+| sequential | — | $len$ | the order of checking does not help |
+| jumps of k | sorted | $\frac1k\Theta(len)$ | best $k=\sqrt{len}$, still linear |
+| binary | sorted, **RAM** | $\Theta(\log_2 len)$ | $S=O(1)$; not fast on a list |
+| 2nd smallest — tournament | — | $len-1+\Theta(\log len)$ | simple: $2len-1$ |
+| Hoare (k-th) | — | $A=\Theta(n)$, $W=\Theta(n^2)$ | partition: $W=n+O(1)$ |
 
-## Selection
-
-- **max:** n − 1 comparisons — the complexity of the **problem** (graph proof: < n − 1 edges ⇒ disconnected).
-- **min and max together:** T(n) = 2T(n/2) + 2 ⇒ **3n/2 − 2**; Pohl: ≥ ⌈3n/2⌉ − 2.
-- **second largest:** tournament, **n + ⌈log₂ n⌉ − 2** (candidates = those who lost to the champion).
-
-## Hoare (k-th element)
-
-- **partition(l, r):** v = a[l]; i from the left to ≥ v, j from the right to ≤ v, swap; finally v goes to position j.
-- k = j − l + 1 → found; k ≤ j − l → p := j − 1; otherwise k := k − (j − l + 1), l := j + 1.
-- W(n) = ½n² + O(n), A(n) = O(n); "magic fives" — O(n) even in the worst case.
+:::warn Common mistakes
+- computing `m = (l+r)/2` rounded up,
+- binary search on an **unsorted** sequence or a linked list (no constant access to `S[m]`),
+- Hoare is **quadratic** in the worst case (partition lands at an end).
+:::
 
 === tasks ===
 

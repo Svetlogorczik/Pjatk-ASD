@@ -5,7 +5,7 @@ type: topic
 title: Sortowanie — problem i proste algorytmy (Selection, Insertion)
 short: Sortowanie proste
 desc: Czym jest sortowanie, co liczymy, co znaczy „w miejscu” i „stabilnie”. SelectionSort i InsertionSort krok po kroku, z analizą złożoności.
-sources: asd2.pdf (§2 Sortowanie); Dziel-RzadzC.pdf (InsertionSort rekurencyjnie); Wyklady 2009/wyklad_5.pdf (Problem sortowania I), asd 08 wyklad_6.pdf (stabilność)
+sources: 2026/2027 (M. Sydow): sortOne4-pl.pdf · 2025/2026: asd2.pdf (§2 Sortowanie); Dziel-RzadzC.pdf (InsertionSort rekurencyjnie); Wyklady 2009/wyklad_5.pdf (Problem sortowania I), asd 08 wyklad_6.pdf (stabilność)
 exercises: asd 05.pdf (zad. 1)
 ---
 
@@ -243,33 +243,43 @@ Istota problemu sortowania i zastosowania; selectionSort, insertionSort, mergeSo
 
 === summary ===
 
-## Wersja 2026/2027 (M. Sydow)
+:::exam Co trzeba umieć
+Stan tablicy po kolejnych przebiegach selection/insertion sort; analiza W i A; porównanie z MergeSort.
+:::
 
-- Selection: W = A = len(len−1)/2 = Θ(len²) — także dla posortowanych.
-- Insertion: W = n(n−1)/2 (odwrotnie posortowane), posortowane: n − 1, A = ¼n² + Θ(n).
+## Selection sort
 
+Znajdź minimum w części nieposortowanej, zamień z pierwszym jej elementem (`indexOfMin` + `swap`), `i++`.
 
-## Pojęcia
+## Insertion sort
 
-- Sortowanie: permutacja dająca ciąg niemalejący; operacja dominująca — **porównanie**.
-- **W miejscu:** S(n) = O(1). **Stabilny:** równe klucze zachowują kolejność.
-- Analiza średnia: każda permutacja jednakowo prawdopodobna.
+Element `arr[next]` „przepychaj” w lewo, dopóki `temp < arr[curr-1]`; pierwsze `next+1` elementów jest posortowane.
 
-## SelectionSort
+```pseudo
+for(next = 1; next < len; next++){
+  curr = next; temp = arr[next];
+  while((curr > 0) && (temp < arr[curr - 1])){
+    arr[curr] = arr[curr - 1]; curr--;
+  }
+  arr[curr] = temp;
+}
+```
 
-- przebieg i: znajdź min w a[i..n−1], zamień z a[i].
-- W = A = n(n−1)/2, Δ = δ = 0, **n − 1 zamian** (optymalnie), S = O(1), **niestabilny**.
+## Złożoności (operacja: porównanie)
 
-## InsertionSort
+| | W | A | najlepiej | pamięć | stabilny |
+|---|---|---|---|---|---|
+| Selection | $\frac{n(n-1)}{2}$ | $=W$ | $=W$ (nawet dla posortowanych) | $O(1)$ | nie |
+| Insertion | $\frac{n(n-1)}{2}$ (odwrotnie posort.) | $\frac14 n^2+\Theta(n)$ | $n-1$ (posortowane) | $O(1)$ | tak |
 
-- a[0..i−1] posortowane; x = a[i] wstaw, przesuwając większe w prawo.
-- najlepiej n − 1, średnio ≈ n²/4, najgorzej n(n−1)/2 porównań; S = O(1); **stabilny**.
-- liczba przesunięć = liczba **inwersji**; świetny dla danych prawie posortowanych.
-- rekurencyjnie: podział 1 ; n−1, T(n) = T(n−1) + n − 1.
+:::tip Zapamiętaj
+Insertion „dostosowuje ilość pracy” do stopnia posortowania; średnio 2× szybszy od Selection, ale wciąż $\Theta(n^2)$.
+:::
 
-## Na ćwiczeniach
-
-Stan tablicy po każdym przebiegu + granica części posortowanej + liczba porównań.
+:::warn Typowe błędy
+- w insertion licz też porównanie, które **zatrzymuje** przesuwanie,
+- selection robi zamianę także, gdy minimum już stoi na miejscu (stan się nie zmienia).
+:::
 
 === tasks ===
 

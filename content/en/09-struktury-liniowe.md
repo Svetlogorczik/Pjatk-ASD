@@ -5,7 +5,7 @@ type: topic
 title: Linear structures — stack, queue, lists
 short: Stack, queue, lists
 desc: Abstract data types, the stack (LIFO) and the queue (FIFO), axioms of their operations, doubly linked lists with sentinels, reverse Polish notation, the sieve of Eratosthenes and merge-sorting lists with a queue.
-sources: asd6.pdf (stack); asd7.pdf (lists); Wyklady 2009/asd 09 wyklad_7.pdf (list, stack, queue, expressions)
+sources: 2026/2027 (M. Sydow): listsAndArrays7-pl.pdf · 2025/2026: asd6.pdf (stack); asd7.pdf (lists); Wyklady 2009/asd 09 wyklad_7.pdf (list, stack, queue, expressions)
 exercises: asd 07.pdf (tasks 1–3)
 ---
 
@@ -272,39 +272,45 @@ A conscious choice of implementation can significantly affect the complexity of 
 
 === summary ===
 
-## 2026/2027 version (M. Sydow)
+:::exam What you must know
+Definition of an **ADS**; interfaces of a stack, queue, deque; implementations on a list and an array with complexities; lists vs arrays.
+:::
 
-- ADS = a set of operations (interface). Stack: push/pop/top (LIFO). Queue: inject/out/front (FIFO). Deque: first/last/pushFront/pushBack/popFront/popBack.
-- Stack: singly linked list/array; queue: singly linked list/cyclic array; deque: doubly linked list/cyclic array — all O(1).
-- splice(a, b, t) on a doubly linked list — O(1).
+:::def Abstract data structure
+Defined by a **set of operations** (interface), without going into the implementation.
+:::
 
+## Interfaces
 
-## ADT
+| ADS | operations | rule |
+|---|---|---|
+| stack | `push(e)`, `pop()`, `top()` | LIFO |
+| queue | `inject(e)`, `out()`, `front()` | FIFO |
+| deque | `first`, `last`, `pushFront/Back`, `popFront/Back` | both ends |
 
-First the operations and their behaviour, then the implementation.
+## Implementations — all $O(1)$
 
-## Stack (LIFO)
+| ADS | list | array |
+|---|---|---|
+| stack | singly linked | plain |
+| queue | singly linked + tail pointer | **cyclic** (indices mod n) |
+| deque | **doubly linked** | cyclic |
 
-- `push, pop, top, size, isEmpty` — all **O(1)** (array or list).
-- uses: recursion, QuickSort without recursion, RPN, DFS, "undo".
-- laws: top(push(s,e)) = e; pop(push(s,e)) = s; ¬empty(s) ⇒ push(pop(s), top(s)) = s.
+## Lists vs arrays
 
-## Queue (FIFO)
+| | array | linked list |
+|---|---|---|
+| access by index | $O(1)$ | $O(n)$ |
+| insert in the middle | $O(n)$ | $O(1)$ (at a known node) |
+| size | fixed | dynamic |
+| memory | minimal | + links |
 
-- `inject (in), front (first), pop (out), isEmpty` — **O(1)** (list with head and tail, or circular array).
-- uses: BFS, buffers, Huffman.
-- laws: empty(q) ⇒ first(in(q,e)) = e; ¬empty(q) ⇒ first(in(q,e)) = first(q); ¬empty(q) ⇒ out(in(q,e)) = in(out(q),e).
+**splice(a, b, t)** — cut out the sublist (a…b) and insert it after t; $O(1)$ on a doubly linked list; most modifications are its special cases.
 
-## RPN
-
-number → push; operator → b = pop, a = pop, push(a op b). `2 3 + 4 *` = 20.
-
-## Lists
-
-- Locate, Retrieve, Insert, Delete; ends: Push/Pop/Front and Inject/Eject/Rear.
-- Inject+Front+Pop = queue; Front+Push+Pop = stack.
-- doubly linked list with **sentinels**: insert/delete O(1), access to position p — O(p).
-- sieve of Eratosthenes on a list; list MergeSort with a queue — O(n log n).
+:::warn Common mistakes
+- a queue on a plain array (shifting = $O(n)$),
+- `popBack` on a singly linked list is $O(n)$ — hence a deque on a doubly linked one.
+:::
 
 === tasks ===
 

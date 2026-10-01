@@ -5,7 +5,7 @@ type: topic
 title: QuickSort, the n log n barrier and linear-time sorting
 short: QuickSort & linear sorts
 desc: Hoare's quick sort, splitting (partition, Split, the Polish flag), QuickSort without recursion using a stack, decision trees and the lower bound, CountingSort, RadixSort and BucketSort.
-sources: asd5.pdf (§2 QuickSort, §3 CountSort, RadixSort); asd6.pdf (QuickSort and the stack); Dziel-RzadzC.pdf (Quicksort, FlagaPolska); Wyklady 2009/wyklad_5.pdf (decision trees), asd 08 wyklad_6.pdf (linear-time sorting)
+sources: 2026/2027 (M. Sydow): sortTwo5-pl.pdf · 2025/2026: asd5.pdf (§2 QuickSort, §3 CountSort, RadixSort); asd6.pdf (QuickSort and the stack); Dziel-RzadzC.pdf (Quicksort, FlagaPolska); Wyklady 2009/wyklad_5.pdf (decision trees), asd 08 wyklad_6.pdf (linear-time sorting)
 exercises: asd 05.pdf (tasks 2, 5), asd 06.pdf (tasks 1, 3)
 ---
 
@@ -305,33 +305,49 @@ Example from the slides: (3,2,5,1,2,6,8,1,2,4), max = 8 → counts after phase 1
 
 === summary ===
 
-## 2026/2027 version (M. Sydow)
+:::exam What you must know
+Task 3: **partition** — returned index, first element, number of swaps (including the last). Task 4: **CountSort** — the `counts` array after 3 phases. RadixSort, stability, lower bound.
+:::
 
-- partition (pivot = first): W = A = Θ(n), S = O(1); QuickSort A = Θ(n log n) (≈1.44), W = Θ(n²) for sorted input.
-- Lower bound for comparison sorting: log₂ n! = Θ(n log n).
-- CountSort: W = A = Θ(n + m), S = Θ(n + m), stable (phase 3 from the back). RadixSort: from the last position, stable auxiliary sort.
+## partition (pivot = first element)
 
+1. `i` moves right while `a[i] <= p`; `j` moves left while `a[j] >= p`.
+2. If `i < j` — swap `a[i]`, `a[j]` and repeat.
+3. End: the pivot goes to position `i-1` (when `a[i] > p`) or `i` — this is the **last swap**.
 
-## QuickSort
+:::tip Quick check
+Returned index = number of elements **smaller** than the pivot (distinct elements). Swaps = pair swaps + 1.
+:::
 
-- partition (pivot = a[l]) → pivot at position j; recursion on a[l..j−1] and a[j+1..r]; "merging" is empty.
-- **W(n) = ½n² + O(n)** (sorted data!), **A(n) ≈ 1.4 n log n**, δ ≈ 0.65n, unstable.
-- without recursion: a stack of pairs [l, r]; **push the longer, process the shorter** → S(n) = O(log n).
-- improvements (by the author): random pivot, median of three, InsertionSort for small fragments.
+## CountSort (natural numbers 0..max)
 
-## Splits
+| Phase | what it does | `counts` after the phase |
+|---|---|---|
+| 1. counting | `counts[a[i]]++` | frequencies |
+| 2. summing | `counts[i] += counts[i-1]` | prefix sums (last = $n$) |
+| 3. output (from the **end**) | `result[--counts[a[i]]] = a[i]` | b) shifted right, with 0 at the front |
 
-- **partition** — two pointers moving towards each other; **Split** — one pointer s (zone < v), finally swap a[l] with a[s]; **Polish flag** — ≤ v to the left, ≥ v to the right.
+**RadixSort:** sort stably by the **last** digit, then the second to last … the first (CountSort as the helper).
 
-## Lower bound
+## Complexities
 
-- decision tree: ≥ n! leaves, height h ≥ log₂ n! = **Ω(n log n)** — for every comparison sort (worst case and average).
+| | W | A | S | stable |
+|---|---|---|---|---|
+| partition | $\Theta(n)$ | $\Theta(n)$ | $O(1)$ | — |
+| QuickSort | $\Theta(n^2)$ (sorted input) | $\Theta(n\log n)$ (≈1.44) | in place | no |
+| CountSort | $\Theta(n+m)$ | $\Theta(n+m)$ | $\Theta(n+m)$ | yes (phase 3 from the back) |
+| RadixSort ($d$ digits) | $\Theta(d(n+10))$ | | | yes |
 
-## Linear sorts (no comparisons)
+:::formula Lower bound for comparison sorting
+$$\log_2(n!)=\Theta(n\log n)$$
+The decision tree has $n!$ leaves. Faster only **without comparisons** (CountSort) — at the cost of memory.
+:::
 
-- **CountingSort:** keys 0…m−1; count → prefix sums → from the end into t; O(n + m), S = n + m, **stable**.
-- **RadixSort:** stable, digit by digit from the least significant; O(d(n + k)).
-- **BucketSort:** uniform distribution on [0,1), n buckets; O(n) on average.
+:::warn Common mistakes
+- forgetting the **last** swap in partition,
+- phase 3 of CountSort from the start (loses stability),
+- `counts` from 0 to **max** — also values that do not occur (entry 0).
+:::
 
 === tasks ===
 

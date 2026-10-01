@@ -5,12 +5,16 @@ type: topic
 title: Kolejki priorytetowe, kopce i HeapSort
 short: Kopce i HeapSort
 desc: Kolejka priorytetowa, kopiec binarny w tablicy, upheap i downheap, budowa kopca w czasie liniowym, sortowanie przez kopcowanie oraz drzewa (kopce) lewicowe.
-sources: asd10.pdf; Wyklady 2009/wyklad_9 kopce binarne.pdf; wyklad_10.pdf (kolejka priorytetowa — kopiec lewicowy)
+sources: 2026/2027 (M. Sydow): priorityQueue8-pl.pdf · 2025/2026: asd10.pdf; Wyklady 2009/wyklad_9 kopce binarne.pdf; wyklad_10.pdf (kolejka priorytetowa — kopiec lewicowy)
 exercises: asd 10.pdf („ASD 10b”: zad. 1–3)
 ---
 
 :::exam Sprawdzian 2026/2027
 Ten temat powstał na podstawie wykładów 2025/2026. **Na sprawdzianach 2026/2027 obowiązują wersje ze slajdów M. Sydowa** — znajdziesz je w sekcji [„Wersja z wykładu 2026/2027”](topic:t12#wersja-z-wykładu-2026-2027-m-sydow-kolejka-priorytetowa) na końcu tematu (kod przepisany ze slajdów). Zadania dopuszczeniowe i zadania treningowe: [Sprawdziany 2026/2027](page:exams).
+:::
+
+:::info Poza programem 2026/2027
+W 2026/2027 kopiec jest typu **min** (`delMin`), indeksy od 1. Kopiec typu max (`deletemax`) i **kopiec lewicowy** z dalszej części tematu to materiał 2025/2026 — **poza programem**.
 :::
 
 ## Kolejka priorytetowa
@@ -243,35 +247,38 @@ Definicja kolejki priorytetowej i kopca binarnego; analiza implementacji naiwnyc
 
 === summary ===
 
-## Wersja 2026/2027 (M. Sydow)
+:::exam Co trzeba umieć
+Zadanie dopuszczeniowe 5: **kopiec typu min** w tablicy od indeksu 1 — a) po kolejnych `insert`, b) + `delMin`, c) po `construct`.
+:::
 
-- PQ: insert(e, p), findMin, delMin. Kopiec: drzewo zupełne, rodzic ≤ dzieci; tablica od 1: parent i/2, synowie 2i, 2i+1.
-- insert (upheap) O(log n), findMin O(1), delMin (ostatni do korzenia + downheap) O(log n); construct: downHeap(i) dla i = n/2..1 → O(n).
-- HeapSort Θ(n log n); merge na kopcu binarnym O(n).
+:::def Kolejka priorytetowa
+`insert(e, p)`, `findMin()`, `delMin()` — mniejsza liczba = wyższy priorytet.
+:::
 
+:::def Kopiec binarny (min)
+Drzewo **zupełne** (wypełniane poziomami od lewej) + **rodzic ≤ dzieci** ⇒ minimum w korzeniu, wysokość $\Theta(\log n)$.
+:::
 
-## Kolejka priorytetowa
+:::formula Kopiec w tablicy (indeks 0 nieużywany)
+$$\text{parent}(i)=\lfloor i/2\rfloor \qquad \text{left}(i)=2i \qquad \text{right}(i)=2i+1$$
+:::
 
-- construct, insert, deletemax (lub deletemin).
-- tablica nieuporządkowana: insert O(1), deletemax O(n); uporządkowana: odwrotnie; **kopiec: O(log n) oba, construct O(n)**.
+## Operacje krok po kroku
 
-## Kopiec
+| operacja | jak | złożoność |
+|---|---|---|
+| `insert(x)` | na koniec + **upheap**: zamieniaj z rodzicem, dopóki rodzic > x | $O(\log n)$ |
+| `findMin()` | korzeń | $O(1)$ |
+| `delMin()` | ostatni → korzeń + **downheap**: zamieniaj z **mniejszym** synem, dopóki mniejszy | $O(\log n)$ |
+| `construct` | `for(i = n/2; i > 0; i--) downHeap(i)` | $O(n)$ |
 
-- warunek: ojciec ≥ syn ⇒ max w korzeniu; to **nie** BST.
-- zupełny: poziomy pełne, ostatni od lewej; **h = ⌊log n⌋**.
-- tablica od 1: synowie **2k, 2k+1**, ojciec **⌊k/2⌋** (od 0: 2k+1, 2k+2, (k−1)/2).
-- **insert:** na koniec + **upheap** (w górę), O(log n).
-- **deletemax:** korzeń ← ostatni, **downheap** (w dół, do większego syna), 2⌊log n⌋ porównań.
-- **construct:** downheap dla i = n/2 … 1 — **O(n)**.
+**HeapSort:** n × insert, potem n × delMin → $\Theta(n\log n)$. Naiwnie: nieposortowane insert $O(1)$ / delMin $O(n)$; posortowane odwrotnie. Merge na kopcu binarnym — $O(n)$ (kopiec dwumianowy: $O(\log n)$).
 
-## HeapSort
-
-construct + (n−1) × deletemax na koniec tablicy; **W ≤ 2n log n + O(n)**, w miejscu, zawsze n log n, niestabilny.
-
-## Kopiec lewicowy
-
-- odl(lewy) ≥ odl(prawy); prawa ścieżka ≤ log(n+1).
-- **scal** po prawych ścieżkach + zamiana synów; insert i deletemax przez scal — O(log n).
+:::warn Typowe błędy
+- wynik `construct` ≠ wynik n × `insert` (oba są poprawnymi kopcami!),
+- przy równych synach downheap bierze **lewego** (porównanie ostre),
+- indeksowanie od 0 zamiast od 1.
+:::
 
 === tasks ===
 

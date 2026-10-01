@@ -5,12 +5,16 @@ type: topic
 title: Greedy programming — Huffman, knapsack, Dijkstra, Prim, Kruskal
 short: Greedy algorithms
 desc: When the locally best choice gives the global optimum and when it does not. Activity selection, Huffman codes, the knapsack problem, shortest paths (Dijkstra) and minimum spanning trees (Prim, Kruskal).
-sources: ProgramowanieZachlanne.pdf; wyklad_11.pdf (Greedy method I); wyklad_10.pdf (Find-Union)
+sources: 2026/2027 (M. Sydow): shortestPaths12-pl.pdf, mst-pl.pdf · 2025/2026: ProgramowanieZachlanne.pdf; wyklad_11.pdf (Greedy method I); wyklad_10.pdf (Find-Union)
 exercises: asd 12.pdf (tasks 1–3)
 ---
 
 :::exam 2026/2027 tests
 This topic was written from the 2025/2026 lectures. **The 2026/2027 tests use the versions from M. Sydow's slides** — you will find them in the section ["2026/2027 lecture version"](topic:t14#2026-2027-lecture-version-m-sydow-finding-shortest-paths) at the end of the topic (code copied from the slides). Qualifying tasks and practice tasks: [Tests 2026/2027](page:exams).
+:::
+
+:::info Outside the 2026/2027 programme
+Huffman, the knapsack problem and activity selection are 2025/2026 material — **outside the 2026/2027 programme**. Binding: shortest paths and MST (sections at the end of the topic).
 :::
 
 ## Optimisation problems and the greedy strategy
@@ -335,33 +339,44 @@ Definitions of a spanning tree and forest, a cut and a cycle; the cut and cycle 
 
 === summary ===
 
-## 2026/2027 version (M. Sydow)
+:::exam What you must know
+**Kruskal** (practical test): edges in order of acceptance, **ties — alphabetically**. Prim, Dijkstra (`distance`, `parent` values), relaxation, choosing the algorithm.
+:::
 
-- relax(u, v): if u.distance + w < v.distance → update distance and parent.
-- Topo-sort: DFS, decreasing f; possible ⇔ no cycles.
-- DAG O(n + m); Dijkstra (weights ≥ 0, PQ) O((n + m) log n); Bellman-Ford (n−1 rounds) O(nm) + negative-cycle detection.
-- MST: cut property (the lightest edge of a cut is "useful") and cycle property (the heaviest in a cycle is redundant). Prim (PQ, `dist` = weight of the edge to the tree) O((n + m) log n); Kruskal (sorting + union-find) O(m log m); ties — alphabetical.
+## Minimum spanning tree (MST)
 
+:::formula Properties
+**Cut:** the lightest edge of a cut belongs to some MST. **Cycle:** the heaviest edge of a cycle is redundant.
+:::
 
-## Greediness
-
-- the locally best choice at every step, no undoing; correctness **must be proved**.
-- counterexample: the bridge (10, 5, 2, 1) — greedy 19 min, optimum 17.
-
-## Correct greedy algorithms
-
-| Problem | Choice rule | Cost |
+| | idea | complexity |
 |---|---|---|
-| activity selection | earliest **end** | O(n log n) |
-| continuous knapsack | largest **v/w** | O(n log n) |
-| Huffman | merge **the two rarest** | O(n log n); sorted — stack+queue O(n) |
-| Dijkstra (weights ≥ 0) | non-final with the smallest **d** | O(n²) or O((n+m) log n) |
-| Prim | cheapest edge **from the tree outward** | O(m log n) |
-| Kruskal | cheapest edge **without a cycle** (Find-Union) | O(m log m) |
+| **Kruskal** | edges by increasing weight; take one if it creates no cycle (**union-find**) | $O(m\log m)$ |
+| **Prim** | grow a tree from $s$; PQ by the weight of the lightest edge to the tree (`dist`) | $O((n+m)\log n)$ |
 
-- **Fano:** no code word is a prefix of another; codes = leaves of a tree.
-- **0/1** knapsack — greediness fails.
-- Dijkstra: d[v], p[v], relaxation d[w] := min(d[w], d[u] + c(u,w)).
+## Single-source shortest paths
+
+:::formula Relaxing edge (u, v)
+$$\text{if } u.d + w(u,v) < v.d:\quad v.d = u.d + w(u,v),\;\; v.\text{parent}=u$$
+:::
+
+| variant | when | complexity |
+|---|---|---|
+| DAG | acyclic graph (topological sort: DFS, decreasing `f`) | $O(n+m)$ |
+| **Dijkstra** | **non-negative** weights; PQ by `distance` | $O((n+m)\log n)$ |
+| Bellman-Ford | any weights; $n-1$ rounds of relaxation + negative-cycle detection | $O(nm)$ |
+
+$\mu(s,v)=+\infty$ — unreachable; $-\infty$ — a path through a negative cycle.
+
+:::warn Common mistakes
+- Kruskal without the **alphabetical** rule for equal weights (it changes the answer!),
+- Dijkstra with negative weights,
+- in Dijkstra relaxation is strict (`>`): on a tie the parent does **not** change.
+:::
+
+:::info Outside the 2026/2027 programme
+Huffman, the knapsack problem and activity selection in this topic come from 2025/2026 (they are not on M. Sydow's slides).
+:::
 
 === tasks ===
 

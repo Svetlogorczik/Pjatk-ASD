@@ -97,7 +97,7 @@ Rekomendacje autora strony — nie są częścią zasad.
 
 1. **Nie opuszczaj ćwiczeń** — limit to tylko 2 nieusprawiedliwione nieobecności.
 2. **Po każdym wykładzie** (najpóźniej dzień przed ćwiczeniami) przejrzyj slajdy: definicje z ramek „Definition” i listę „Co na pewno należy umieć” — tak zbierzesz punkty z wejściówek.
-3. Od połowy semestru **ćwicz ręczne śledzenie algorytmów** z zakresu sprawdzianu praktycznego — na stronie [Sprawdziany 2026/2027](page:exams) są gotowe zestawy z rozwiązaniami.
+3. Od połowy semestru **ćwicz ręczne śledzenie algorytmów** z zakresu sprawdzianu praktycznego — na stronie [Sprawdziany 2026/2027](page:exams) są gotowe zestawy z rozwiązaniami. Pełne próbne sprawdziany i wejściówki: [Testy próbne](page:mock).
 4. Zgłaszaj się do tablicy — **aktywność** to punkty, których nie da się stracić.
 5. Przed sprawdzianem wiedzy naucz się **na pamięć dokładnych definicji** (poprawność, złożoność, notacje) — patrz tematy [2](topic:t02) i [3](topic:t03), sekcje „wersja z wykładu 2026/2027”.
 

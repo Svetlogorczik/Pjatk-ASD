@@ -1,86 +1,102 @@
 ---
 id: cheatsheet
 type: page
-title: Cheat sheet — all complexities and formulas on one page
+title: Cheat sheet 2026/2027 — all complexities and formulas on one page
 short: Cheat sheet
 icon: 📋
-eyebrow: Summary of the whole course
-desc: The complexities of algorithms and data structures and the most important formulas from the lectures, gathered in one place.
+eyebrow: Summary of the whole course · 2026/2027
+desc: Complexities and formulas from M. Sydow's lectures (2026/2027) in one place — for revision before entry quizzes and tests.
 ---
 
 :::own
-Compiled by the site author from the lecture results (details and proofs are in the individual topics).
+Compiled by the site author from the 2026/2027 slides (details in the topics and summaries). Practice: [Practice tests](page:mock).
 :::
 
-## Notations and formulas
+## Before you compute a complexity
 
-- f = O(g) ⇔ ∃ c > 0, n₀: f(n) ≤ c·g(n) for n > n₀; Ω — the other way round; Θ = O and Ω.
-- 1 ≺ log n ≺ √n ≺ n ≺ n log n ≺ n² ≺ n³ ≺ 2ⁿ ≺ n!
-- log(xy) = log x + log y; log xᵏ = k log x; log_a x = log_b x / log_b a; digits: ⌊log₁₀ x⌋ + 1.
-- 1 + 2 + … + n = n(n+1)/2; 1 + 2 + 4 + … + 2ᵏ = 2ᵏ⁺¹ − 1; log n! = Θ(n log n).
-- **Master theorem** T(n) = aT(n/b) + f(n): compare f with n^(log_b a) → slower: Θ(n^(log_b a)); equal: Θ(n^(log_b a) log n); faster: Θ(f).
-- Fibonacci: Fₙ ≈ φⁿ/√5, φ ≈ 1.618 (Euclid, AVL).
+:::formula Two steps + measures
+1. **dominant operation**, 2. **data size**.
+$$W(n)=\sup\{t(d):d\in D_n\} \qquad A(n)=\sum_k p_{nk}\,k=E(X_n) \qquad S(n)\text{ — memory}$$
+:::
 
-## Searching and selection
+| | means | definition |
+|---|---|---|
+| $O$ | ≤ | $\exists_{c>0}\exists_{n_0}\forall_{n\ge n_0}\,f\le c\,g$ |
+| $\Omega$ | ≥ | $\exists_{c>0}\exists_{n_0}\forall_{n\ge n_0}\,f\ge c\,g$ |
+| $\Theta$ | = | $O$ both ways |
+| $o$ / $\omega$ | < / > | $\forall_{c>0}$ instead of $\exists_{c>0}$ |
+
+$$1 \prec \log n \prec \sqrt n \prec n \prec n\log n \prec n^2 \prec n^3 \prec 2^n \prec n!$$
+
+## Searching
 
 | Algorithm | Complexity |
 |---|---|
-| sequential (sentinel) | W = n + 1, A = (n+1)/2 |
-| binary | ⌈log₂ n⌉ + 1 |
-| max | n − 1 (optimal) |
-| min and max | ⌈3n/2⌉ − 2 (optimal) |
-| second largest | n + ⌈log₂ n⌉ − 2 |
-| k-th — Hoare | W = ½n² + O(n), A = O(n) |
-| Euclid (mod) | O(log n) |
+| sequential | $W=len$, $A=\frac{len+1}{2}$ |
+| jumps of $k$ | $\frac1k\Theta(len)$, best $k=\sqrt{len}$ |
+| binary (sorted, RAM) | $\Theta(\log_2 len)$, $S=O(1)$ |
+| 2nd smallest — tournament | $len-1+\Theta(\log len)$ |
+| partition | $W=n+O(1)$, $S=O(1)$ |
+| Hoare (k-th) | $A=\Theta(n)$, $W=\Theta(n^2)$ |
 
-## Sorting
+## Sorting (operation: comparison)
 
-| Algorithm | Worst | Average | Memory | Stable |
+| Algorithm | W | A | memory | stable |
 |---|---|---|---|---|
-| SelectionSort | n²/2 | n²/2 | O(1) | no |
-| InsertionSort | n²/2 | n²/4 | O(1) | yes |
-| MergeSort | n log n | n log n | O(n) | yes |
-| QuickSort | n²/2 | 1.4 n log n | O(log n) | no |
-| HeapSort | 2n log n | ~2n log n | O(1) | no |
-| CountingSort | O(n + m) | O(n + m) | O(n + m) | yes |
-| RadixSort | O(d(n + k)) | O(d(n + k)) | O(n + k) | yes |
-| **lower bound (comparisons)** | ⌈log₂ n!⌉ = Ω(n log n) | | | |
+| Selection | $\frac{n(n-1)}{2}$ | $=W$ | $O(1)$ | no |
+| Insertion | $\frac{n(n-1)}{2}$ | $\frac14n^2+\Theta(n)$ | $O(1)$ | yes |
+| MergeSort | $\Theta(n\log n)$ | $\Theta(n\log n)$ | $\Theta(n)$ | yes* |
+| QuickSort | $\Theta(n^2)$ | $\Theta(n\log n)$ (≈1.44) | in place | no |
+| HeapSort | $\Theta(n\log n)$ | $\Theta(n\log n)$ | — | no |
+| CountSort | $\Theta(n+m)$ | $\Theta(n+m)$ | $\Theta(n+m)$ | yes |
+| RadixSort | $\Theta(d(n+10))$ | | | yes |
+
+\* with `<=` in merge; the slide version with `<` takes from the right sequence on ties. **Comparison lower bound:** $\log_2 n!=\Theta(n\log n)$.
+
+## Recursion
+
+| Equation | Solution |
+|---|---|
+| $t(n)=t(n/2)+c$ | $\Theta(\log n)$ |
+| $t(n)=2t(n/2)+c$ | $\Theta(n)$ |
+| $t(n)=2t(n/2)+cn$ | $\Theta(n\log n)$ |
+| hanoi | $2^n-1$ |
+
+**Master theorem** $T(n)=aT(n/b)+f(n)$ — compare $f$ with $n^{\log_b a}$: smaller → $\Theta(n^{\log_b a})$, equal → $\cdot\log n$, larger → $\Theta(f)$.
 
 ## Data structures
 
 | Structure | Operations |
 |---|---|
-| stack (array/list) | push, pop, top — O(1) |
-| queue (list/circular array) | inject, front, pop — O(1) |
-| doubly linked list | insert/delete at a node O(1); access to position p — O(p) |
-| sorted array | search O(log n); insert, delete O(n) |
-| BST | O(h): O(log n) on average, O(n) worst |
-| AVL | search, insert, delete — O(log n); h < 1.44 log n |
-| hash table | O(1) on average, O(n) worst |
-| heap | insert O(log n), deletemax 2⌊log n⌋, construct O(n) |
-| leftist heap | merge, insert, deletemax — O(log n) |
-| Find-Union (trees + compression) | almost O(1) per operation |
+| stack / queue / deque | $O(1)$ (singly linked list / cyclic array / doubly linked list) |
+| linked list | splice, insert/remove at a node $O(1)$; access $O(n)$ |
+| dictionary — naive arrays | unsorted: search $O(n)$, insert $O(1)$; sorted: search $O(\log n)$, insert $O(n)$ |
+| hash table | $O(\alpha)$, $\alpha=n/m$ |
+| BST | $A=O(\log n)$, $W=O(n)$ |
+| AVL | everything $W=O(\log n)$; $bf\in\{-1,0,1\}$ |
+| binary heap (min) | insert, delMin $O(\log n)$; findMin $O(1)$; construct $O(n)$; merge $O(n)$ |
+
+**Heap in an array from 1:** parent $\lfloor i/2
+floor$, sons $2i$, $2i+1$.
 
 ## Graphs
 
 | Algorithm | Complexity |
 |---|---|
-| DFS, BFS (lists) | O(n + m) |
-| Dijkstra | O(n²) or O((n + m) log n) |
-| Prim | O(n²) or O(m log n) |
-| Kruskal | O(m log m) |
+| representations | matrix $\Theta(n^2)$, lists $\Theta(n+m)$, incidence $\Theta(nm)$ |
+| BFS, DFS | $O(n+m)$ |
+| shortest paths in a DAG | $O(n+m)$ |
+| Dijkstra (binary heap) | $O((n+m)\log n)$; Fibonacci: $O(m+n\log n)$ |
+| Bellman-Ford | $O(nm)$ |
+| Prim | $O((n+m)\log n)$ |
+| Kruskal | $O(m\log m)$ |
 
-## Multiplication
+## Test conventions (easy points to lose)
 
-| Algorithm | Number of multiplications |
-|---|---|
-| schoolbook | n² |
-| Karatsuba | n^(log₂ 3) ≈ n^1.585 |
-| FFT | O(n log n) |
-
-## Important numbers
-
-- Hanoi: 2ⁿ − 1 moves. Permutations: n!.
-- AVL: max 2ʰ⁺¹ − 1 nodes, min N(h) = N(h−1) + N(h−2) + 1 (1, 2, 4, 7, 12, 20, 33).
-- Heap: children 2k, 2k+1; parent ⌊k/2⌋; h = ⌊log n⌋; leaves: positions > ⌊n/2⌋.
-- Undirected graph: m ≤ n(n−1)/2.
+:::warn Remember
+- binSearch: `m = (l+r)/2` rounded **down**; MergeSort: `m = len/2` — **left shorter**,
+- partition: the **last** swap counts; CountSort: phase 3 **from the end**,
+- heap from index **1**; `construct` ≠ n × `insert`,
+- BST: equal key goes **right**; DFS: `time` from **0**,
+- neighbours and ties (Kruskal, Prim) — **alphabetically**.
+:::

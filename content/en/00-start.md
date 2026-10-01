@@ -11,7 +11,7 @@ cta: Start with topic 1
 ## How to use this site
 
 1. **Read the topics in order.** Each topic is one or more lectures merged into a logical whole (the list of sources is at the top of every topic).
-2. **Before a class, open the "Cheat notes".** The button is at the top of each topic — a short summary with the key definitions, formulas and complexities.
+2. **Open the "Summary" before every entry quiz.** The button is at the top of every topic — a concise, structured summary of the 2026/2027 material: what you must know, definitions, formulas, complexities and common mistakes.
 3. **Solve the tasks at the end of a topic.** First on your own, then the hint, and only at the end the solution.
 4. **Tick the topic** ("Mark as done") — progress is stored only in your browser.
 
@@ -58,6 +58,7 @@ The final answer to an example or a task — what you write in the test.
 - **The main text** of every topic is the content of the course lectures (files `asd1…asd11`, `Algorytmika`, `Dziel i rządź` (divide and conquer), `FFT`, `Programowanie zachłanne` (greedy programming) and older slides from 2009) — retold in simpler words and extended with step-by-step examples.
 - **The tasks** follow **the same logic** as the class exercises, but with **changed data and wording**, so you can study without copying old problem sets. Each task says which class exercise it is modelled on. Tasks marked "by the site author" have no counterpart in the sets.
 - **Information about passing the course** is up to date for **2026/2027** (lecturer: M. Sydow) — see [Passing the course](page:course) and [Tests 2026/2027](page:exams) (task types, official examples solved step by step, practice tasks).
+- **Practice tests:** 13 entry quizzes (one per lecture), two variants of a mock practical test and a mock knowledge test — all with solutions: [Practice tests](page:mock). **Summaries** (the "Summary" button in every topic) condense the 2026/2027 material: definitions, formulas, complexities and common mistakes.
 - **Note:** topics 1–14 were written mainly from the 2025/2026 lectures (a different lecturer). In 2026/2027 the tests use **the versions of algorithms and definitions from M. Sydow's slides** — topics [2](topic:t02), [3](topic:t03), [4](topic:t04), [5](topic:t05), [6](topic:t06), [7](topic:t07), [9](topic:t09), [10](topic:t10), [11](topic:t11), [12](topic:t12), [13](topic:t13) and [14](topic:t14) already have "2026/2027 lecture version" sections with his definitions and code from the slides, and the other algorithm topics link to versions that match the official examples.
 
 :::tip

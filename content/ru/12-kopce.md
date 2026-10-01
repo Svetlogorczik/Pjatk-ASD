@@ -5,12 +5,16 @@ type: topic
 title: Очереди с приоритетом, кучи и HeapSort
 short: Кучи и HeapSort
 desc: Очередь с приоритетом, двоичная куча в массиве, upheap и downheap, построение кучи за линейное время, пирамидальная сортировка и левосторонние (левацкие) кучи.
-sources: asd10.pdf; Wyklady 2009/wyklad_9 kopce binarne.pdf; wyklad_10.pdf (kolejka priorytetowa — kopiec lewicowy)
+sources: 2026/2027 (M. Sydow): priorityQueue8-pl.pdf · 2025/2026: asd10.pdf; Wyklady 2009/wyklad_9 kopce binarne.pdf; wyklad_10.pdf (kolejka priorytetowa — kopiec lewicowy)
 exercises: asd 10.pdf («ASD 10b»: зад. 1–3)
 ---
 
 :::exam Тесты 2026/2027
 Эта тема написана по лекциям 2025/2026. **На тестах 2026/2027 действуют версии со слайдов M. Sydow** — они в разделе [«Версия лекции 2026/2027»](topic:t12#версия-лекции-2026-2027-m-sydow-kolejka-priorytetowa-очередь) в конце темы (код переписан со слайдов). Задачи допуска и тренировочные задачи: [Тесты 2026/2027](page:exams).
+:::
+
+:::info Вне программы 2026/2027
+В 2026/2027 куча — типа **min** (`delMin`), индексы с 1. Куча типа max (`deletemax`) и **левосторонняя куча** дальше в теме — материал 2025/2026, **вне программы**.
 :::
 
 ## Очередь с приоритетом
@@ -243,35 +247,38 @@ downheap(i)
 
 === summary ===
 
-## Версия 2026/2027 (M. Sydow)
+:::exam Что нужно уметь
+Задача допуска 5: **куча типа min** в массиве с индекса 1 — a) после последовательных `insert`, b) + `delMin`, c) после `construct`.
+:::
 
-- PQ: insert(e, p), findMin, delMin. Куча: полное дерево, родитель ≤ детей; массив с 1: parent i/2, сыновья 2i, 2i+1.
-- insert (upheap) O(log n), findMin O(1), delMin (последний в корень + downheap) O(log n); construct: downHeap(i) для i = n/2..1 → O(n).
-- HeapSort Θ(n log n); merge на двоичной куче O(n).
+:::def Очередь с приоритетом
+`insert(e, p)`, `findMin()`, `delMin()` — меньшее число = более высокий приоритет.
+:::
 
+:::def Двоичная куча (min)
+**Полное** дерево (заполняется по уровням слева) + **родитель ≤ детей** ⇒ минимум в корне, высота $\Theta(\log n)$.
+:::
 
-## Очередь с приоритетом
+:::formula Куча в массиве (индекс 0 не используется)
+$$\text{parent}(i)=\lfloor i/2\rfloor \qquad \text{left}(i)=2i \qquad \text{right}(i)=2i+1$$
+:::
 
-- construct, insert, deletemax (или deletemin).
-- неупорядоченный массив: insert O(1), deletemax O(n); упорядоченный — наоборот; **куча: оба O(log n), construct O(n)**.
+## Операции по шагам
 
-## Куча
+| операция | как | сложность |
+|---|---|---|
+| `insert(x)` | в конец + **upheap**: меняем с родителем, пока родитель > x | $O(\log n)$ |
+| `findMin()` | корень | $O(1)$ |
+| `delMin()` | последний → в корень + **downheap**: меняем с **меньшим** сыном, пока он меньше | $O(\log n)$ |
+| `construct` | `for(i = n/2; i > 0; i--) downHeap(i)` | $O(n)$ |
 
-- свойство: отец ≥ сын ⇒ max в корне; это **не** BST.
-- полная: уровни заполнены, последний слева; **h = ⌊log n⌋**.
-- массив с 1: сыновья **2k, 2k+1**, отец **⌊k/2⌋** (с 0: 2k+1, 2k+2, (k−1)/2).
-- **insert:** в конец + **upheap** (вверх), O(log n).
-- **deletemax:** корень ← последний, **downheap** (вниз, к большему сыну), 2⌊log n⌋ сравнений.
-- **construct:** downheap для i = n/2 … 1 — **O(n)**.
+**HeapSort:** n × insert, затем n × delMin → $\Theta(n\log n)$. Наивно: неотсорт. insert $O(1)$ / delMin $O(n)$; отсорт. — наоборот. Merge на двоичной куче — $O(n)$ (биномиальная: $O(\log n)$).
 
-## HeapSort
-
-construct + (n−1) × deletemax в конец массива; **W ≤ 2n log n + O(n)**, на месте, всегда n log n, неустойчива.
-
-## Левосторонняя куча
-
-- odl(левый) ≥ odl(правый); правый путь ≤ log(n+1).
-- **слияние** по правым путям + обмен сыновей; insert и deletemax через слияние — O(log n).
+:::warn Типичные ошибки
+- результат `construct` ≠ результату n × `insert` (обе — корректные кучи!),
+- при равных сыновьях downheap берёт **левого** (сравнение строгое),
+- индексация с 0 вместо 1.
+:::
 
 === tasks ===
 

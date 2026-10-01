@@ -5,7 +5,7 @@ type: topic
 title: Wyszukiwanie i wybór — sekwencyjnie, binarnie, k-ty element
 short: Wyszukiwanie i wybór
 desc: Wyszukiwanie ze strażnikiem i binarne, dolne ograniczenie dla maksimum, min i max naraz, drugi największy (turniej) oraz algorytm Hoare'a wyboru k-tego elementu.
-sources: asd3.pdf; Dziel-RzadzC.pdf (min-max); Wyklady 2009/wyklad_3.pdf i asd 07 wyklad_4.pdf (Problem wyszukania I i II)
+sources: 2026/2027 (M. Sydow): searching3-pl.pdf · 2025/2026: asd3.pdf; Dziel-RzadzC.pdf (min-max); Wyklady 2009/wyklad_3.pdf i asd 07 wyklad_4.pdf (Problem wyszukania I i II)
 exercises: asd 03.pdf (zad. 3), asd 05.pdf (zad. 4)
 ---
 
@@ -296,37 +296,46 @@ Bierze **pierwszy** element m podciągu S[l..r] i przestawia elementy tak, że n
 
 === summary ===
 
-## Wersja 2026/2027 (M. Sydow)
+:::exam Co trzeba umieć
+Zadanie dopuszczeniowe 1: **binary search** — kolejne indeksy `m` i wynik. Kod `search` z pamięci; skoki co k; statystyki pozycyjne, turniej, Hoare.
+:::
 
-- search: l = 0, r = len − 1, m = (l + r)/2; równość → m; S[m] > key → r = m − 1, wpp. l = m + 1; brak → −1.
-- binarne: W = A = Θ(log len), S = O(1) (zakładamy RAM); sekwencyjne W = len; skoki co k: liniowo, ~k razy szybciej (k = √len).
-- drugi najmniejszy: proste 2len − 1; turniej len − 1 + Θ(log len).
-- partition: W(n) = n + O(1), S = O(1); Hoare: A = Θ(n) niezależnie od k, W = Θ(n²).
+## Wyszukiwanie binarne (ciąg posortowany!)
 
+```pseudo
+search(S, len, key){
+  l = 0
+  r = len - 1
+  while(l <= r){
+    m = (l + r)/2
+    if(S[m] == key) return m
+    else
+      if(S[m] > key) r = m - 1
+      else l = m + 1
+  }
+  return -1
+}
+```
 
-## Wyszukiwanie
+:::example Jak liczyć
+Tabelka **l | r | m | S[m] | decyzja**; `m` zaokrąglamy **w dół**; brak klucza → `-1`, gdy `l > r`.
+:::
 
-| Metoda | Wymaganie | Złożoność |
-|---|---|---|
-| sekwencyjne (ze strażnikiem) | brak | W = n + 1, A = (n+1)/2 |
-| binarne | tablica posortowana | ~⌈log₂ n⌉ obrotów + 1 porównanie |
-| skoki co √n | posortowana | O(√n) |
-| interpolacyjne | posortowana, rozkład równomierny | średnio O(log log n), najgorzej O(n) |
+## Złożoności
 
-- Nieuporządkowane dane: n porównań jest niezbędne.
-- **SzukajBin:** `s := (l+p) div 2; if a > L[s] then l := s+1 else p := s`; niezmiennik: a ∈ L ⇔ a ∈ L[l..p]; zwraca **pierwsze** wystąpienie; funkcja malejąca p − l.
+| Algorytm | Założenie | W | uwagi |
+|---|---|---|---|
+| sekwencyjne | — | $len$ | kolejność nie pomaga |
+| skoki co k | posortowany | $\frac1k\Theta(len)$ | najlepiej $k=\sqrt{len}$, wciąż liniowe |
+| binarne | posortowany, **RAM** | $\Theta(\log_2 len)$ | $S=O(1)$; na liście — nie działa szybko |
+| 2. najmniejszy — turniej | — | $len-1+\Theta(\log len)$ | proste: $2len-1$ |
+| Hoare (k-ty) | — | $A=\Theta(n)$, $W=\Theta(n^2)$ | partition: $W=n+O(1)$ |
 
-## Wybór
-
-- **max:** n − 1 porównań — to złożoność **problemu** (dowód grafowy: < n − 1 krawędzi ⇒ graf niespójny).
-- **min i max naraz:** T(n) = 2T(n/2) + 2 ⇒ **3n/2 − 2**; tw. Pohla: ≥ ⌈3n/2⌉ − 2.
-- **drugi największy:** turniej, **n + ⌈log₂ n⌉ − 2** (kandydaci = przegrani z mistrzem).
-
-## Hoare (k-ty element)
-
-- **partition(l, r):** v = a[l]; i od lewej do ≥ v, j od prawej do ≤ v, zamiana; na końcu v na pozycję j.
-- k = j − l + 1 → znaleziony; k ≤ j − l → p := j − 1; inaczej k := k − (j − l + 1), l := j + 1.
-- W(n) = ½n² + O(n), A(n) = O(n); „magiczne piątki” — O(n) nawet pesymistycznie.
+:::warn Typowe błędy
+- liczenie `m = (l+r)/2` w górę,
+- binarne na **nieposortowanym** ciągu albo na liście dowiązaniowej (brak stałego dostępu do `S[m]`),
+- Hoare pesymistycznie jest **kwadratowy** (partition trafia na koniec).
+:::
 
 === tasks ===
 

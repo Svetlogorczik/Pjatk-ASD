@@ -5,7 +5,7 @@ type: topic
 title: QuickSort, granica n log n i sortowanie w czasie liniowym
 short: QuickSort i sortowania liniowe
 desc: Szybkie sortowanie Hoare'a, podział (partition, Split, flaga polska), QuickSort bez rekursji ze stosem, drzewa decyzyjne i dolne ograniczenie, CountingSort, RadixSort i BucketSort.
-sources: asd5.pdf (§2 QuickSort, §3 CountSort, RadixSort); asd6.pdf (QuickSort i stos); Dziel-RzadzC.pdf (Quicksort, FlagaPolska); Wyklady 2009/wyklad_5.pdf (drzewa decyzyjne), asd 08 wyklad_6.pdf (sortowanie w czasie liniowym)
+sources: 2026/2027 (M. Sydow): sortTwo5-pl.pdf · 2025/2026: asd5.pdf (§2 QuickSort, §3 CountSort, RadixSort); asd6.pdf (QuickSort i stos); Dziel-RzadzC.pdf (Quicksort, FlagaPolska); Wyklady 2009/wyklad_5.pdf (drzewa decyzyjne), asd 08 wyklad_6.pdf (sortowanie w czasie liniowym)
 exercises: asd 05.pdf (zad. 2, 5), asd 06.pdf (zad. 1, 3)
 ---
 
@@ -305,33 +305,49 @@ Przykład ze slajdów: (3,2,5,1,2,6,8,1,2,4), max = 8 → counts po fazie 1: 0,2
 
 === summary ===
 
-## Wersja 2026/2027 (M. Sydow)
+:::exam Co trzeba umieć
+Zadanie 3: **partition** — zwrócony indeks, pierwszy element, liczba swapów (z ostatnim). Zadanie 4: **CountSort** — tablica `counts` po 3 fazach. RadixSort, stabilność, dolna granica.
+:::
 
-- partition (pivot = pierwszy): W = A = Θ(n), S = O(1); QuickSort A = Θ(n log n) (≈1,44), W = Θ(n²) dla posortowanych.
-- Dolna granica przez porównania: log₂ n! = Θ(n log n).
-- CountSort: W = A = Θ(n + m), S = Θ(n + m), stabilny (faza 3 od tyłu). RadixSort: od ostatniej pozycji, stabilny pomocniczy.
+## partition (pivot = pierwszy element)
 
+1. `i` idzie w prawo, dopóki `a[i] <= p`; `j` w lewo, dopóki `a[j] >= p`.
+2. Jeśli `i < j` — zamień `a[i]`, `a[j]` i powtarzaj.
+3. Koniec: pivot na pozycję `i-1` (gdy `a[i] > p`) albo `i` — to **ostatni swap**.
 
-## QuickSort
+:::tip Szybkie sprawdzenie
+Zwrócony indeks = liczba elementów **mniejszych** od pivota (gdy elementy są różne). Swapów = zamiany par + 1.
+:::
 
-- partition (pivot = a[l]) → pivot na miejscu j; rekurencja na a[l..j−1] i a[j+1..r]; „scalanie” puste.
-- **W(n) = ½n² + O(n)** (dane posortowane!), **A(n) ≈ 1,4 n log n**, δ ≈ 0,65n, niestabilny.
-- bez rekursji: stos par [l, r]; **na stos dłuższy, od razu krótszy** → S(n) = O(log n).
-- ulepszenia (od autora): losowy pivot, mediana z trzech, InsertionSort dla małych fragmentów.
+## CountSort (liczby naturalne 0..max)
 
-## Podziały
+| Faza | co robi | `counts` po fazie |
+|---|---|---|
+| 1. zliczanie | `counts[a[i]]++` | liczności |
+| 2. sumowanie | `counts[i] += counts[i-1]` | sumy prefiksowe (ostatnia = $n$) |
+| 3. wypisanie (od **końca**) | `result[--counts[a[i]]] = a[i]` | b) przesunięte w prawo, z 0 na początku |
 
-- **partition** — dwa wskaźniki do siebie; **Split** — jeden wskaźnik s (strefa < v), na końcu zamiana a[l] z a[s]; **flaga polska** — ≤ v na lewo, ≥ v na prawo.
+**RadixSort:** sortuj stabilnie po **ostatniej** cyfrze, potem przedostatniej … pierwszej (pomocniczo CountSort).
 
-## Dolne ograniczenie
+## Złożoności
 
-- drzewo decyzyjne: ≥ n! liści, wysokość h ≥ log₂ n! = **Ω(n log n)** — dla każdego sortowania przez porównania (pesymistycznie i średnio).
+| | W | A | S | stabilny |
+|---|---|---|---|---|
+| partition | $\Theta(n)$ | $\Theta(n)$ | $O(1)$ | — |
+| QuickSort | $\Theta(n^2)$ (posortowane) | $\Theta(n\log n)$ (≈1,44) | w miejscu | nie |
+| CountSort | $\Theta(n+m)$ | $\Theta(n+m)$ | $\Theta(n+m)$ | tak (faza 3 od tyłu) |
+| RadixSort ($d$ cyfr) | $\Theta(d(n+10))$ | | | tak |
 
-## Sortowania liniowe (bez porównań)
+:::formula Dolna granica sortowania przez porównania
+$$\log_2(n!)=\Theta(n\log n)$$
+Drzewo decyzyjne ma $n!$ liści. Szybciej tylko **bez porównań** (CountSort) — kosztem pamięci.
+:::
 
-- **CountingSort:** klucze 0…m−1; count → sumy prefiksowe → od końca do t; O(n + m), S = n + m, **stabilny**.
-- **RadixSort:** stabilnie po cyfrach od najmniej znaczącej; O(d(n + k)).
-- **BucketSort:** rozkład równomierny na [0,1), n kubełków; średnio O(n).
+:::warn Typowe błędy
+- pominięcie **ostatniego** swapu w partition,
+- faza 3 CountSort od początku (traci stabilność),
+- `counts` od 0 do **max** — także wartości, które nie występują (wpis 0).
+:::
 
 === tasks ===
 

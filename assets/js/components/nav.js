@@ -3,7 +3,7 @@
   'use strict';
 
   var esc = ASD.util.escapeHtml;
-  var PAGE_ORDER = ['start', 'course', 'exams', 'howto', 'cheatsheet', 'sources'];
+  var PAGE_ORDER = ['start', 'course', 'exams', 'mock', 'howto', 'cheatsheet', 'sources'];
 
   ASD.nav = {
     render: function (data, route) {
