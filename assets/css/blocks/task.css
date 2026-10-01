@@ -1,12 +1,12 @@
-/* Block: task — exercise card with collapsible hint and solution. */
+/* Block: task — exercise card with collapsible hint (orange) and step-by-step solution (green). */
 .task {
-  padding: 20px 22px;
+  padding: 20px 22px 18px;
   border: 1px solid var(--c-border);
   border-radius: var(--radius-l);
   background: var(--c-surface);
   box-shadow: var(--shadow-s);
 }
-.task + .task { margin-top: 20px; }
+.task + .task { margin-top: 22px; }
 
 .task__header {
   display: flex;
@@ -18,7 +18,7 @@
 }
 
 .task__number {
-  padding: 3px 10px;
+  padding: 3px 11px;
   border-radius: 999px;
   background: var(--c-accent);
   color: var(--c-accent-text);
@@ -40,7 +40,7 @@
 }
 
 .task__source--own {
-  padding: 2px 8px;
+  padding: 2px 9px;
   border-radius: 999px;
   background: var(--c-own-soft);
   color: var(--c-own);
@@ -48,8 +48,8 @@
 }
 
 .task__title {
-  margin-bottom: 8px;
-  font-size: 1.12em;
+  margin-bottom: 10px;
+  font-size: 1.14em;
   font-weight: 700;
   line-height: 1.35;
 }
@@ -57,17 +57,24 @@
 .task__body { font-size: .98em; }
 
 .task__reveal {
+  --reveal-c: var(--c-accent);
   margin-top: 14px;
   border: 1px solid var(--c-border);
   border-radius: var(--radius-m);
   background: var(--c-bg);
+  transition: border-color .15s var(--ease);
 }
+.task__reveal--hint { --reveal-c: var(--c-warn); }
+.task__reveal--solution { --reveal-c: var(--c-answer); }
+.task__reveal[open] { border-color: color-mix(in srgb, var(--reveal-c) 45%, var(--c-border)); }
 
 .task__toggle {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 10px 14px;
+  min-height: 44px;
+  padding: 8px 14px;
+  color: var(--reveal-c);
   font-size: 14px;
   font-weight: 700;
   list-style: none;
@@ -76,28 +83,28 @@
 }
 .task__toggle::-webkit-details-marker { display: none; }
 .task__toggle::before {
-  content: "+";
+  content: "▸";
   display: inline-grid;
   place-items: center;
   width: 22px;
   height: 22px;
-  border-radius: 50%;
-  background: var(--c-surface-3);
-  font-size: 15px;
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--reveal-c) 14%, transparent);
+  font-size: 12px;
   line-height: 1;
   transition: transform .2s var(--ease);
 }
-.task__reveal[open] > .task__toggle::before { content: "−"; }
-
-.task__reveal--hint > .task__toggle { color: var(--c-tip); }
-.task__reveal--solution > .task__toggle { color: var(--c-accent); }
+.task__reveal[open] > .task__toggle::before { transform: rotate(90deg); }
+.task__toggle:hover { background: color-mix(in srgb, var(--reveal-c) 6%, transparent); }
 
 .task__content {
-  padding: 4px 16px 16px;
+  margin: 0 14px;
+  padding: 14px 2px 16px;
+  border-top: 1px dashed var(--c-border-strong);
   font-size: .96em;
 }
 
 @media (max-width: 600px) {
-  .task { padding: 16px 14px; }
-  .task__content { padding: 4px 12px 14px; }
+  .task { padding: 16px 14px 14px; border-radius: var(--radius-m); }
+  .task__content { margin: 0 10px; padding: 12px 0 14px; }
 }

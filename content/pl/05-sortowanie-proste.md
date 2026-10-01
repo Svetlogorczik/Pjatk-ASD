@@ -210,7 +210,7 @@ selectionSort(S, len){
 }
 ```
 
-`indexOfMin(S, i, len)` zwraca indeks minimum wśród S[j], i ≤ j < len; `swap(S, i, mini)` zamienia S[i] i S[mini]. **Analiza:** operacja dominująca — porównanie 2 elementów; rozmiar danych — len. W i-tej iteracji szukamy minimum w ciągu długości len − i: **W(len) = Σ_{i=1}^{len−1} i = len(len−1)/2 = Θ(len²)**. **A(len) = W(len)** — algorytm zawsze wykonuje tyle samo porównań, **nawet dla ciągu już posortowanego**.
+`indexOfMin(S, i, len)` zwraca indeks minimum wśród S[j], i ≤ j < len; `swap(S, i, mini)` zamienia S[i] i S[mini]. **Analiza:** operacja dominująca — porównanie 2 elementów; rozmiar danych — len. W i-tej iteracji szukamy minimum w ciągu długości len − i: $W(len)=\sum_{i=1}^{len-1} i=\frac{len(len-1)}{2}=\Theta(len^2)$. $A(len)=W(len)$ — algorytm zawsze wykonuje tyle samo porównań, **nawet dla ciągu już posortowanego**.
 
 **Insertion Sort** — od drugiej pozycji (`next`) „przepychamy” bieżący element wstecz (porównując), aż znajdzie właściwe miejsce i pierwsze next + 1 elementów jest posortowane.
 
@@ -233,7 +233,7 @@ insertionSort(arr, len){
 }
 ```
 
-Niezmiennik pętli zewnętrznej — analogiczny jak w SelectionSort (początkowy fragment jest posortowany). **Najgorszy przypadek:** dane **odwrotnie posortowane**: **W(n) = n(n−1)/2 = ½n² + Θ(n) = Θ(n²)**. Dla danych **już posortowanych** wystarczy **n − 1** porównań — algorytm „**dostosowuje ilość pracy**” do stopnia posortowania. **Przeciętnie** (każda permutacja liczb 1..n jednakowo prawdopodobna) w i-tej iteracji średnio (1/i)·Σ_{j=1}^{i} j = (i+1)/2 porównań, łącznie **A(n) = Σ_{i=1}^{n−1} (i+1)/2 = ¼n² + Θ(n) = Θ(n²)** — 2 razy szybciej niż SelectionSort, ale wciąż kwadratowo (3 razy więcej danych → ok. 9 razy dłużej).
+Niezmiennik pętli zewnętrznej — analogiczny jak w SelectionSort (początkowy fragment jest posortowany). **Najgorszy przypadek:** dane **odwrotnie posortowane**: $W(n)=\frac{n(n-1)}{2}=\frac{1}{2}n^2+\Theta(n)=\Theta(n^2)$. Dla danych **już posortowanych** wystarczy **n − 1** porównań — algorytm „**dostosowuje ilość pracy**” do stopnia posortowania. **Przeciętnie** (każda permutacja liczb 1..n jednakowo prawdopodobna) w i-tej iteracji średnio $\frac{1}{i}\sum_{j=1}^{i} j=\frac{i+1}{2}$ porównań, łącznie $A(n)=\sum_{i=1}^{n-1}\frac{i+1}{2}=\frac{1}{4}n^2+\Theta(n)=\Theta(n^2)$ — 2 razy szybciej niż SelectionSort, ale wciąż kwadratowo (3 razy więcej danych → ok. 9 razy dłużej).
 
 Kwadratowa złożoność jest za wysoka dla dużych danych — np. miliard liczb to tylko 8 GB w RAM. Rozwiązanie: **MergeSort** ([temat 6](topic:t06)).
 

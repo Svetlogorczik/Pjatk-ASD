@@ -267,11 +267,11 @@ quicksort(a, l, r){
 }
 ```
 
-**Analiza partition:** indeks i idzie w prawo, dopóki nie napotka liczby większej od p, j w lewo, dopóki nie napotka mniejszej — wtedy je zamieniamy; na końcu p zamieniamy z ostatnim elementem „lewego” ciągu. Porównanie jest wykonywane raz dla każdej pozycji indeksu — łącznie tyle, ile elementów minus jeden: **W(n) = A(n) = Θ(n)**, **S(n) = O(1)** (działa **w miejscu**).
+**Analiza partition:** indeks i idzie w prawo, dopóki nie napotka liczby większej od p, j w lewo, dopóki nie napotka mniejszej — wtedy je zamieniamy; na końcu p zamieniamy z ostatnim elementem „lewego” ciągu. Porównanie jest wykonywane raz dla każdej pozycji indeksu — łącznie tyle, ile elementów minus jeden: $W(n)=A(n)=\Theta(n)$, $S(n)=O(1)$ (działa **w miejscu**).
 
-**Analiza QuickSort:** na każdym poziomie rekurencji łącznie Θ(n) porównań, więc wszystko zależy od **głębokości rekurencji**. Oś zawsze w połowie → głębokość Θ(log n) → **Θ(n log n)**. Oś zawsze na końcu (np. ciąg **posortowany lub odwrotnie posortowany**) → ciąg krótszy tylko o 1, głębokość Θ(n) → **W(n) = Θ(n²)**. Przeciętnie (każda permutacja jednakowo prawdopodobna) głębokość Θ(log n): **A(n) = Θ(n log n)** ze stałą ok. **1,44** — QuickSort jest przeciętnie szybszy od MergeSort. Wersja podstawowa **nie jest stabilna**; istnieją ulepszenia (gwarantowane n log n, stabilność).
+**Analiza QuickSort:** na każdym poziomie rekurencji łącznie Θ(n) porównań, więc wszystko zależy od **głębokości rekurencji**. Oś zawsze w połowie → głębokość Θ(log n) → **Θ(n log n)**. Oś zawsze na końcu (np. ciąg **posortowany lub odwrotnie posortowany**) → ciąg krótszy tylko o 1, głębokość Θ(n) → $W(n)=\Theta(n^2)$. Przeciętnie (każda permutacja jednakowo prawdopodobna) głębokość Θ(log n): $A(n)=\Theta(n\log n)$ ze stałą ok. **1,44** — QuickSort jest przeciętnie szybszy od MergeSort. Wersja podstawowa **nie jest stabilna**; istnieją ulepszenia (gwarantowane n log n, stabilność).
 
-**Dolna granica.** Sortowanie przez porównania to **drzewo decyzyjne**: każdy węzeł to porównanie „a < b?”, liście to wszystkie **n!** permutacje. Wysokość binarnego drzewa o n! liściach to co najmniej log₂(n!) = **Θ(n log n)** — nie istnieje algorytm sortujący przez porównania o niższym rzędzie złożoności **przeciętnej i pesymistycznej** niż Θ(n log n). Szybciej można tylko **bez porównań** — kosztem pamięci („**czas vs pamięć**”).
+**Dolna granica.** Sortowanie przez porównania to **drzewo decyzyjne**: każdy węzeł to porównanie „a < b?”, liście to wszystkie **n!** permutacje. Wysokość binarnego drzewa o n! liściach to co najmniej $\log_2(n!)=\Theta(n\log n)$ — nie istnieje algorytm sortujący przez porównania o niższym rzędzie złożoności **przeciętnej i pesymistycznej** niż Θ(n log n). Szybciej można tylko **bez porównań** — kosztem pamięci („**czas vs pamięć**”).
 
 **CountSort** (adresowanie bezpośrednie, dane w RAM). Elementy to liczby **naturalne**. Tablice pomocnicze: **counts** (długość = maksymalna liczba + 1) i **result**. Trzy fazy: (1) zliczanie wystąpień, (2) przyrostowe sumowanie od lewej do prawej (ile elementów jest niewiększych od danego), (3) ponowne przejście wejścia i wysłanie każdego elementu do result pod adres z counts (licznik zmniejszamy o 1 przed użyciem); **dla stabilności wejście przechodzimy „od tyłu”**.
 
@@ -291,7 +291,7 @@ countSort(a, l){
 }
 ```
 
-Przykład ze slajdów: (3,2,5,1,2,6,8,1,2,4), max = 8 → counts po fazie 1: 0,2,3,1,1,1,1,0,1; po fazie 2: 0,2,5,6,7,8,9,9,10. **Analiza:** operacja dominująca — przypisanie wartości w tablicy; rozmiar danych: n (długość) i **m (maksymalna wartość)**; **A(n,m) = W(n,m) = 2n + 2m = Θ(n + m)** — liniowa; **S(n,m) = n + m = Θ(n + m)**. Słaby wybór, gdy m ≫ n (np. ciąg (10⁹, 1) — miliard kroków i tablica długości 10⁹).
+Przykład ze slajdów: (3,2,5,1,2,6,8,1,2,4), max = 8 → counts po fazie 1: 0,2,3,1,1,1,1,0,1; po fazie 2: 0,2,5,6,7,8,9,9,10. **Analiza:** operacja dominująca — przypisanie wartości w tablicy; rozmiar danych: n (długość) i **m (maksymalna wartość)**; $A(n,m)=W(n,m)=2n+2m=\Theta(n+m)$ — liniowa; $S(n,m)=n+m=\Theta(n+m)$. Słaby wybór, gdy m ≫ n (np. ciąg (10⁹, 1) — miliard kroków i tablica długości 10⁹).
 
 **RadixSort** — schemat sortowania wieloelementowych obiektów stałej długości (łańcuchy, liczby wielocyfrowe) za pomocą pomocniczego **stabilnego** algorytmu: najpierw po **ostatniej** pozycji, potem po przedostatniej, … aż do pierwszej. Dla małego alfabetu (cyfry 0–9, litery) dobrym pomocniczym algorytmem jest CountSort. Przykład: (212, 305, 115, 202, 131) → po ostatniej: (131, 212, 202, 305, 115) → po środkowej: (202, 305, 212, 115, 131) → po pierwszej: (115, 131, 202, 212, 305).
 

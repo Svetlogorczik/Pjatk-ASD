@@ -267,11 +267,11 @@ quicksort(a, l, r){
 }
 ```
 
-**Analysis of partition:** index i moves right until it meets a number greater than p, j moves left until it meets a smaller one — then they are swapped; at the end p is swapped with the last element of the "left" part. A comparison is made once per index position — as many as the elements minus one: **W(n) = A(n) = Θ(n)**, **S(n) = O(1)** (works **in place**).
+**Analysis of partition:** index i moves right until it meets a number greater than p, j moves left until it meets a smaller one — then they are swapped; at the end p is swapped with the last element of the "left" part. A comparison is made once per index position — as many as the elements minus one: $W(n)=A(n)=\Theta(n)$, $S(n)=O(1)$ (works **in place**).
 
-**Analysis of QuickSort:** each recursion level costs Θ(n) comparisons in total, so everything depends on the **recursion depth**. Pivot always in the middle → depth Θ(log n) → **Θ(n log n)**. Pivot always at an end (e.g. a **sorted or reverse-sorted** sequence) → the sequence shrinks by only 1, depth Θ(n) → **W(n) = Θ(n²)**. On average (every permutation equally likely) depth Θ(log n): **A(n) = Θ(n log n)** with a constant of about **1.44** — QuickSort is on average faster than MergeSort. The basic version is **not stable**; improvements exist (guaranteed n log n, stability).
+**Analysis of QuickSort:** each recursion level costs Θ(n) comparisons in total, so everything depends on the **recursion depth**. Pivot always in the middle → depth Θ(log n) → **Θ(n log n)**. Pivot always at an end (e.g. a **sorted or reverse-sorted** sequence) → the sequence shrinks by only 1, depth Θ(n) → $W(n)=\Theta(n^2)$. On average (every permutation equally likely) depth Θ(log n): $A(n)=\Theta(n\log n)$ with a constant of about **1.44** — QuickSort is on average faster than MergeSort. The basic version is **not stable**; improvements exist (guaranteed n log n, stability).
 
-**Lower bound.** Sorting by comparisons is a **decision tree**: each node is a comparison "a < b?", the leaves are all **n!** permutations. The height of a binary tree with n! leaves is at least log₂(n!) = **Θ(n log n)** — no comparison sort has a lower order of **average and worst-case** complexity than Θ(n log n). Faster is only possible **without comparisons** — at the cost of memory ("**time vs memory**").
+**Lower bound.** Sorting by comparisons is a **decision tree**: each node is a comparison "a < b?", the leaves are all **n!** permutations. The height of a binary tree with n! leaves is at least $\log_2(n!)=\Theta(n\log n)$ — no comparison sort has a lower order of **average and worst-case** complexity than Θ(n log n). Faster is only possible **without comparisons** — at the cost of memory ("**time vs memory**").
 
 **CountSort** (direct addressing, data in RAM). Elements are **natural** numbers. Auxiliary arrays: **counts** (length = the maximum + 1) and **result**. Three phases: (1) count occurrences, (2) cumulative summing from left to right (how many elements are not greater than a given one), (3) traverse the input again and send each element to result at the address from counts (the counter is decremented before use); **for stability the input is traversed "from the back"**.
 
@@ -291,7 +291,7 @@ countSort(a, l){
 }
 ```
 
-Example from the slides: (3,2,5,1,2,6,8,1,2,4), max = 8 → counts after phase 1: 0,2,3,1,1,1,1,0,1; after phase 2: 0,2,5,6,7,8,9,9,10. **Analysis:** dominant operation — assigning a value in an array; data size: n (length) and **m (maximum value)**; **A(n,m) = W(n,m) = 2n + 2m = Θ(n + m)** — linear; **S(n,m) = n + m = Θ(n + m)**. A poor choice when m ≫ n (e.g. the sequence (10⁹, 1) — a billion steps and an array of length 10⁹).
+Example from the slides: (3,2,5,1,2,6,8,1,2,4), max = 8 → counts after phase 1: 0,2,3,1,1,1,1,0,1; after phase 2: 0,2,5,6,7,8,9,9,10. **Analysis:** dominant operation — assigning a value in an array; data size: n (length) and **m (maximum value)**; $A(n,m)=W(n,m)=2n+2m=\Theta(n+m)$ — linear; $S(n,m)=n+m=\Theta(n+m)$. A poor choice when m ≫ n (e.g. the sequence (10⁹, 1) — a billion steps and an array of length 10⁹).
 
 **RadixSort** — a scheme for sorting fixed-length multi-element objects (strings, multi-digit numbers) using an auxiliary **stable** algorithm: first by the **last** position, then the second to last, … up to the first. For a small alphabet (digits 0–9, letters) CountSort is a good auxiliary algorithm. Example: (212, 305, 115, 202, 131) → by the last: (131, 212, 202, 305, 115) → by the middle: (202, 305, 212, 115, 131) → by the first: (115, 131, 202, 212, 305).
 

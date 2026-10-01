@@ -171,12 +171,12 @@ In the knowledge test: hash tables (hash function, collisions, load factor α, c
 **Direct addressing.** If keys are natural numbers from [0, …, m−1], the dictionary is an array indexed by the key — all operations **O(1)**. Two problems: memory proportional to the largest possible key value (m), not the number of stored keys; it works only for natural keys.
 
 :::def Hash table
-Extends direct addressing with a **hash function** hash : U → [0, …, m−1] (U — the universe of keys) that turns a key into an index. Memory is proportional to m (not |U|), and the key type can be anything.
+Extends direct addressing with a **hash function** $\text{hash}: U\to[0,\dots,m-1]$ (U — the universe of keys) that turns a key into an index. Memory is proportional to m (not |U|), and the key type can be anything.
 :::
 
 **Collisions.** Usually m < |U|, so the function is not injective: for some k1 ≠ k2 hash(k1) == hash(k2) — a **collision**. Methods: **repeated hashing** (if the slot is taken, hash again in a reproducible way until a free slot; drawback: at most m elements) and **chaining** (each slot holds a list of elements, searched linearly).
 
-**Required properties of a hash function:** (1) computable very fast (in constant time); (2) **uniform load** — for a key drawn uniformly from U each value in [0, …, m−1] is equally likely. **Load factor α = n/m** (n — number of pairs in the table). Thanks to (2) the worst-case complexity of operations is close to **O(α)** (lists have length close to α). The simplest function for integers: **hash(key) = key mod m** (fast — for m a power of 2 just take the last log₂(m) bits; uniform). Sometimes it must also be hard to invert (e.g. MD5) — modulo does not satisfy that.
+**Required properties of a hash function:** (1) computable very fast (in constant time); (2) **uniform load** — for a key drawn uniformly from U each value in [0, …, m−1] is equally likely. **Load factor α = n/m** (n — number of pairs in the table). Thanks to (2) the worst-case complexity of operations is close to **O(α)** (lists have length close to α). The simplest function for integers: $\text{hash}(key)=key \bmod m$ (fast — for m a power of 2 just take the last log₂(m) bits; uniform). Sometimes it must also be hard to invert (e.g. MD5) — modulo does not satisfy that.
 
 **Summary:** hash tables give dictionary operations in **O(α)** and let you balance time and memory with m (larger m — faster, but more memory). They do **not** efficiently support ordered-dictionary operations (minimum, maximum, successor, predecessor — linear).
 

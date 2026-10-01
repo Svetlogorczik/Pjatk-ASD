@@ -194,7 +194,7 @@ Wnioski: minimalny priorytet jest zawsze w **korzeniu**; na każdej ścieżce od
 
 **Operacje:** insert(e) — dodaj w pierwszym wolnym od lewej miejscu ostatniego poziomu i przywróć porządek w górę (**upheap**); findMin() — korzeń; delMin() — usuń korzeń, wstaw do korzenia ostatni element (skrajnie prawy na ostatnim poziomie) i przywróć porządek w dół (**downheap**: zamieniaj z mniejszym synem, dopóki oba synowie nie są niemniejsi lub nie dojdziesz do ostatniego poziomu). Obie pomocnicze operacje zakładają, że warunek kopca zakłóca co najwyżej węzeł x. **Złożoność** (n — liczba elementów, op. dominująca — porównanie priorytetów): co najwyżej 1 (upheap) lub 2 (downheap) porównania na poziom → insert **O(log n)**, findMin **O(1)**, delMin **O(log n)**.
 
-**Kopiec w tablicy** (dzięki zupełności, indeks 0 nieużywany, od góry do dołu i od lewej do prawej): **parent[i] = i/2** (dzielenie całkowite), **i.left = 2i**, **i.right = 2i + 1**. Przykład ze slajdów: kopiec 2(6(7(8, 10), 12), 3(9, 4)) to tablica [n, 2, 6, 3, 7, 12, 9, 4, 8, 10]; rodzic 12 (indeks 5) ma indeks 5/2 = 2.
+**Kopiec w tablicy** (dzięki zupełności, indeks 0 nieużywany, od góry do dołu i od lewej do prawej): $\text{parent}[i]=\lfloor i/2\rfloor$ (dzielenie całkowite), $\text{left}(i)=2i$, $\text{right}(i)=2i+1$. Przykład ze slajdów: kopiec 2(6(7(8, 10), 12), 3(9, 4)) to tablica [n, 2, 6, 3, 7, 12, 9, 4, 8, 10]; rodzic 12 (indeks 5) ma indeks 5/2 = 2.
 
 ```pseudo
 upheap(i)        // i > 0

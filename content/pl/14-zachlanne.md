@@ -154,14 +154,14 @@ Krótkie uzasadnienie od autora strony (na slajdach go nie ma).
 ## Wersja z wykładu 2026/2027 (M. Sydow) — „Znajdowanie najkrótszych ścieżek”
 
 :::exam
-Na sprawdzianie wiedzy: specyfikacja problemu, relaksacja, sortowanie topologiczne, **trzy warianty (DAG, Dijkstra, Bellman-Ford)** z kodem i złożonościami, wybór najlepszego algorytmu dla danego grafu, **symulacja Dijkstry** (wartości `distance` i `parent`). Zadanie treningowe (Dijkstra + Kruskal): [Sprawdziany 2026/2027](page:exams). Kruskal jest w zakresie sprawdzianu praktycznego — slajdów o drzewach rozpinających w tym zestawie jeszcze nie było.
+Na sprawdzianie wiedzy: specyfikacja problemu, relaksacja, sortowanie topologiczne, **trzy warianty (DAG, Dijkstra, Bellman-Ford)** z kodem i złożonościami, wybór najlepszego algorytmu dla danego grafu, **symulacja Dijkstry** (wartości `distance` i `parent`). Zadanie treningowe (Dijkstra + Kruskal): [Sprawdziany 2026/2027](page:exams). Minimalne drzewa rozpinające (Prim, Kruskal) — w sekcji poniżej.
 :::
 
 :::def Problem najkrótszych ścieżek z jednym źródłem
-**Wejście:** skierowany graf G = (V, E) z wagami krawędzi w : E → ℝ i wierzchołek startowy s ∈ V. **Wyjście:** dla każdego v ∈ V — długość najkrótszej ścieżki **μ(s, v)** z s do v (jeśli istnieje) oraz **rodzic** w drzewie najkrótszych ścieżek.
+**Wejście:** skierowany graf G = (V, E) z wagami krawędzi w : E → ℝ i wierzchołek startowy s ∈ V. **Wyjście:** dla każdego v ∈ V — długość najkrótszej ścieżki $\mu(s,v)$ z s do v (jeśli istnieje) oraz **rodzic** w drzewie najkrótszych ścieżek.
 :::
 
-Najkrótsza ścieżka może nie istnieć: v nieosiągalny z s (**μ = +∞**) albo istnieje ścieżka przez **ujemny cykl** (**μ = −∞**); w pozostałych przypadkach μ = d ∈ ℝ. **Lemat:** podścieżka najkrótszej ścieżki jest najkrótszą ścieżką. Warianty zależą od własności grafu: skierowany czy nie, **acykliczny** (najszybciej), **wagi nieujemne** (szybciej; dla wag całkowitych — jeszcze lepsza struktura danych).
+Najkrótsza ścieżka może nie istnieć: v nieosiągalny z s ($\mu=+\infty$) albo istnieje ścieżka przez **ujemny cykl** ($\mu=-\infty$); w pozostałych przypadkach μ = d ∈ ℝ. **Lemat:** podścieżka najkrótszej ścieżki jest najkrótszą ścieżką. Warianty zależą od własności grafu: skierowany czy nie, **acykliczny** (najszybciej), **wagi nieujemne** (szybciej; dla wag całkowitych — jeszcze lepsza struktura danych).
 
 **Idea (jak BFS):** każdy wierzchołek ma `distance` (najkrótsza znana odległość) i `parent`. Inicjalizacja: s.distance = 0, s.parent = s, pozostałe distance = +∞, parent = null. Wartości są „propagowane” przez krawędzie — **relaksacja**:
 
@@ -176,7 +176,7 @@ Po dowolnym ciągu relaksacji ∀v: v.distance ≥ μ(v) (nie spada poniżej pra
 
 **Sortowanie topologiczne** (tylko digrafy): ustawienie wierzchołków w ciąg tak, by dla każdej krawędzi (u, v) u było przed v. Możliwe ⇔ graf **nie ma cykli**. Sposób: wykonaj **DFS** i ustaw wierzchołki od **największego czasu zakończenia** do najmniejszego (lub iteracyjnie usuwaj wierzchołki o stopniu wejściowym 0 — też liniowo).
 
-**1. DAG:** posortuj topologicznie (O(m + n)), potem dla s = vⱼ relaksuj wszystkie krawędzie wychodzące z vⱼ, vⱼ₊₁, … aż do vₙ. Każda krawędź relaksowana co najwyżej raz → **O(m + n)**. Wierzchołki przed s w porządku są nieosiągalne.
+**1. DAG:** posortuj topologicznie (O(m + n)), potem dla s = vⱼ relaksuj wszystkie krawędzie wychodzące z vⱼ, vⱼ₊₁, … aż do vₙ. Każda krawędź relaksowana co najwyżej raz → $O(m+n)$. Wierzchołki przed s w porządku są nieosiągalne.
 
 **2. Dijkstra (wagi nieujemne):** bez ujemnych krawędzi nie ma ujemnych cykli, ale zwykłe cykle mogą być (nie da się sortować topologicznie). Relaksujemy w kolejności **niemalejących najkrótszych odległości** od źródła — zapewnia to **kolejka priorytetowa** (priorytet = distance). Analogia: podnoszenie ze stołu sznurków połączonych węzełkami.
 
@@ -199,9 +199,9 @@ while(!pq.isEmpty())
          else pq.insert(v)
 ```
 
-(pq z operacją decreaseKey — **adresowalna** kolejka priorytetowa, ze słownikiem mapującym wierzchołki na pozycje.) **Analiza:** n = |V|, m = |E|; operacja dominująca — porównanie priorytetów, aktualizacja atrybutów; inicjalizacja O(n); pętla O(n × (delMin + insert) + m × decreaseKey) = O(n log n) + O(m log n) = **O((n + m) log n)** dla kopca binarnego. Przeciętnie decreaseKey wykonuje się O(n log(m/n)) razy → **O(m + n log(m/n) log n)** (liniowo dla gęstych grafów). Kopiec Fibonacciego (decreaseKey zamortyzowane O(1)): **O(m + n log n)**. Wagi całkowite ≤ C: **O(m + nC)** (monotoniczna kolejka bukietowa).
+(pq z operacją decreaseKey — **adresowalna** kolejka priorytetowa, ze słownikiem mapującym wierzchołki na pozycje.) **Analiza:** n = |V|, m = |E|; operacja dominująca — porównanie priorytetów, aktualizacja atrybutów; inicjalizacja O(n); pętla $O(n\times(\text{delMin}+\text{insert})+m\times\text{decreaseKey})=O(n\log n)+O(m\log n)$ = $O((n+m)\log n)$ dla kopca binarnego. Przeciętnie decreaseKey wykonuje się O(n log(m/n)) razy → $O(m+n\log(m/n)\log n)$ (liniowo dla gęstych grafów). Kopiec Fibonacciego (decreaseKey zamortyzowane O(1)): $O(m+n\log n)$. Wagi całkowite ≤ C: $O(m+nC)$ (monotoniczna kolejka bukietowa).
 
-**3. Bellman-Ford (dowolne wagi):** podejście „siłowe” — najkrótsza ścieżka ma ≤ n − 1 krawędzi, więc (n − 1)-krotna relaksacja wszystkich m krawędzi (w ustalonym ciągu) zawiera każdą najkrótszą ścieżkę jako podciąg: **O(nm)**. Nieosiągalne mają d = ∞. Potem jeszcze raz m relaksacji — jeśli distance nadal maleje, wierzchołek leży na ścieżce z ujemnym cyklem → ustawiamy −∞ (liniowo).
+**3. Bellman-Ford (dowolne wagi):** podejście „siłowe” — najkrótsza ścieżka ma ≤ n − 1 krawędzi, więc (n − 1)-krotna relaksacja wszystkich m krawędzi (w ustalonym ciągu) zawiera każdą najkrótszą ścieżkę jako podciąg: $O(nm)$. Nieosiągalne mają d = ∞. Potem jeszcze raz m relaksacji — jeśli distance nadal maleje, wierzchołek leży na ścieżce z ujemnym cyklem → ustawiamy −∞ (liniowo).
 
 ```pseudo
 %% (initialise as in Dijkstra)
@@ -233,6 +233,106 @@ identifyNegativeCycle(v)
 
 Specyfikacja problemu najkrótszych ścieżek z jednym źródłem i 2 przykłady zastosowań; na czym polega relaksacja; specyfikacja sortowania topologicznego, kiedy możliwe i jak (2 sposoby); **sortowanie topologiczne danego DAG za pomocą DFS**; który z 3 algorytmów będzie najefektywniejszy dla danego grafu; **Dijkstra na danym grafie — wartości wszystkich atrybutów**; Bellman-Ford na danym grafie; analiza złożoności 3 algorytmów.
 
+
+## Wersja z wykładu 2026/2027 (M. Sydow) — „Minimalne drzewa rozpinające”
+
+:::exam
+**Kruskal** jest w zakresie sprawdzianu praktycznego. Typowe zadanie ze slajdów: *mając dany graf z wagami, zastosuj algorytm Prima/Kruskala i wypisz krawędzie w kolejności, w jakiej zostały zaakceptowane* — **przy remisie wag decyduje kolejność alfabetyczna etykiet**. Zadanie treningowe (Kruskal i Prim na jednym grafie): [Sprawdziany 2026/2027](page:exams).
+:::
+
+:::def Drzewo i las rozpinający src="slajdy MST"
+**Drzewo rozpinające** spójnego, nieskierowanego grafu prostego $G=(V,E)$ to taki podgraf $T$, który **jest drzewem** i **zawiera wszystkie wierzchołki** grafu.
+- graf niespójny nie ma drzewa rozpinającego; suma drzew rozpinających jego składowych (po jednym na składową) to **las rozpinający**,
+- drzewo rozpinające dostaniemy, usuwając kolejno krawędzie aż do uzyskania drzewa; drzew rozpinających może być wiele,
+- każde drzewo rozpinające danego grafu ma tyle samo krawędzi: $|V|-1$.
+:::
+
+:::def Problem MST
+- **Wejście:** nieskierowany graf $G$ z wagami na krawędziach (liczby wymierne).
+- **Wyjście:** drzewo rozpinające o **minimalnym łącznym koszcie krawędzi** — **minimalne drzewo rozpinające** (*Minimum Spanning Tree*).
+
+Problem jest rozwiązywalny w czasie wielomianowym. Kruskal opiera się na własnościach cykli i rozcięć, Prim — na modyfikacji BFS i Dijkstry.
+:::
+
+### Rozcięcia i cykle
+
+:::def Rozcięcie
+Dla spójnego grafu $G=(V,E)$ z wagami i podzbioru $S\subseteq V$ **rozcięcie** to zbiór krawędzi $E'\subseteq E$ mających **dokładnie jeden koniec w $S$**, a drugi w $V\setminus S$.
+:::
+
+:::formula Własność rozcięcia src="lemat"
+Jeśli $E'$ jest rozcięciem i $e$ jest krawędzią o **minimalnej wadze w $E'$**, to istnieje MST zawierające $e$. Co więcej, jeśli $T'$ jest zawarty w pewnym MST i nie zawiera żadnej krawędzi z $E'$, to $T'\cup\{e\}$ też jest zawarty w pewnym MST — krawędź $e$ jest **„przydatna”**.
+:::
+
+:::formula Własność cyklu src="lemat"
+Niech $S$ będzie podzbiorem krawędzi pewnego MST, a $C$ cyklem w $G$. Jeśli $e=(u,v)\in C$ ma **maksymalny koszt w $C$**, $u$ styka się z $S$, a $v$ nie, to istnieje MST zawierające $S$ i **niezawierające $e$** — krawędź $e$ jest **zbędna**.
+:::
+
+Dowody — np. w podręczniku K. Mehlhorna. **Ogólny schemat:** (1) $T=\emptyset$; (2) dopóki $T$ nie jest MST, dodaj krawędź o minimalnym koszcie z pewnego rozcięcia $E'$ rozłącznego z $T$. Własność rozcięcia gwarantuje poprawność; różne wybory $E'$ dają Prima i Kruskala.
+
+### Algorytm Prima
+
+Zaczyna od wierzchołka $s$ i powiększa drzewo; $S$ — wierzchołki drzewa (na początku $\{s\}$). Krawędzie z dokładnie jednym końcem w $S$ tworzą rozcięcie — w każdym kroku dodajemy drugi koniec **najlżejszej** krawędzi z tego rozcięcia. Kolejka priorytetowa trzyma wierzchołki z priorytetem = waga najlżejszej krawędzi łączącej je z $S$ (`dist`); po dodaniu wierzchołka relaksujemy jego krawędzie. Drzewo — w atrybutach `parent`.
+
+```pseudo
+MSTPrim(V,w,s){
+  PriorityQueue pq
+  s.dist = 0
+  s.parent = null
+  pq.insert(s)
+  for each u in V\{s}:
+    u.dist = INFINITY
+
+  while(!pq.isEmpty()):
+    u = pq.deleteMin()
+    u.dist = 0
+    for each v in u.adjList:
+      if (w(u,v) < v.dist):
+        v.dist = w(u,v)
+        v.parent = u
+        if (pq.contains(v)): pq.decreaseKey(v)
+        else pq.insert(v)
+}
+```
+
+:::formula Złożoność Prima
+Rozmiar danych $n=|V|$, $m=|E|$; operacja dominująca: przypisania i porównania priorytetów. Inicjalizacja $O(n)$, pętla: $n\times\text{delMin} + m\times\text{decreaseKey}$.
+$$\text{kopiec binarny: } O(n\log n)+O(m\log n)=O\big((n+m)\log n\big)$$
+$$\text{kopiec Fibonacciego: } O(n\log n + m)$$
+:::
+
+:::own
+Dlaczego `u.dist = 0` po zdjęciu z kolejki? (wyjaśnienie autora strony) To „zamyka” wierzchołek: przy dodatnich wagach warunek `w(u,v) < v.dist` nigdy już nie zmieni jego rodzica, więc wierzchołki drzewa nie są relaksowane ponownie.
+:::
+
+### Algorytm Kruskala
+
+1. początkowo $T=\emptyset$,
+2. rozpatruj krawędzie w kolejności **niemalejących wag** i dodawaj te, które **nie tworzą cyklu** z dotychczas dodanymi; pozostałe odrzucaj — aż $T$ będzie drzewem rozpinającym.
+
+Problem: szybko sprawdzić, czy krawędź tworzy cykl. $T$ jest w każdej chwili **lasem**, a krawędź $(u,v)$ tworzyłaby cykl ⇔ $u$ i $v$ są **w tym samym drzewie** lasu — stąd struktura **union-find**.
+
+```pseudo
+kruskalMST(V,E,w){
+  T = 0
+  UnionFind uf
+  foreach edge (u,v) in non-decreasing order of weight:
+    if (uf.find(u) != uf.find(v)):
+      T = T + (u,v)
+      uf.union(uf.find(u),uf.find(v))
+  return T
+}
+```
+
+:::formula Złożoność Kruskala
+Szybka (drzewowa) implementacja union-find: `union` w czasie stałym, `find` w prawie stałym czasie zamortyzowanym. Całość jest zdominowana przez **sortowanie krawędzi**:
+$$O(m\log m)$$
+:::
+
+### Przykładowe pytania ze slajdów
+
+Definicje drzewa i lasu rozpinającego, rozcięcia i cyklu; własność rozcięcia i cyklu oraz ich interpretacja w MST i w algorytmach; idee Prima i Kruskala; analiza złożoności; **Prim/Kruskal na danym grafie — krawędzie w kolejności akceptacji (remisy: kolejność alfabetyczna)**.
+
 === summary ===
 
 ## Wersja 2026/2027 (M. Sydow)
@@ -240,6 +340,7 @@ Specyfikacja problemu najkrótszych ścieżek z jednym źródłem i 2 przykłady
 - relax(u, v): jeśli u.distance + w < v.distance → zmień distance i parent.
 - Topo-sort: DFS, malejące f; możliwe ⇔ brak cykli.
 - DAG O(n + m); Dijkstra (wagi ≥ 0, PQ) O((n + m) log n); Bellman-Ford (n−1 rund) O(nm) + wykrywanie ujemnych cykli.
+- MST: własność rozcięcia (najlżejsza krawędź rozcięcia jest „przydatna”) i cyklu (najcięższa w cyklu — zbędna). Prim (PQ, `dist` = waga krawędzi do drzewa) O((n + m) log n); Kruskal (sortowanie + union-find) O(m log m); remisy — alfabetycznie.
 
 
 ## Zachłanność

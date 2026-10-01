@@ -1,0 +1,87 @@
+/* Block: to-top — floating button that scrolls back to the top of a long page. */
+.to-top {
+  position: fixed;
+  right: max(16px, env(safe-area-inset-right));
+  bottom: max(16px, env(safe-area-inset-bottom));
+  z-index: 25;
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border: 1px solid var(--c-border-strong);
+  border-radius: 50%;
+  background: var(--c-surface);
+  color: var(--c-accent);
+  box-shadow: var(--shadow-m);
+  transition: transform .15s var(--ease), background-color .15s var(--ease);
+}
+.to-top[hidden] { display: none; }
+.to-top:hover { transform: translateY(-2px); background: var(--c-accent-soft); }
+.to-top__icon {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Block: toc-inline — collapsible "On this page" at the top of an article (narrow screens only). */
+.toc-inline {
+  display: none;
+  margin-bottom: 28px;
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-m);
+  background: var(--c-surface);
+}
+.toc-inline__summary {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 46px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 700;
+  list-style: none;
+  cursor: pointer;
+}
+.toc-inline__summary::-webkit-details-marker { display: none; }
+.toc-inline__summary::before {
+  content: "☰";
+  color: var(--c-accent);
+}
+.toc-inline__count {
+  margin-left: auto;
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: var(--c-surface-2);
+  color: var(--c-text-muted);
+  font-size: 12px;
+}
+.toc-inline__list {
+  max-height: 60vh;
+  overflow-y: auto;
+  margin: 0;
+  padding: 4px 8px 10px;
+  border-top: 1px solid var(--c-border);
+  list-style: none;
+}
+.toc-inline__item--level-3 { padding-left: 14px; }
+.toc-inline__link {
+  display: block;
+  padding: 7px 8px;
+  border-radius: var(--radius-s);
+  color: var(--c-text-muted);
+  font-size: 14px;
+  line-height: 1.4;
+  text-decoration: none;
+}
+.toc-inline__link:hover { background: var(--c-surface-2); color: var(--c-text); }
+
+@media (max-width: 1240px) {
+  .toc-inline { display: block; }
+}
+@media print {
+  .to-top, .toc-inline { display: none !important; }
+}

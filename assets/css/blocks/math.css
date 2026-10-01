@@ -1,0 +1,40 @@
+/* Block: math — KaTeX formulas. Display formulas get their own centred row and scroll
+   horizontally on narrow screens instead of breaking the layout. */
+.math--inline .katex { font-size: 1.06em; }
+
+.math--block {
+  margin: 1.1em 0;
+  padding: 6px 4px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  text-align: center;
+  scrollbar-width: thin;
+}
+.math--block .katex-display { margin: .35em 0; }
+.math--block .katex { font-size: 1.16em; }
+
+/* A display formula directly in the text (not inside a box) gets a quiet card. */
+.prose > .math--block,
+.task__body > .math--block,
+.task__content > .math--block {
+  padding: 10px 14px;
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-m);
+  background: var(--c-math-bg);
+}
+
+.math__fallback {
+  font-family: var(--font-mono);
+  font-size: .9em;
+  white-space: pre-wrap;
+}
+
+@media (max-width: 600px) {
+  .math--block .katex { font-size: 1.04em; }
+}
+
+/* Formulas in table cells stay on one line; the table itself scrolls on narrow screens. */
+.prose__table .math--inline {
+  display: inline-block;
+  white-space: nowrap;
+}

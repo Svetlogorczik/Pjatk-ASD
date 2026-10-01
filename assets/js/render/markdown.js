@@ -5,7 +5,8 @@
  * > quotes, --- rules, fenced code (```java title="File.java").
  * Extensions:
  *   ## Heading {own}                      heading with the "by the author" badge
- *   :::own | analogy | tip | warn | info | exam | def | example  [title]   ...   :::
+ *   :::own | analogy | tip | warn | info | exam | def | example | formula | answer  [title] [src="..."]   ...   :::
+ *   $inline TeX$ and $$display TeX$$ (one line, or $$ ... $$ over several lines) — rendered by math.js
  *   :::task level=1..3 source="..." | source=own title="..."   ... ::hint ... ::solution ... :::
  *   ```tree / ```graph / ```array          diagrams (see diagrams.js)
  *   ==marked text==, [text](topic:t03), [text](topic:t03#anchor), [text](page:course)
@@ -19,7 +20,8 @@
 
   var CALLOUTS = {
     own: 'calloutOwn', analogy: 'calloutAnalogy', tip: 'calloutTip', warn: 'calloutWarn',
-    info: 'calloutInfo', exam: 'calloutExam', def: 'calloutDef', example: 'calloutExample'
+    info: 'calloutInfo', exam: 'calloutExam', def: 'calloutDef', example: 'calloutExample',
+    formula: 'calloutFormula', answer: 'calloutAnswer'
   };
   var DIAGRAMS = { tree: 1, graph: 1, array: 1 };
 
@@ -61,8 +63,13 @@
       codes.push('<code class="prose__code">' + esc(c) + '</code>');
       return '\u0000' + (codes.length - 1) + '\u0000';
     });
+    var maths = [];
+    s = s.replace(/(^|[^\\$])\$(?!\$)([^$\n]+?)\$(?!\d)/g, function (_, pre, tex) {
+      maths.push(ASD.math.inline(tex));
+      return pre + '\u0002' + (maths.length - 1) + '\u0002';
+    });
     var escapes = [];
-    s = s.replace(/\\([*_=\[\]`\\|#])/g, function (_, ch) {
+    s = s.replace(/\\([*_=\[\]`\\|#$])/g, function (_, ch) {
       escapes.push(ch);
       return '\u0001' + (escapes.length - 1) + '\u0001';
     });
@@ -75,6 +82,7 @@
       return '<a class="prose__link" href="' + esc(l.href) + '"' + (l.ext ? ' target="_blank" rel="noopener"' : '') + '>' + label + '</a>';
     });
     s = s.replace(/\u0001(\d+)\u0001/g, function (_, i) { return esc(escapes[+i]); });
+    s = s.replace(/\u0002(\d+)\u0002/g, function (_, i) { return maths[+i]; });
     return s.replace(/\u0000(\d+)\u0000/g, function (_, i) { return codes[+i]; });
   }
 
@@ -97,7 +105,7 @@
   }
 
   function startsBlock(line) {
-    return isFence(line) || RE.container.test(line) || RE.heading.test(line) || RE.hr.test(line) ||
+    return isFence(line) || /^\s*\$\$/.test(line) || RE.container.test(line) || RE.heading.test(line) || RE.hr.test(line) ||
       RE.listItem.test(line) || RE.quote.test(line) || /^\s*\|/.test(line) || /^::(hint|solution)\s*$/.test(line);
   }
 
@@ -137,6 +145,22 @@
         }
         i++;
         html += DIAGRAMS[lang] ? this.diagram(lang, body.join('\n'), info) : this.code(lang, body.join('\n'), info);
+        continue;
+      }
+
+      /* display math: $$...$$ on one line, or $$ / lines / $$ */
+      if (/^\s*\$\$/.test(line)) {
+        var one = /^\s*\$\$(.+)\$\$\s*$/.exec(line);
+        var tex;
+        if (one) { tex = one[1]; i++; }
+        else {
+          var buf = [line.replace(/^\s*\$\$/, '')];
+          i++;
+          while (i < lines.length && !/\$\$\s*$/.test(lines[i])) buf.push(lines[i++]);
+          if (i < lines.length) buf.push(lines[i++].replace(/\$\$\s*$/, ''));
+          tex = buf.join('\n');
+        }
+        html += ASD.math.block(tex.trim());
         continue;
       }
 
@@ -281,10 +305,16 @@
 
   Renderer.prototype.container = function (type, attrs, lines) {
     if (type === 'task') return this.task(attrs, lines);
-    var key = CALLOUTS[type] || 'calloutInfo';
-    var title = attrs.title || attrs._text || t(key);
-    return '<aside class="callout callout--' + esc(CALLOUTS[type] ? type : 'info') + '">' +
-      '<div class="callout__title"><span class="callout__icon" aria-hidden="true"></span>' + inline(title) + '</div>' +
+    var kind = CALLOUTS[type] ? type : 'info';
+    var key = CALLOUTS[kind];
+    var custom = attrs.title || attrs._text;
+    /* Head: coloured kind label; a custom title follows it in the normal text colour. */
+    var head = custom
+      ? '<span class="callout__kind">' + esc(t(key + 'Short')) + '</span><span class="callout__name">' + inline(custom) + '</span>'
+      : '<span class="callout__kind">' + esc(t(key)) + '</span>';
+    if (attrs.src) head += '<span class="callout__src">' + inline(attrs.src) + '</span>';
+    return '<aside class="callout callout--' + esc(kind) + '">' +
+      '<div class="callout__title"><span class="callout__icon" aria-hidden="true"></span>' + head + '</div>' +
       '<div class="callout__body">' + this.blocks(lines) + '</div></aside>';
   };
 

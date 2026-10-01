@@ -277,7 +277,7 @@ merge(a1, len1, a2, len2){
 }
 ```
 
-**Analiza merge:** operacja dominująca — porównanie 2 elementów lub indeksów; rozmiar danych n = len1 + len2; **W(n) = A(n) = Θ(n)**; niestety **S(n) = Θ(n)** (alokujemy tablicę na połączone ciągi — można tego uniknąć na **listach dowiązaniowych**). **Analiza mergeSort:** na każdym poziomie rekurencji wywołania merge działają na ciągach o łącznej długości len, a poziomów jest log₂(len): **W(len) = A(len) = Θ(len·log len)** — złożoność **liniowo-logarytmiczna**. Przykład ze slajdów: 100 mln logów, 10⁹ porównań/s: insertionSort ≈ (10⁸)²/10⁹ s = 10⁷ s (**115 dni**), mergeSort ≈ 2,65·10⁹/10⁹ s (**2,65 sekundy**).
+**Analiza merge:** operacja dominująca — porównanie 2 elementów lub indeksów; rozmiar danych n = len1 + len2; $W(n)=A(n)=\Theta(n)$; niestety $S(n)=\Theta(n)$ (alokujemy tablicę na połączone ciągi — można tego uniknąć na **listach dowiązaniowych**). **Analiza mergeSort:** na każdym poziomie rekurencji wywołania merge działają na ciągach o łącznej długości len, a poziomów jest log₂(len): $W(len)=A(len)=\Theta(len\cdot\log len)$ — złożoność **liniowo-logarytmiczna**. Przykład ze slajdów: 100 mln logów, 10⁹ porównań/s: insertionSort ≈ (10⁸)²/10⁹ s = 10⁷ s (**115 dni**), mergeSort ≈ 2,65·10⁹/10⁹ s (**2,65 sekundy**).
 
 **Listy dowiązaniowe w mergeSort.** Węzły połączone dowiązaniami (wskaźnikami): `początek -> (2)-> (3)-> (5)-> (8)-> null`. Wystarczą listy **jednokierunkowe** (merge przechodzi każdą listę w jednym kierunku). Merge na listach tylko przestawia dowiązania, więc **nie zużywa dodatkowej pamięci** (poza stosem rekurencji), przy tej samej złożoności czasowej. Tablice: szybki dostęp bezpośredni, mało pamięci, ale wstawienie w środek — liniowe; listy: wstawienie/usunięcie podlisty w czasie **stałym**, ale wolny (liniowy) dostęp i pamięć na dowiązania.
 
@@ -297,30 +297,32 @@ fibonacci(n){
 Liczba wywołań rekurencyjnych jest **wykładniczą** funkcją n — fibonacci(50) liczy się zaskakująco długo (może zabraknąć pamięci na stos). Lepszy jest wzór **nierekurencyjny**. Rekurencji należy unikać, jeśli to możliwe i nie komplikuje bardzo algorytmu (koszt czasowy i pamięciowy — stos wywołań).
 
 :::def Liniowe równanie rekurencyjne 2. rzędu
-Jeśli sₙ = a·sₙ₋₁ + b·sₙ₋₂, rozwiązujemy **równanie charakterystyczne** x² − ax − b = 0:
-1. jeden pierwiastek r: **sₙ = c₁rⁿ + c₂nrⁿ**,
-2. dwa pierwiastki r₁, r₂: **sₙ = c₁r₁ⁿ + c₂r₂ⁿ**,
+Jeśli $s_n=a\,s_{n-1}+b\,s_{n-2}$, rozwiązujemy **równanie charakterystyczne** $x^2-ax-b=0$:
+1. jeden pierwiastek r: $s_n=c_1r^n+c_2\,n\,r^n$,
+2. dwa pierwiastki r₁, r₂: $s_n=c_1r_1^n+c_2r_2^n$,
 
-stałe c₁, c₂ wyznaczamy z wartości bazowych (n = 0, n = 1). Dla Fibonacciego (a = b = 1) daje to **wzór Bineta**: F(n) = (1/√5)·(((1+√5)/2)ⁿ − ((1−√5)/2)ⁿ); F(50) = 12 586 269 025.
+stałe c₁, c₂ wyznaczamy z wartości bazowych (n = 0, n = 1). Dla Fibonacciego (a = b = 1) daje to **wzór Bineta**: 
+$$F(n)=\frac{1}{\sqrt5}\left(\left(\frac{1+\sqrt5}{2}\right)^{n}-\left(\frac{1-\sqrt5}{2}\right)^{n}\right),\qquad F(50)=12\,586\,269\,025$$
+
 :::
 
-**Wieże Hanoi.** n krążków na drążku A (największy na dole), przenieść na C, jeden ruch = jeden krążek z wierzchu, nigdy większy na mniejszym, pomocniczy drążek B. hanoi(0) = 0, hanoi(1) = 1, hanoi(2) = 3. Rekurencyjnie: przenieś n−1 krążków na B, największy na C, n−1 krążków z B na C: **hanoi(1) = 1, hanoi(n) = 2·hanoi(n−1) + 1**. „Rozwijanie sumy”: hanoi(n) = Σ_{i=0}^{n−1} 2ⁱ = **2ⁿ − 1**; hanoi(10) = 1023 (rośnie szybciej niż Fibonacci). Wzór dało się wyznaczyć **dzięki rekurencyjnemu ujęciu problemu**.
+**Wieże Hanoi.** n krążków na drążku A (największy na dole), przenieść na C, jeden ruch = jeden krążek z wierzchu, nigdy większy na mniejszym, pomocniczy drążek B. hanoi(0) = 0, hanoi(1) = 1, hanoi(2) = 3. Rekurencyjnie: przenieś n−1 krążków na B, największy na C, n−1 krążków z B na C: $\text{hanoi}(1)=1,\;\; \text{hanoi}(n)=2\cdot\text{hanoi}(n-1)+1$. „Rozwijanie sumy”: $\text{hanoi}(n)=\sum_{i=0}^{n-1}2^i=2^n-1$; hanoi(10) = 1023 (rośnie szybciej niż Fibonacci). Wzór dało się wyznaczyć **dzięki rekurencyjnemu ujęciu problemu**.
 
 ### Trzy często spotykane przypadki (n = 2ᵏ, t(1) = 0, c > 0 stała)
 
 | Równanie | Rozwiązanie | Przykład |
 |---|---|---|
-| t(n) = t(n/2) + c | c·log n = **Θ(log n)** | rekurencyjny binSearch |
-| t(n) = t(⌊n/2⌋) + t(⌈n/2⌉) + c | c(n − 1) = **Θ(n)** | rekurencyjne maksimum (max z lewej i prawej połowy) |
-| t(n) = t(⌊n/2⌋) + t(⌈n/2⌉) + c·n | c·n·log n = **Θ(n log n)** | mergeSort |
+| $t(n)=t(n/2)+c$ | $c\log n=\Theta(\log n)$ | rekurencyjny binSearch |
+| $t(n)=t(\lfloor n/2\rfloor)+t(\lceil n/2\rceil)+c$ | $c(n-1)=\Theta(n)$ | rekurencyjne maksimum (max z lewej i prawej połowy) |
+| $t(n)=t(\lfloor n/2\rfloor)+t(\lceil n/2\rceil)+cn$ | $c\,n\log n=\Theta(n\log n)$ | mergeSort |
 
 :::def Twierdzenie o rekurencji uniwersalnej
-T(n) = a·T(n/b) + f(n), a ≥ 1, b > 1 stałe, n/b to ⌊n/b⌋ lub ⌈n/b⌉, f asymptotycznie dodatnia:
-1. f(n) = O(n^(log_b a − ε)) dla pewnego ε > 0 ⇒ **T(n) = Θ(n^(log_b a))**,
-2. f(n) = Θ(n^(log_b a)) ⇒ **T(n) = Θ(n^(log_b a)·log n)**,
-3. f(n) = Ω(n^(log_b a + ε)) dla pewnego ε > 0 i a·f(n/b) ≤ c·f(n) dla pewnego c < 1 („warunek regularności”) ⇒ **T(n) = Θ(f(n))**.
+$T(n)=a\,T(n/b)+f(n)$, a ≥ 1, b > 1 stałe, n/b to ⌊n/b⌋ lub ⌈n/b⌉, f asymptotycznie dodatnia:
+1. $f(n)=O(n^{\log_b a-\varepsilon})$ dla pewnego ε > 0 ⇒ $T(n)=\Theta(n^{\log_b a})$,
+2. $f(n)=\Theta(n^{\log_b a})$ ⇒ $T(n)=\Theta(n^{\log_b a}\log n)$,
+3. $f(n)=\Omega(n^{\log_b a+\varepsilon})$ dla pewnego ε > 0 i $a\,f(n/b)\le c\,f(n)$ dla pewnego c < 1 („warunek regularności”) ⇒ $T(n)=\Theta(f(n))$.
 
-Interpretacja: porównujemy rząd narzutu f(n) z n^(log_b a) — wyższy z nich wyznacza rząd T(n); przy równych dochodzi czynnik Θ(log n). (Dowód: Cormen i in., rozdz. 4.4.) MergeSort: a = 2, b = 2, f(n) = Θ(n) → przypadek 2 → Θ(n log n).
+Interpretacja: porównujemy rząd narzutu f(n) z $n^{\log_b a}$ — wyższy z nich wyznacza rząd T(n); przy równych dochodzi czynnik Θ(log n). (Dowód: Cormen i in., rozdz. 4.4.) MergeSort: a = 2, b = 2, f(n) = Θ(n) → przypadek 2 → Θ(n log n).
 :::
 
 ### Zadania ze slajdów

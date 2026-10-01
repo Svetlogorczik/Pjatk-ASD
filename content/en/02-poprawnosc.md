@@ -277,7 +277,7 @@ algor1(Arr, len){
 It returns the **maximum** of the first len numbers of the array. Proof of total correctness — the two standard steps:
 
 1. **Stop** — as above: i grows by 1, len is constant and finite.
-2. **Partial correctness.** Postcondition: `(∀ 0≤j<len: x ≥ Arr[j]) ∧ (∃ 0≤j<len: x == Arr[j])`. Invariant ("in the i-th iteration x is the maximum of the first i values"): `(∀ 0≤j<i: x ≥ Arr[j]) ∧ (∃ 0≤j<len: x == Arr[j])`.
+2. **Partial correctness.** Postcondition: $(\forall_{0\le j<len}\; x\ge Arr[j]) \wedge (\exists_{0\le j<len}\; x = Arr[j])$. Invariant ("in the i-th iteration x is the maximum of the first i values"): $(\forall_{0\le j<i}\; x\ge Arr[j]) \wedge (\exists_{0\le j<len}\; x = Arr[j])$.
    - before the first iteration: i = 1, x = Arr[0] — true,
    - it is an invariant thanks to the conditional update of x in the `if`,
    - when the loop stops (i == len) it takes the form of the postcondition.

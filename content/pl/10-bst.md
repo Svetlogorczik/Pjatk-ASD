@@ -301,7 +301,7 @@ begin
 Uwaga autora strony: według pseudokodu ze slajdów węzeł z **jednym** synem też trafia do gałęzi „find x = the rightmost node in node.left” (bo nie jest liściem) — w wyniku drzewo nadal jest poprawnym BST, ale wygląda inaczej niż przy „podpięciu syna”. Przykład ze slajdów (delete(12) → 15 w miejsce 12) odpowiada opisowi słownemu („podpinamy jedynego syna”), więc na sprawdzianie stosuj **opis słowny trzech wariantów**.
 :::
 
-**Analiza** (n — liczba elementów, operacja dominująca — porównanie kluczy): wszystkie operacje słownika uporządkowanego wykonują liczbę porównań **proporcjonalną do wysokości drzewa**. Wysokość **losowego** BST (każda permutacja wstawianych kluczy jednakowo prawdopodobna) jest O(log n), więc **A(n) = O(log n)**; ale pesymistycznie drzewo może być jedną długą gałęzią: **W(n) = O(n)**. Stąd drzewa AVL ([temat 11](topic:t11)).
+**Analiza** (n — liczba elementów, operacja dominująca — porównanie kluczy): wszystkie operacje słownika uporządkowanego wykonują liczbę porównań **proporcjonalną do wysokości drzewa**. Wysokość **losowego** BST (każda permutacja wstawianych kluczy jednakowo prawdopodobna) jest O(log n), więc $A(n)=O(\log n)$; ale pesymistycznie drzewo może być jedną długą gałęzią: $W(n)=O(n)$. Stąd drzewa AVL ([temat 11](topic:t11)).
 
 ### Obchody drzew binarnych (wykład „Algorytmy przeglądania grafów i drzew”)
 

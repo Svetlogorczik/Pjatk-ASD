@@ -246,11 +246,11 @@ The 2026/2027 tests use the specifications and code from the slides below. You m
 - Example: S = (3,5,8,2,1,8,4,2,9): search(S, 9, 2) → 3; search(S, 9, 7) → −1.
 :::
 
-The natural **dominant operation** is **comparison** of the key with an element, the **data size** is the length len (it may include other parameters, e.g. k in the jump algorithm). **Sequential search** (indices 0..len−1) has **W(len) = len**, and changing the order of checking **cannot improve** this worst case — the key can always be at the last checked index.
+The natural **dominant operation** is **comparison** of the key with an element, the **data size** is the length len (it may include other parameters, e.g. k in the jump algorithm). **Sequential search** (indices 0..len−1) has $W(len)=len$, and changing the order of checking **cannot improve** this worst case — the key can always be at the last checked index.
 
 **Sorted sequence.** An extra property — **ordering** — allows faster search. Modified specification: Input: S — a sequence of integers **sorted non-decreasingly** (values may repeat), indexed from 0; the rest unchanged.
 
-**Jumps of k.** Check every k-th index (skipping k−1 elements per "jump"); after finding the first element greater than the key, it is enough to check the last k−1 "jumped-over" elements. For len → ∞ it is on average **asymptotically k times faster** than sequential search (for small k). With a good k (exercise: k = √len) W(len) = (1/k)·Θ(len) — but this is **still linear**, the same order.
+**Jumps of k.** Check every k-th index (skipping k−1 elements per "jump"); after finding the first element greater than the key, it is enough to check the last k−1 "jumped-over" elements. For len → ∞ it is on average **asymptotically k times faster** than sequential search (for small k). With a good k (exercise: k = √len) $W(len)=\frac{1}{k}\cdot\Theta(len)$ — but this is **still linear**, the same order.
 
 **Binary search — idea:** (1) while the sequence length is positive: (2) compare the key with the middle element; (3) equal → return the current index; (4) key smaller → search only the left subsequence; (5) greater → only the right one; (6) go back to 1; (7) the length dropped to zero → no key.
 
@@ -272,18 +272,18 @@ search(S, len, key){
 }
 ```
 
-It is assumed that the whole sequence is in **RAM** (random access) — checking any S[m] takes constant time. **Analysis:** data size — len; dominant operation — the comparison `S[m] == key`; with each iteration the current sequence becomes **2 times shorter**, so **W(len) = Θ(log₂ len)**, **A(len) = Θ(log₂ len)**, **S(len) = O(1)**. (On a linked list or a "slow" disk access to S[m] is not constant — then this analysis fails.)
+It is assumed that the whole sequence is in **RAM** (random access) — checking any S[m] takes constant time. **Analysis:** data size — len; dominant operation — the comparison `S[m] == key`; with each iteration the current sequence becomes **2 times shorter**, so $W(len)=\Theta(\log_2 len)$, $A(len)=\Theta(\log_2 len)$, $S(len)=O(1)$. (On a linked list or a "slow" disk access to S[m] is not constant — then this analysis fails.)
 
 ### Order statistics
 
 The **k-th order statistic** is the k-th smallest (or largest) element; the minimum is the case k = 1. In a sorted sequence the task is trivial, so we consider **unordered** sequences.
 
-**Second smallest — second(S, len)** (distinct elements). Simple solution: find the minimum, remove it, find the minimum again — **2·len − 1** comparisons. **Tournament algorithm (divide and conquer):** elements play in pairs, the smaller goes on; the winner = the minimum. The second smallest is among the elements that **lost to the winner** (it could only lose to it). The tournament is a binary tree with **Θ(log₂ len)** levels; the first phase takes **len − 1** comparisons (each comparison eliminates exactly one element), the second finds the minimum among about log₂ len candidates: **W(len) = len − 1 + Θ(log₂ len)** — asymptotically 2 times faster than searching for the minimum twice.
+**Second smallest — second(S, len)** (distinct elements). Simple solution: find the minimum, remove it, find the minimum again — $2\cdot len-1$ comparisons. **Tournament algorithm (divide and conquer):** elements play in pairs, the smaller goes on; the winner = the minimum. The second smallest is among the elements that **lost to the winner** (it could only lose to it). The tournament is a binary tree with **Θ(log₂ len)** levels; the first phase takes **len − 1** comparisons (each comparison eliminates exactly one element), the second finds the minimum among about log₂ len candidates: $W(len)=len-1+\Theta(\log_2 len)$ — asymptotically 2 times faster than searching for the minimum twice.
 
 **k-th smallest — kthSmallest(S, len, k)** (1 ≤ k ≤ len, nothing assumed about S). Naively: find the minimum k times — about k·len comparisons.
 
 :::def The partition(S, l, r) procedure
-Takes the **first** element m of the subsequence S[l..r] and rearranges the elements so that to the left of m there are **not greater** elements and to the right **not smaller** ones (not necessarily sorted). It **returns** the final position i of m. Dominant operation: comparison of 2 elements; data size n = r − l + 1; it can be designed with **W(n) = n + O(1)** and **S(n) = O(1)** (code — in the QuickSort lecture, [topic 7](topic:t07)).
+Takes the **first** element m of the subsequence S[l..r] and rearranges the elements so that to the left of m there are **not greater** elements and to the right **not smaller** ones (not necessarily sorted). It **returns** the final position i of m. Dominant operation: comparison of 2 elements; data size n = r − l + 1; it can be designed with $W(n)=n+O(1)$ and $S(n)=O(1)$ (code — in the QuickSort lecture, [topic 7](topic:t07)).
 :::
 
 **Hoare's algorithm:** run partition; if the returned index i = k, return S[k]; if i < k, repeat on the part to the right of i, otherwise to the left ("divide and conquer", like binSearch, but the split is rarely in the middle). Thanks to linear partition the **average** complexity is **linear — Θ(n) regardless of k**. In the worst case it is **quadratic** (when partition always ends at an end of the subsequence, which shrinks by only 1).

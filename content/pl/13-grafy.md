@@ -234,7 +234,7 @@ Rysunek to tylko jedna z nieskończenie wielu reprezentacji graficznych — trze
 T jest drzewem o n wierzchołkach ⇔ T ma n−1 krawędzi i jest acykliczny ⇔ T jest spójny i ma n−1 krawędzi ⇔ każde dwa wierzchołki łączy **dokładnie jedna** droga elementarna ⇔ T jest acykliczny, ale dodanie dowolnej krawędzi tworzy dokładnie jeden cykl.
 :::
 
-**Drzewa ukorzenione:** wyróżniony **korzeń**; **głębokość (poziom)** — odległość od korzenia; **wysokość** — maksymalna głębokość; przodek/potomek, rodzic/dziecko, bliźniak (brat), liście (bez dzieci), poddrzewo. Reprezentacja: **tablica rodziców** (n[i] — etykieta rodzica i). **Drzewo d-arne** — każdy wierzchołek ma ≤ d dzieci; **zupełne** — liście różnią się głębokością o ≤ 1; na poziomie l jest ≤ dˡ wierzchołków; dla wysokości h: **h + 1 ≤ n ≤ (d^(h+1) − 1)/(d − 1)**. **Drzewo uporządkowane** — dzieci mają porządek liniowy (rysowane od lewej do prawej; porządek standardowy — po poziomach, potem według dzieci). **Drzewo binarne** — 2-arne uporządkowane z określeniem, które dziecko jest lewe, a które prawe.
+**Drzewa ukorzenione:** wyróżniony **korzeń**; **głębokość (poziom)** — odległość od korzenia; **wysokość** — maksymalna głębokość; przodek/potomek, rodzic/dziecko, bliźniak (brat), liście (bez dzieci), poddrzewo. Reprezentacja: **tablica rodziców** (n[i] — etykieta rodzica i). **Drzewo d-arne** — każdy wierzchołek ma ≤ d dzieci; **zupełne** — liście różnią się głębokością o ≤ 1; na poziomie l jest ≤ dˡ wierzchołków; dla wysokości h: $h+1\le n\le\frac{d^{h+1}-1}{d-1}$. **Drzewo uporządkowane** — dzieci mają porządek liniowy (rysowane od lewej do prawej; porządek standardowy — po poziomach, potem według dzieci). **Drzewo binarne** — 2-arne uporządkowane z określeniem, które dziecko jest lewe, a które prawe.
 
 **Reprezentacje grafów:** **macierz sąsiedztwa** A[i, j] = 1 ⇔ i, j połączone (pętla — 2); dla grafu nieskierowanego symetryczna, dla prostego — zera na przekątnej; suma w wierszu/kolumnie — stopień (wyjściowy/wejściowy); Aᵀ — odwrócenie krawędzi. **Macierz incydencji** I[v, e] = 1 ⇔ v incydentny z e (digraf: 1 wchodzące, −1 wychodzące). **Listy sąsiedztwa** (dla digrafu — wierzchołki, do których wchodzą krawędzie wychodzące). Także lista krawędzi, reprezentacja obiektowa, „gd0” (binarna). **Rozmiar grafu** — para (n, m); graf **rzadki** — m = O(n).
 
@@ -272,7 +272,7 @@ while(!queue.empty()){
 }
 ```
 
-**BFS** odwiedza wierzchołki „we wszystkich kierunkach” według rosnącej odległości: atrybut `d` — odległość od startu, `p` — drzewo. Zastosowania: składowe spójne, odległości, domknięcie przechodnie (n×BFS). Złożoność **O(|V| + |E|)**. Graf nieskierowany: brak krawędzi w przód i wstecz; drzewowa: v.d = u.d + 1; poprzeczna: v.d = u.d lub u.d + 1. Skierowany: brak w przód; drzewowa: v.d = u.d + 1; poprzeczna: v.d ≤ u.d + 1; wsteczna: 0 ≤ v.d ≤ u.d.
+**BFS** odwiedza wierzchołki „we wszystkich kierunkach” według rosnącej odległości: atrybut `d` — odległość od startu, `p` — drzewo. Zastosowania: składowe spójne, odległości, domknięcie przechodnie (n×BFS). Złożoność $O(|V|+|E|)$. Graf nieskierowany: brak krawędzi w przód i wstecz; drzewowa: v.d = u.d + 1; poprzeczna: v.d = u.d lub u.d + 1. Skierowany: brak w przód; drzewowa: v.d = u.d + 1; poprzeczna: v.d ≤ u.d + 1; wsteczna: 0 ≤ v.d ≤ u.d.
 
 ```pseudo
 DFS(){
@@ -296,7 +296,7 @@ recursiveDFS(GraphNode v){
 }
 ```
 
-**DFS** (stos lub rekurencja — równoważne co do idei, ale kolejność odwiedzania może się różnić): **czas odwiedzenia v.d** (staje się szary) i **zakończenia v.f** (czarny). Złożoność **O(|V| + |E|)**. **Struktura nawiasowa:** przedziały [u.d, u.f] i [v.d, v.f] są rozłączne albo jeden zawiera się w drugim. **Twierdzenie o białej ścieżce:** v jest potomkiem u w drzewie DFS ⇔ w chwili u.d istnieje ścieżka z u do v z samych białych wierzchołków. Graf nieskierowany: brak krawędzi w przód i poprzecznych. Skierowany — wszystkie 4 rodzaje; przy przejściu (u, v): **drzewowa**, jeśli v biały; **wstecz**, jeśli szary; **w przód lub poprzeczna**, jeśli czarny. Przez czasy: (v, w) drzewowa lub w przód ⇔ v.d < w.d < w.f < v.f; w tył ⇔ w.d < v.d < v.f < w.f; poprzeczna ⇔ w.d < w.f < v.d < v.f. Zastosowania: test acykliczności (brak krawędzi wstecz), **sortowanie topologiczne**, składowe silnie spójne, punkty artykulacji, mosty, bloki.
+**DFS** (stos lub rekurencja — równoważne co do idei, ale kolejność odwiedzania może się różnić): **czas odwiedzenia v.d** (staje się szary) i **zakończenia v.f** (czarny). Złożoność $O(|V|+|E|)$. **Struktura nawiasowa:** przedziały [u.d, u.f] i [v.d, v.f] są rozłączne albo jeden zawiera się w drugim. **Twierdzenie o białej ścieżce:** v jest potomkiem u w drzewie DFS ⇔ w chwili u.d istnieje ścieżka z u do v z samych białych wierzchołków. Graf nieskierowany: brak krawędzi w przód i poprzecznych. Skierowany — wszystkie 4 rodzaje; przy przejściu (u, v): **drzewowa**, jeśli v biały; **wstecz**, jeśli szary; **w przód lub poprzeczna**, jeśli czarny. Przez czasy: (v, w) drzewowa lub w przód ⇔ v.d < w.d < w.f < v.f; w tył ⇔ w.d < v.d < v.f < w.f; poprzeczna ⇔ w.d < w.f < v.d < v.f. Zastosowania: test acykliczności (brak krawędzi wstecz), **sortowanie topologiczne**, składowe silnie spójne, punkty artykulacji, mosty, bloki.
 
 ### Przykładowe pytania/ćwiczenia ze slajdów
 

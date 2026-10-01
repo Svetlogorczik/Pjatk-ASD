@@ -268,16 +268,16 @@ find(arr, len, key){
 
 :::def Time and space complexity
 - **Time complexity** — the number of dominant operations the algorithm performs, **as a function of the data size**.
-- **Worst-case (pessimistic) time complexity:** **W(n) = sup { t(d) : d ∈ Dₙ }**, where Dₙ is the set of all inputs of size n and t(d) the number of dominant operations for input d (W — *worst*).
-- **Average time complexity:** **A(n) = Σ_{k≥0} pₙₖ · k = Σ P(Xₙ = k) · k = E(Xₙ)** — the expected value of the random variable Xₙ (the number of dominant operations for random input of size n); it requires assuming a **model of data randomness** (the distribution pₙₖ) (A — *average*).
-- **Space complexity S(n)** — the number of memory units used by the algorithm as a function of the data size; analogously worst-case **SW(n)** and average **SA(n)**. When memory does not depend on the data: **S(n) = const = O(1)**.
+- **Worst-case (pessimistic) time complexity:** $W(n)=\sup\{\,t(d) : d\in D_n\,\}$, where Dₙ is the set of all inputs of size n and t(d) the number of dominant operations for input d (W — *worst*).
+- **Average time complexity:** $A(n)=\sum_{k\ge 0} p_{nk}\cdot k=\sum_{k} P(X_n=k)\cdot k=E(X_n)$ — the expected value of the random variable Xₙ (the number of dominant operations for random input of size n); it requires assuming a **model of data randomness** (the distribution pₙₖ) (A — *average*).
+- **Space complexity S(n)** — the number of memory units used by the algorithm as a function of the data size; analogously worst-case **SW(n)** and average **SA(n)**. When memory does not depend on the data: $S(n)=\text{const}=O(1)$.
 :::
 
-For `find` the number of comparisons `arr[i] == key` ranges from 1 (key at the start — the "optimistic" case) to n (at the end or missing — "pessimistic"), so **W(n) = n**. Assuming the key is at each position with equal probability 1/n (k-th position → k comparisons): **A(n) = Σ_{k=1..n} (1/n)·k = (n+1)/2** — "on average in the middle of the array". Memory: **SA(n) = O(1)**.
+For `find` the number of comparisons `arr[i] == key` ranges from 1 (key at the start — the "optimistic" case) to n (at the end or missing — "pessimistic"), so $W(n)=n$. Assuming the key is at each position with equal probability 1/n (k-th position → k comparisons): $A(n)=\sum_{k=1}^{n}\frac{1}{n}\cdot k=\frac{n+1}{2}$ — "on average in the middle of the array". Memory: $SA(n)=O(1)$.
 
 ### Five variants of asymptotic notation
 
-We are interested in the **character of the growth rate**, not the specific function: e.g. in A(n) = 3.45·n + 2 the "+2" is irrelevant, and if we only care that the function is **linear**, so is the constant 3.45.
+We are interested in the **character of the growth rate**, not the specific function: e.g. in $A(n)=3.45\cdot n+2$ the "+2" is irrelevant, and if we only care that the function is **linear**, so is the constant 3.45.
 
 | Notation | Analogue | Meaning |
 |---|---|---|
@@ -290,26 +290,26 @@ We are interested in the **character of the growth rate**, not the specific func
 Capital letters — bounds "with equality" (non-strict), small letters — strict. The analogy with numbers is not complete, because numbers are linearly ordered and orders of functions are not.
 
 :::def Definitions
-- **f(n) = O(g(n)) ⇔ ∃ c>0 ∃ n₀ ∀ n≥n₀: f(n) ≤ c·g(n)** — g is an upper bound on the order of f.
-- **f(n) = Θ(g(n)) ⇔ f(n) = O(g(n)) ∧ g(n) = O(f(n))** — the same order of magnitude.
-- f(n) = Ω(g(n)) ⇔ ∃ c>0 ∃ n₀ ∀ n≥n₀: f(n) ≥ c·g(n) (equivalently g = O(f)).
-- f(n) = o(g(n)) ⇔ ∀ c>0 ∃ n₀ ∀ n≥n₀: f(n) ≤ c·g(n) (for **every** constant, not for some).
-- f(n) = ω(g(n)) ⇔ ∀ c>0 ∃ n₀ ∀ n≥n₀: f(n) ≥ c·g(n).
+- $f(n)=O(g(n)) \iff \exists_{c>0}\,\exists_{n_0}\,\forall_{n\ge n_0}\; f(n)\le c\cdot g(n)$ — g is an upper bound on the order of f.
+- $f(n)=\Theta(g(n)) \iff f(n)=O(g(n)) \wedge g(n)=O(f(n))$ — the same order of magnitude.
+- $f(n)=\Omega(g(n)) \iff \exists_{c>0}\,\exists_{n_0}\,\forall_{n\ge n_0}\; f(n)\ge c\cdot g(n)$ (equivalently g = O(f)).
+- $f(n)=o(g(n)) \iff \forall_{c>0}\,\exists_{n_0}\,\forall_{n\ge n_0}\; f(n)\le c\cdot g(n)$ (for **every** constant, not for some).
+- $f(n)=\omega(g(n)) \iff \forall_{c>0}\,\exists_{n_0}\,\forall_{n\ge n_0}\; f(n)\ge c\cdot g(n)$.
 :::
 
 :::own
 The slides give the quantifier definitions of O and Θ and the meaning of the other symbols; the definitions of Ω, o, ω in the same form were added by the site author (standard, as in Cormen's textbook).
 :::
 
-**Definition via a limit** (equivalent; f, g positive): compute lim_{n→∞} f(n)/g(n). If the limit exists, then:
+**Definition via a limit** (equivalent; f, g positive): compute $\lim\limits_{n\to\infty}\frac{f(n)}{g(n)}$. If the limit exists, then:
 - **∞** → f has a **higher** order: f = ω(g),
 - **a positive constant** → the orders are **equal**: f = Θ(g),
 - **0** → f has a **lower** order: f = o(g).
 
-**Examples from the slides:** A(n) = (n+1)/2 = O(n); SA(n) = O(1); f(n) = 3n² + 2n − 7 is **not** O(n), but it is O(n²) and also O(n³) (a less precise bound); n² + n − 3 = Θ(n²) — it is enough to focus on the **dominant** term. W(n) = o(n) means: "the order of the worst-case complexity is significantly lower than linear".
+**Examples from the slides:** $A(n)=\frac{n+1}{2}=O(n)$; SA(n) = O(1); $f(n)=3n^2+2n-7$ is **not** O(n), but it is O(n²) and also O(n³) (a less precise bound); $n^2+n-3=\Theta(n^2)$ — it is enough to focus on the **dominant** term. W(n) = o(n) means: "the order of the worst-case complexity is significantly lower than linear".
 
 :::warn Remarks on the notation
-The "=" in f(n) = O(g(n)) does **not** mean ordinary equality — it is just a kind of notation. You cannot, e.g., subtract both sides, and the notation is used mainly on the **right-hand side** of "=". Writing "O(f(n)) = n" or "O(f(n)) = O(g(n))" **makes no sense**. An extended form is allowed, e.g. **f(n) = g(n) + O(h(n))**, meaning f(n) − g(n) = O(h(n)).
+The "=" in f(n) = O(g(n)) does **not** mean ordinary equality — it is just a kind of notation. You cannot, e.g., subtract both sides, and the notation is used mainly on the **right-hand side** of "=". Writing "O(f(n)) = n" or "O(f(n)) = O(g(n))" **makes no sense**. An extended form is allowed, e.g. $f(n)=g(n)+O(h(n))$, meaning $f(n)-g(n)=O(h(n))$.
 :::
 
 ### The most common orders (from the slides)
@@ -330,7 +330,7 @@ Algorithms with time complexity higher than polynomial are considered **impracti
 - What do we measure the "speed" of an algorithm with? Which 2 steps must be done before a time-complexity analysis?
 - Definition by heart and determining for a given algorithm: dominant operation, data size, W(n), A(n) (for very simple algorithms), space complexity.
 - What is the purpose of asymptotic notation? Definitions (by heart) and interpretation of the 5 variants.
-- Prove from the definition that an expression with asymptotic notation is true or false — e.g. **n² + 5n + 2 = O(n²)** (c = 8, n₀ = 1), but **≠ O(n)** (solution: [Tests 2026/2027](page:exams)).
+- Prove from the definition that an expression with asymptotic notation is true or false — e.g. $n^2+5n+2=O(n^2)$ ($c=8$, $n_0=1$), but **≠ O(n)** (solution: [Tests 2026/2027](page:exams)).
 
 === summary ===
 

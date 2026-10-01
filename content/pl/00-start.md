@@ -41,6 +41,18 @@ Treść dopisana przez autora strony — **nie było jej w wykładach** (np. dod
 Analogia z życia codziennego, która pomaga „poczuć” pojęcie. Też jest od autora strony.
 :::
 
+:::formula
+Najważniejsze wzory i złożoności — wyróżnione i zapisane czytelnie, np. $W(n)=\Theta(n\log n)$.
+:::
+
+:::example
+Przykład z danymi, rozpisany krok po kroku.
+:::
+
+:::answer
+Końcowa odpowiedź do przykładu lub zadania — to, co wpisujesz na sprawdzianie.
+:::
+
 ## Skąd pochodzą treści
 
 - **Tekst główny** każdego tematu to treść wykładów z przedmiotu (pliki `asd1…asd11`, `Algorytmika`, `Dziel i rządź`, `FFT`, `Programowanie zachłanne` oraz starsze slajdy z 2009 r.) — opowiedziana prostszym językiem i uzupełniona przykładami krok po kroku.

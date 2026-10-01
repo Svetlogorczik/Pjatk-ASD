@@ -301,7 +301,7 @@ begin
 A note by the site author: by the slide pseudocode a node with **one** son also goes into the "find x = the rightmost node in node.left" branch (it is not a leaf) — the result is still a valid BST, but it looks different from "attaching the son". The slide example (delete(12) → 15 replaces 12) follows the verbal description ("attach the only son"), so in the test use the **verbal description of the three variants**.
 :::
 
-**Analysis** (n — number of elements, dominant operation — key comparison): all ordered-dictionary operations make a number of comparisons **proportional to the tree height**. The height of a **random** BST (every permutation of inserted keys equally likely) is O(log n), so **A(n) = O(log n)**; but in the worst case the tree can be one long branch: **W(n) = O(n)**. Hence AVL trees ([topic 11](topic:t11)).
+**Analysis** (n — number of elements, dominant operation — key comparison): all ordered-dictionary operations make a number of comparisons **proportional to the tree height**. The height of a **random** BST (every permutation of inserted keys equally likely) is O(log n), so $A(n)=O(\log n)$; but in the worst case the tree can be one long branch: $W(n)=O(n)$. Hence AVL trees ([topic 11](topic:t11)).
 
 ### Binary tree traversals (lecture "Graph and tree traversal algorithms")
 

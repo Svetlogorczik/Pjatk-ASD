@@ -34,6 +34,7 @@
       prev: 'Poprzedni temat',
       next: 'Następny temat',
       onThisPage: 'Na tej stronie',
+      toTop: 'Do góry',
       readingTime: '~{min} min czytania',
 
       task: 'Zadanie',
@@ -58,6 +59,18 @@
       calloutExam: 'Ważne na ćwiczeniach i testach',
       calloutDef: 'Definicja',
       calloutExample: 'Przykład',
+      calloutFormula: 'Wzór',
+      calloutAnswer: 'Odpowiedź',
+      calloutOwnShort: 'Od autora',
+      calloutAnalogyShort: 'Analogia',
+      calloutTipShort: 'Wskazówka',
+      calloutWarnShort: 'Uwaga',
+      calloutInfoShort: 'Info',
+      calloutExamShort: 'Na sprawdzian',
+      calloutDefShort: 'Definicja',
+      calloutExampleShort: 'Przykład',
+      calloutFormulaShort: 'Wzór',
+      calloutAnswerShort: 'Odpowiedź',
       badgeOwn: 'od autora'
     },
 
@@ -92,6 +105,7 @@
       prev: 'Previous topic',
       next: 'Next topic',
       onThisPage: 'On this page',
+      toTop: 'Back to top',
       readingTime: '~{min} min read',
 
       task: 'Task',
@@ -116,6 +130,18 @@
       calloutExam: 'Important for classes and tests',
       calloutDef: 'Definition',
       calloutExample: 'Example',
+      calloutFormula: 'Formula',
+      calloutAnswer: 'Answer',
+      calloutOwnShort: 'By the author',
+      calloutAnalogyShort: 'Analogy',
+      calloutTipShort: 'Tip',
+      calloutWarnShort: 'Watch out',
+      calloutInfoShort: 'Info',
+      calloutExamShort: 'For the test',
+      calloutDefShort: 'Definition',
+      calloutExampleShort: 'Example',
+      calloutFormulaShort: 'Formula',
+      calloutAnswerShort: 'Answer',
       badgeOwn: 'by the author'
     },
 
@@ -150,6 +176,7 @@
       prev: 'Предыдущая тема',
       next: 'Следующая тема',
       onThisPage: 'На этой странице',
+      toTop: 'Наверх',
       readingTime: '~{min} мин чтения',
 
       task: 'Задача',
@@ -174,6 +201,18 @@
       calloutExam: 'Важно для занятий и тестов',
       calloutDef: 'Определение',
       calloutExample: 'Пример',
+      calloutFormula: 'Формула',
+      calloutAnswer: 'Ответ',
+      calloutOwnShort: 'От автора',
+      calloutAnalogyShort: 'Аналогия',
+      calloutTipShort: 'Подсказка',
+      calloutWarnShort: 'Внимание',
+      calloutInfoShort: 'Инфо',
+      calloutExamShort: 'Для теста',
+      calloutDefShort: 'Определение',
+      calloutExampleShort: 'Пример',
+      calloutFormulaShort: 'Формула',
+      calloutAnswerShort: 'Ответ',
       badgeOwn: 'от автора'
     }
   };

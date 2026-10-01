@@ -194,7 +194,7 @@ Consequences: the minimal priority is always at the **root**; on every root-to-l
 
 **Operations:** insert(e) — add at the first free place from the left on the last level and restore order upwards (**upheap**); findMin() — the root; delMin() — remove the root, put the last element (rightmost on the last level) in the root and restore order downwards (**downheap**: swap with the smaller son until both sons are not smaller or the last level is reached). Both helper operations assume the heap condition is violated at most at node x. **Complexity** (n — number of elements, dominant operation — priority comparison): at most 1 (upheap) or 2 (downheap) comparisons per level → insert **O(log n)**, findMin **O(1)**, delMin **O(log n)**.
 
-**Heap in an array** (thanks to completeness; index 0 unused; top to bottom, left to right): **parent[i] = i/2** (integer division), **i.left = 2i**, **i.right = 2i + 1**. Example from the slides: the heap 2(6(7(8, 10), 12), 3(9, 4)) is the array [n, 2, 6, 3, 7, 12, 9, 4, 8, 10]; the parent of 12 (index 5) has index 5/2 = 2.
+**Heap in an array** (thanks to completeness; index 0 unused; top to bottom, left to right): $\text{parent}[i]=\lfloor i/2\rfloor$ (integer division), $\text{left}(i)=2i$, $\text{right}(i)=2i+1$. Example from the slides: the heap 2(6(7(8, 10), 12), 3(9, 4)) is the array [n, 2, 6, 3, 7, 12, 9, 4, 8, 10]; the parent of 12 (index 5) has index 5/2 = 2.
 
 ```pseudo
 upheap(i)        // i > 0

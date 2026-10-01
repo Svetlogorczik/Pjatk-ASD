@@ -5,7 +5,7 @@ title: Tests 2026/2027 — practical and knowledge
 short: Tests 2026/2027
 icon: 📝
 eyebrow: Preparing to pass · 2026/2027
-desc: Qualifying-task types (binSearch, MergeSort, partition, CountSort, heap, a^b), the official sample data solved step by step, algorithm versions that match the answers, practice tasks and hints for the knowledge test.
+desc: Qualifying-task types (binSearch, MergeSort, partition, CountSort, heap, aᵇ), the official sample data solved step by step, algorithm versions that match the answers, practice tasks and hints for the knowledge test.
 ---
 
 :::info Where this page comes from
@@ -27,7 +27,7 @@ The practical test has about 10 tasks, mainly on **knowing how algorithms work**
 | 3 | **partition()** from QuickSort (lecture version) | a) the returned index, b) the first element of the array after partition, c) the number of `swap()`s — **including the last one** |
 | 4 | **Count Sort** (lecture version) | the `counts` array (range 0..max) a) after counting, b) after summing, c) after writing to the output array |
 | 5 | **Binary min-heap** (array from index 1) | a) after consecutive `insert()`s of S, b) as a) + `delMin()`, c) after one `construct()` from S |
-| 6 | a simple **a^b** algorithm | a) specification, b) pseudocode (multiplying b times) |
+| 6 | a simple **aᵇ** algorithm | a) specification, b) pseudocode (multiplying b times) |
 | 7 | continuation of 6 | c) analysis of **total correctness**, d) **time and space** complexity (dominant operation, data size!) |
 
 Full scope of the practical test: orders of functions / O notation, binSearch, selection sort, insertion sort, mergeSort, quickSort/partition, countSort, radixSort, minHeap, BST, in/pre/post-order, BFS/DFS, Kruskal.
@@ -61,7 +61,9 @@ S: 7 13 17 25 30 [41] 52 58 60 61 80 85
 | 1 | 0 | 11 | **5** | 41 | 41 < 60 → l = 6 |
 | 2 | 6 | 11 | **8** | 60 | found → return 8 |
 
-**Answer:** a) **5, 8**; b) **8**.
+:::answer
+a) **5, 8**; b) **8**.
+:::
 
 :::tip
 In the test always write the l, r, m table — one slip in the division (e.g. (6+11)/2 = 8, not 9) ruins the whole result. If the key is missing, −1 is returned, and there are about log₂ n compared indices.
@@ -105,7 +107,9 @@ Watch the split: **m = len/2 (rounded down)**, the left part is S[0:m] — for o
 | (3, 8) + (5, 7) | 3, 5, 7, 8 | 3 (3<5, 5<8, 7<8; then 8) |
 | **(0, 2, 4, 6) + (3, 5, 7, 8)** | 0, 2, 3, 4, 5, 6, 7, 8 | 6 (left ends after 6; 7, 8 without comparisons) |
 
-**Answer:** a) 1+1+3+1+1+3+6 = **16**; b) last merge: **0, 2, 4, 6 | 3, 5, 7, 8**.
+:::answer
+a) 1+1+3+1+1+3+6 = **16**; b) last merge: **0, 2, 4, 6 | 3, 5, 7, 8**.
+:::
 
 :::tip
 The last `merge()` always merges **the two sorted halves of the whole array** — just sort the left and right halves separately. The number of comparisons when merging sequences of lengths p and q is between min(p, q) and p + q − 1.
@@ -155,7 +159,9 @@ swap 3: 1 5 0 4 2 3 {6} 7 8 9
 2. i stops at 8 (index 4), j at 2 (index 8) → swap(4, 8).
 3. i passes 2, 3, 1 and stops at 7 (index 7); j goes down to i — the loop ends. a[7] = 7 > 6, so p = 6 → swap(0, 6).
 
-**Answer:** a) **6**; b) **1**; c) **3** swaps.
+:::answer
+a) **6**; b) **1**; c) **3** swaps.
+:::
 
 :::tip Quick check
 The returned index = **the number of elements smaller than the pivot** (when the elements are distinct): in the example 5, 4, 3, 1, 2, 0 → 6. The number of swaps = the number of pair swaps + 1.
@@ -262,16 +268,19 @@ construct: for(i = n/2; i > 0; i--) downHeap(i)
 The results of a) and c) are **different**, although both are valid heaps — a common trap. `construct()` is not the same as n `insert()`s.
 :::
 
-## 6–7. The a^b algorithm: specification, pseudocode, correctness, complexity
+## 6–7. The aᵇ algorithm: specification, pseudocode, correctness, complexity
 
 This task checks the definitions from lectures 1 (correctness) and 2 (complexity) — see [topic 2](topic:t02) and [topic 3](topic:t03), sections "2026/2027 lecture version".
 
-**a) Specification**
-- **name and arguments:** `power(a, b)`
-- **precondition:** a, b — natural numbers, a > 0 (b may be 0)
-- **postcondition:** the algorithm returns the number a^b (in particular 1 when b = 0)
+### a) Specification
 
-**b) Pseudocode**
+:::def Specification of power(a, b)
+- **name and arguments:** `power(a, b)`
+- **precondition:** $a, b \in \mathbb{N}$, $a > 0$ ($b$ may be 0)
+- **postcondition:** the algorithm returns the number $a^b$ (in particular $1$ when $b = 0$)
+:::
+
+### b) Pseudocode
 
 ```pseudo
 power(a, b){
@@ -285,24 +294,39 @@ power(a, b){
 }
 ```
 
-**c) Total correctness** = stop property + partial correctness.
+### c) Total correctness
 
-1. **Stop property.** The loop ends when i ≥ b. The value b is **constant and finite** (a natural number), i starts at 0 and **grows by 1** in every iteration. So after exactly b iterations i = b and the algorithm stops.
-2. **Partial correctness — loop invariant:** `result == a^i  ∧  i <= b`.
-   - **before the first iteration:** i = 0, result = 1 = a⁰; i = 0 ≤ b, because b is natural ✓
-   - **preservation:** if before an iteration result = a^i and i < b (the loop condition), then after it result' = a^i · a = a^(i+1) and i' = i + 1 ≤ b ✓
-   - **after leaving the loop:** the invariant and ¬(i < b) give i = b, so result = a^b — the postcondition ✓
+Total correctness = **stop property** + **partial correctness**. We prove the two parts separately.
 
-Since the algorithm has the stop property and is partially correct, it is **totally correct**.
+**Step 1 — stop property.** The loop ends when $i \ge b$. The value $b$ is **constant and finite** (a natural number), and $i$ starts at $0$ and **grows by 1** in every iteration. After exactly $b$ iterations $i = b$ and the algorithm stops.
 
-**d) Complexity**
-- **data size:** the value of the exponent **b** (a does not affect the number of operations — assuming multiplication is one operation),
-- **dominant operation:** the multiplication `result * a` (the comparison `i < b` works too),
-- **time complexity:** W(b) = A(b) = b, i.e. **Θ(b)** — linear (there are b + 1 comparisons, also Θ(b)),
-- **space complexity:** a constant number of variables (result, i) → **S(b) = O(1)**.
+**Step 2 — partial correctness.** We use a loop invariant:
+
+:::formula Loop invariant
+$$\text{result} = a^{i} \;\wedge\; i \le b$$
+:::
+
+1. **Before the first iteration:** $i = 0$, $\text{result} = 1 = a^0$ and $0 \le b$, since $b$ is natural ✓
+2. **Preservation:** if before an iteration $\text{result} = a^i$ and $i < b$ (the loop condition), then after it
+$$\text{result}' = a^i \cdot a = a^{i+1}, \qquad i' = i + 1 \le b \;✓$$
+3. **After leaving the loop:** the invariant and $\neg(i < b)$ give $i = b$, so $\text{result} = a^b$ — the postcondition ✓
+
+### d) Complexity
+
+- **data size:** the value of the exponent $b$ ($a$ does not affect the number of operations if multiplication is one operation),
+- **dominant operation:** the multiplication `result * a` (the comparison `i < b` works too).
+
+:::formula Time and space complexity
+$$W(b) = A(b) = b = \Theta(b) \qquad S(b) = O(1)$$
+There are $b + 1$ comparisons `i < b` — also $\Theta(b)$. Memory: a constant number of variables (`result`, `i`).
+:::
+
+:::answer
+The algorithm has the stop property and is partially correct (invariant $\text{result} = a^i \wedge i \le b$), so it is **totally correct**. Complexity: time $\Theta(b)$ — linear in the value of $b$, space $O(1)$.
+:::
 
 :::exam
-Without naming the **dominant operation** and the **data size** the complexity analysis is incomplete — the lecturer explicitly reminds you of that. A bonus remark: with respect to the **number of bits** of the exponent (≈ log₂ b) this algorithm is exponential (compare [topic 3](topic:t03)).
+Without naming the **dominant operation** and the **data size** the complexity analysis is incomplete — the lecturer explicitly reminds you of that. A bonus remark: with respect to the **number of bits** of the exponent ($\approx \log_2 b$) this algorithm is exponential (compare [topic 3](topic:t03)).
 :::
 
 ## Knowledge test — what to prepare
@@ -444,7 +468,7 @@ post-order: 20, 35, 45, 40, 30, 65, 60, 80, 70, 50
 height: **3** (counted in edges).
 :::
 
-:::task level=2 source=own title="BFS, DFS, Kruskal and Dijkstra on one graph"
+:::task level=2 source=own title="BFS, DFS, Kruskal, Dijkstra and Prim on one graph"
 An undirected weighted graph: 1–2 (7), 1–3 (3), 1–4 (5), 2–5 (2), 3–5 (6), 3–6 (4), 4–6 (1), 5–7 (8), 6–7 (9), 2–3 (10).
 
 a) Run BFS and DFS (the recursive version from the slides, `time` from 0) from vertex 1, taking neighbours in increasing order. Give the visiting order, for BFS the distances `d` and parents `p`, for DFS the discovery and finishing times `d/f` and the non-tree edges (what type are they?).
@@ -452,6 +476,8 @@ a) Run BFS and DFS (the recursive version from the slides, `time` from 0) from v
 b) Give the order of edges added by Kruskal's algorithm and the weight of the tree.
 
 c) Run Dijkstra's algorithm from vertex 1 (edges work both ways). Give the order in which vertices leave the queue and the final `distance` and `parent`.
+
+d) Run Prim's algorithm from the slides from vertex 1. Give the edges in order of acceptance (adding to the tree) and compare with Kruskal.
 ```graph
 1 60 140
 2 180 40
@@ -479,6 +505,12 @@ DFS: **1, 2, 3, 5, 7, 6, 4**; d/f: 1: 0/13, 2: 1/12, 3: 2/11, 5: 3/10, 7: 4/9, 6
 **b)** Edges by weight: 4–6 (1) ✓, 2–5 (2) ✓, 1–3 (3) ✓, 3–6 (4) ✓, 1–4 (5) ✗ cycle 1-3-6-4, 3–5 (6) ✓, 1–2 (7) ✗ cycle, 5–7 (8) ✓ — we have 6 edges for 7 vertices, done. Weight: 1 + 2 + 3 + 4 + 6 + 8 = **24**.
 
 **c)** Leaving the queue (distance): 1 (0), 3 (3), 4 (5), 6 (6), 2 (7), 5 (9), 7 (15). Result: distance 2 = 7, 3 = 3, 4 = 5, 5 = 9, 6 = 6, 7 = 15; parent 2 ← 1, 3 ← 1, 4 ← 1, 5 ← 3, 6 ← 4, 7 ← 6. Note: 6 first gets 7 (via 3), then relaxation from 4 improves it to 6. Two paths of length 9 lead to 5 (via 3 and via 2) — the relaxation condition is strict (`>`), so parent 3 stays.
+
+**d)** Prim from 1 (removed vertex ← parent, weight): 3 ← 1 (3); 6 ← 3 (4); 4 ← 6 (1) — 4 had dist 5 (via 1), after adding 6 it drops to 1; 5 ← 3 (6); 2 ← 5 (2) — 2 had dist 7 (via 1), after adding 5 it drops to 2; 7 ← 5 (8). Order of acceptance: **1–3, 3–6, 6–4, 3–5, 5–2, 5–7**, weight $3 + 4 + 1 + 6 + 2 + 8 = 24$.
+
+:::answer
+Kruskal and Prim give **the same MST** of weight **24** (the weights are distinct, so the MST is unique), but in a different edge order.
+:::
 :::
 
 :::task level=2 source=own title="BST: deletion in all variants"
@@ -512,7 +544,12 @@ b) Insert 66 into it (plain BST insert). Is it still AVL?
 :::task level=2 source="Lecturer's hints (example)" title="O notation from the definition"
 Prove from the definition that n² + 5n + 2 = O(n²), but n² + 5n + 2 ≠ O(n).
 ::solution
-**O(n²):** for n ≥ 1 we have 5n ≤ 5n² and 2 ≤ 2n², so n² + 5n + 2 ≤ 8n². Constants: **c = 8, n₀ = 1** ✓.
-
-**Not O(n):** suppose there are c > 0 and n₀ such that n² + 5n + 2 ≤ c·n for n ≥ n₀. Dividing by n: n + 5 + 2/n ≤ c, so n ≤ c for all n ≥ n₀ — a contradiction (take n > max(c, n₀)). ∎
+**Part 1: $n^2 + 5n + 2 = O(n^2)$.** We look for the constants $c > 0$ and $n_0$ from the definition. For $n \ge 1$ we have $5n \le 5n^2$ and $2 \le 2n^2$, so
+$$n^2 + 5n + 2 \;\le\; n^2 + 5n^2 + 2n^2 \;=\; 8n^2 \qquad (n \ge 1)$$
+**Part 2: $n^2 + 5n + 2 \ne O(n)$.** Suppose there are $c > 0$ and $n_0$ such that $n^2 + 5n + 2 \le c \cdot n$ for $n \ge n_0$. Dividing by $n$:
+$$n + 5 + \frac{2}{n} \le c \quad\Longrightarrow\quad n \le c \quad \text{for every } n \ge n_0$$
+— a contradiction: just take $n > \max(c, n_0)$. ∎
+:::answer
+$c = 8$, $n_0 = 1$ proves $n^2 + 5n + 2 = O(n^2)$; no linear bound $O(n)$ exists.
+:::
 :::

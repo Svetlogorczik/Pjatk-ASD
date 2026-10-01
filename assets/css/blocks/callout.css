@@ -1,49 +1,74 @@
-/* Block: callout — coloured boxes (definition, tip, own addition, exam note...). */
+/* Block: callout — coloured boxes. Each kind has its own colour pair from tokens.css:
+   def (indigo), formula (violet), example (teal), answer (green), tip (cyan), info (blue),
+   warn (orange), exam (red), own (pink, dashed), analogy (purple, dashed). */
 .callout {
   --callout-c: var(--c-info);
   --callout-bg: var(--c-info-soft);
-  padding: 14px 18px 16px;
-  border: 1px solid color-mix(in srgb, var(--callout-c) 28%, transparent);
+  padding: 16px 20px 18px;
+  border: 1px solid color-mix(in srgb, var(--callout-c) 24%, transparent);
   border-left: 4px solid var(--callout-c);
-  border-radius: var(--radius-m);
+  border-radius: var(--radius-l);
   background: var(--callout-bg);
   font-size: .96em;
 }
 
 .callout__title {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 6px;
-  color: var(--callout-c);
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: .02em;
-  text-transform: uppercase;
+  gap: 6px 10px;
+  margin-bottom: 10px;
+  line-height: 1.35;
 }
 
 .callout__icon {
   display: inline-grid;
   place-items: center;
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
   flex: none;
-  border-radius: 50%;
+  border-radius: 7px;
   background: var(--callout-c);
   color: var(--c-surface);
   font-size: 12px;
   font-weight: 800;
   line-height: 1;
-  text-transform: none;
 }
 .callout__icon::before { content: "i"; }
 
+.callout__kind {
+  color: var(--callout-c);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+}
+
+.callout__kind:last-child { flex: 1 1 0; min-width: 0; }
+
+.callout__name {
+  color: var(--c-text);
+  font-size: 15.5px;
+  font-weight: 700;
+}
+
+.callout__src {
+  padding: 2px 9px;
+  border: 1px solid color-mix(in srgb, var(--callout-c) 35%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--callout-c) 10%, transparent);
+  color: var(--callout-c);
+  font-size: 11.5px;
+  font-weight: 600;
+}
+
 .callout__body { line-height: 1.7; }
+.callout__body > .math--block { margin-block: .9em; }
 
 .callout--own { --callout-c: var(--c-own); --callout-bg: var(--c-own-soft); border-style: dashed; border-left-style: solid; }
 .callout--own .callout__icon::before { content: "✎"; }
 
-.callout--analogy { --callout-c: var(--c-own); --callout-bg: var(--c-own-soft); border-style: dashed; border-left-style: solid; }
+.callout--analogy { --callout-c: var(--c-analogy); --callout-bg: var(--c-analogy-soft); border-style: dashed; border-left-style: solid; }
 .callout--analogy .callout__icon::before { content: "≈"; }
 
 .callout--tip { --callout-c: var(--c-tip); --callout-bg: var(--c-tip-soft); }
@@ -62,3 +87,15 @@
 
 .callout--example { --callout-c: var(--c-example); --callout-bg: var(--c-example-soft); }
 .callout--example .callout__icon::before { content: "→"; }
+
+.callout--formula { --callout-c: var(--c-formula); --callout-bg: var(--c-formula-soft); }
+.callout--formula .callout__icon::before { content: "∑"; }
+
+.callout--answer { --callout-c: var(--c-answer); --callout-bg: var(--c-answer-soft); }
+.callout--answer .callout__icon::before { content: "✔"; }
+.callout--answer .callout__body { font-weight: 500; }
+
+@media (max-width: 600px) {
+  .callout { padding: 13px 14px 14px; border-radius: var(--radius-m); }
+  .callout__name { font-size: 15px; }
+}

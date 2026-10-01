@@ -210,7 +210,7 @@ selectionSort(S, len){
 }
 ```
 
-`indexOfMin(S, i, len)` returns the index of the minimum among S[j], i ≤ j < len; `swap(S, i, mini)` swaps S[i] and S[mini]. **Analysis:** dominant operation — comparison of 2 elements; data size — len. In the i-th iteration we look for the minimum in a sequence of length len − i: **W(len) = Σ_{i=1}^{len−1} i = len(len−1)/2 = Θ(len²)**. **A(len) = W(len)** — the algorithm always does the same number of comparisons, **even for an already sorted sequence**.
+`indexOfMin(S, i, len)` returns the index of the minimum among S[j], i ≤ j < len; `swap(S, i, mini)` swaps S[i] and S[mini]. **Analysis:** dominant operation — comparison of 2 elements; data size — len. In the i-th iteration we look for the minimum in a sequence of length len − i: $W(len)=\sum_{i=1}^{len-1} i=\frac{len(len-1)}{2}=\Theta(len^2)$. $A(len)=W(len)$ — the algorithm always does the same number of comparisons, **even for an already sorted sequence**.
 
 **Insertion Sort** — from the second position (`next`) we "push" the current element backwards (comparing) until it finds its place and the first next + 1 elements are sorted.
 
@@ -233,7 +233,7 @@ insertionSort(arr, len){
 }
 ```
 
-The invariant of the outer loop is analogous to SelectionSort (the initial fragment is sorted). **Worst case:** **reverse-sorted** data: **W(n) = n(n−1)/2 = ½n² + Θ(n) = Θ(n²)**. For **already sorted** data **n − 1** comparisons suffice — the algorithm "**adapts the amount of work**" to how sorted the data is. **On average** (every permutation of 1..n equally likely) the i-th iteration makes on average (1/i)·Σ_{j=1}^{i} j = (i+1)/2 comparisons, in total **A(n) = Σ_{i=1}^{n−1} (i+1)/2 = ¼n² + Θ(n) = Θ(n²)** — 2 times faster than SelectionSort, but still quadratic (3 times more data → about 9 times longer).
+The invariant of the outer loop is analogous to SelectionSort (the initial fragment is sorted). **Worst case:** **reverse-sorted** data: $W(n)=\frac{n(n-1)}{2}=\frac{1}{2}n^2+\Theta(n)=\Theta(n^2)$. For **already sorted** data **n − 1** comparisons suffice — the algorithm "**adapts the amount of work**" to how sorted the data is. **On average** (every permutation of 1..n equally likely) the i-th iteration makes on average $\frac{1}{i}\sum_{j=1}^{i} j=\frac{i+1}{2}$ comparisons, in total $A(n)=\sum_{i=1}^{n-1}\frac{i+1}{2}=\frac{1}{4}n^2+\Theta(n)=\Theta(n^2)$ — 2 times faster than SelectionSort, but still quadratic (3 times more data → about 9 times longer).
 
 Quadratic complexity is too high for large data — e.g. a billion numbers is only 8 GB in RAM. The solution: **MergeSort** ([topic 6](topic:t06)).
 

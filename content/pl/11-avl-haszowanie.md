@@ -171,12 +171,12 @@ Na sprawdzianie wiedzy: tablice mieszające (funkcja mieszająca, kolizje, wspó
 **Adresowanie bezpośrednie.** Jeśli klucze to liczby naturalne z [0, …, m−1], słownik to tablica indeksowana kluczem — wszystkie operacje **O(1)**. Dwa problemy: pamięć proporcjonalna do największej możliwej wartości klucza (m), a nie liczby przechowywanych kluczy; działa tylko dla kluczy naturalnych.
 
 :::def Tablica mieszająca
-Rozszerza adresowanie bezpośrednie o **funkcję mieszającą** hash : U → [0, …, m−1] (U — uniwersum kluczy), przeliczającą klucz na indeks. Pamięć jest proporcjonalna do m (a nie |U|), a typ klucza może być dowolny.
+Rozszerza adresowanie bezpośrednie o **funkcję mieszającą** $\text{hash}: U\to[0,\dots,m-1]$ (U — uniwersum kluczy), przeliczającą klucz na indeks. Pamięć jest proporcjonalna do m (a nie |U|), a typ klucza może być dowolny.
 :::
 
 **Kolizje.** Zwykle m < |U|, więc funkcja nie jest różnowartościowa: dla pewnych k1 ≠ k2 hash(k1) == hash(k2) — to **kolizja**. Metody: **mieszanie wielokrotne** (przy zajętym miejscu mieszamy ponownie w sposób odtwarzalny aż do wolnego miejsca; wada: maksymalnie m elementów) i **metoda łańcuchowa** (w każdym miejscu tablicy lista elementów, przeszukiwana liniowo).
 
-**Wymagane własności funkcji mieszającej:** (1) obliczalna bardzo szybko (w czasie stałym); (2) **równomierne obciążenie** — dla klucza z rozkładu jednostajnego na U każda wartość z [0, …, m−1] jednakowo prawdopodobna. **Współczynnik obciążenia α = n/m** (n — liczba par w tablicy). Dzięki (2) pesymistyczna złożoność operacji jest bliska **O(α)** (listy mają długość zbliżoną do α). Najprostsza funkcja dla liczb całkowitych: **hash(key) = key mod m** (szybka — dla m będącego potęgą 2 wystarczy wziąć ostatnie log₂(m) bitów; równomierna). Czasem wymaga się też, by była trudna do odwrócenia (np. MD5) — modulo tego nie spełnia.
+**Wymagane własności funkcji mieszającej:** (1) obliczalna bardzo szybko (w czasie stałym); (2) **równomierne obciążenie** — dla klucza z rozkładu jednostajnego na U każda wartość z [0, …, m−1] jednakowo prawdopodobna. **Współczynnik obciążenia α = n/m** (n — liczba par w tablicy). Dzięki (2) pesymistyczna złożoność operacji jest bliska **O(α)** (listy mają długość zbliżoną do α). Najprostsza funkcja dla liczb całkowitych: $\text{hash}(key)=key \bmod m$ (szybka — dla m będącego potęgą 2 wystarczy wziąć ostatnie log₂(m) bitów; równomierna). Czasem wymaga się też, by była trudna do odwrócenia (np. MD5) — modulo tego nie spełnia.
 
 **Podsumowanie:** tablice mieszające dają operacje słownika w **O(α)** i pozwalają wyważyć czas i pamięć parametrem m (większe m — szybciej, ale więcej pamięci). **Nie** wspierają efektywnie operacji słownika uporządkowanego (minimum, maksimum, następnik, poprzednik — liniowo).
 

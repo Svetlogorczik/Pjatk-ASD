@@ -154,14 +154,14 @@ A short justification from the site author (not on the slides).
 ## 2026/2027 lecture version (M. Sydow) — "Finding shortest paths"
 
 :::exam
-In the knowledge test: the problem specification, relaxation, topological sort, **the three variants (DAG, Dijkstra, Bellman-Ford)** with code and complexities, choosing the best algorithm for a given graph, **simulating Dijkstra** (values of `distance` and `parent`). Practice task (Dijkstra + Kruskal): [Tests 2026/2027](page:exams). Kruskal is in the practical-test scope — there have been no spanning-tree slides in this set yet.
+In the knowledge test: the problem specification, relaxation, topological sort, **the three variants (DAG, Dijkstra, Bellman-Ford)** with code and complexities, choosing the best algorithm for a given graph, **simulating Dijkstra** (values of `distance` and `parent`). Practice task (Dijkstra + Kruskal): [Tests 2026/2027](page:exams). Minimum spanning trees (Prim, Kruskal) — in the section below.
 :::
 
 :::def Single-source shortest paths
-**Input:** a directed graph G = (V, E) with edge weights w : E → ℝ and a start vertex s ∈ V. **Output:** for each v ∈ V — the length of the shortest path **μ(s, v)** from s to v (if it exists) and the **parent** in the shortest-path tree.
+**Input:** a directed graph G = (V, E) with edge weights w : E → ℝ and a start vertex s ∈ V. **Output:** for each v ∈ V — the length of the shortest path $\mu(s,v)$ from s to v (if it exists) and the **parent** in the shortest-path tree.
 :::
 
-A shortest path may not exist: v is unreachable from s (**μ = +∞**) or there is a path through a **negative cycle** (**μ = −∞**); otherwise μ = d ∈ ℝ. **Lemma:** a subpath of a shortest path is a shortest path. Variants depend on the graph: directed or not, **acyclic** (fastest), **non-negative weights** (faster; for integer weights — an even better data structure).
+A shortest path may not exist: v is unreachable from s ($\mu=+\infty$) or there is a path through a **negative cycle** ($\mu=-\infty$); otherwise μ = d ∈ ℝ. **Lemma:** a subpath of a shortest path is a shortest path. Variants depend on the graph: directed or not, **acyclic** (fastest), **non-negative weights** (faster; for integer weights — an even better data structure).
 
 **Idea (like BFS):** each vertex has `distance` (the shortest known distance) and `parent`. Initialisation: s.distance = 0, s.parent = s, the rest distance = +∞, parent = null. Values are "propagated" along edges — **relaxation**:
 
@@ -176,7 +176,7 @@ After any sequence of relaxations ∀v: v.distance ≥ μ(v) (it never drops bel
 
 **Topological sort** (digraphs only): an ordering of the vertices such that for every edge (u, v) u comes before v. Possible ⇔ the graph has **no cycles**. Method: run **DFS** and order the vertices from the **largest finishing time** to the smallest (or repeatedly remove vertices of in-degree 0 — also linear).
 
-**1. DAG:** sort topologically (O(m + n)), then for s = vⱼ relax all edges leaving vⱼ, vⱼ₊₁, … up to vₙ. Each edge is relaxed at most once → **O(m + n)**. Vertices before s in the order are unreachable.
+**1. DAG:** sort topologically (O(m + n)), then for s = vⱼ relax all edges leaving vⱼ, vⱼ₊₁, … up to vₙ. Each edge is relaxed at most once → $O(m+n)$. Vertices before s in the order are unreachable.
 
 **2. Dijkstra (non-negative weights):** without negative edges there are no negative cycles, but ordinary cycles may exist (topological sort impossible). We relax in order of **non-decreasing shortest distances** from the source — guaranteed by a **priority queue** (priority = distance). Analogy: lifting strings tied with knots off a table.
 
@@ -199,9 +199,9 @@ while(!pq.isEmpty())
          else pq.insert(v)
 ```
 
-(pq with decreaseKey — an **addressable** priority queue, with a dictionary mapping vertices to positions.) **Analysis:** n = |V|, m = |E|; dominant operation — priority comparison, attribute update; initialisation O(n); loop O(n × (delMin + insert) + m × decreaseKey) = O(n log n) + O(m log n) = **O((n + m) log n)** with a binary heap. On average decreaseKey runs O(n log(m/n)) times → **O(m + n log(m/n) log n)** (linear for dense graphs). Fibonacci heap (decreaseKey amortised O(1)): **O(m + n log n)**. Integer weights ≤ C: **O(m + nC)** (monotone bucket queue).
+(pq with decreaseKey — an **addressable** priority queue, with a dictionary mapping vertices to positions.) **Analysis:** n = |V|, m = |E|; dominant operation — priority comparison, attribute update; initialisation O(n); loop $O(n\times(\text{delMin}+\text{insert})+m\times\text{decreaseKey})=O(n\log n)+O(m\log n)$ = $O((n+m)\log n)$ with a binary heap. On average decreaseKey runs O(n log(m/n)) times → $O(m+n\log(m/n)\log n)$ (linear for dense graphs). Fibonacci heap (decreaseKey amortised O(1)): $O(m+n\log n)$. Integer weights ≤ C: $O(m+nC)$ (monotone bucket queue).
 
-**3. Bellman-Ford (any weights):** a "brute-force" approach — a shortest path has ≤ n − 1 edges, so (n − 1) rounds of relaxing all m edges (in a fixed order) contain every shortest path as a subsequence: **O(nm)**. Unreachable vertices have d = ∞. Then m more relaxations — if distance still decreases, the vertex lies on a path with a negative cycle → set −∞ (linear).
+**3. Bellman-Ford (any weights):** a "brute-force" approach — a shortest path has ≤ n − 1 edges, so (n − 1) rounds of relaxing all m edges (in a fixed order) contain every shortest path as a subsequence: $O(nm)$. Unreachable vertices have d = ∞. Then m more relaxations — if distance still decreases, the vertex lies on a path with a negative cycle → set −∞ (linear).
 
 ```pseudo
 %% (initialise as in Dijkstra)
@@ -233,6 +233,106 @@ identifyNegativeCycle(v)
 
 The single-source shortest-path specification and 2 example uses; what relaxation is; the topological-sort specification, when it is possible and how (2 ways); **topologically sort a given DAG using DFS**; which of the 3 algorithms is most efficient for a given graph; **Dijkstra on a given graph — values of all attributes**; Bellman-Ford on a given graph; complexity analysis of the 3 algorithms.
 
+
+## 2026/2027 lecture version (M. Sydow) — "Minimum spanning trees"
+
+:::exam
+**Kruskal** is in the practical-test scope. A typical task from the slides: *given a weighted graph, apply Prim's/Kruskal's algorithm and list the edges in the order they were accepted* — **ties in weights are broken by the alphabetical order of labels**. Practice task (Kruskal and Prim on one graph): [Tests 2026/2027](page:exams).
+:::
+
+:::def Spanning tree and spanning forest src="MST slides"
+A **spanning tree** of a connected, undirected simple graph $G=(V,E)$ is a subgraph $T$ that **is a tree** and **contains all vertices** of the graph.
+- a disconnected graph has no spanning tree; the union of spanning trees of its components (one per component) is a **spanning forest**,
+- a spanning tree can be obtained by removing edges one by one until a tree remains; there can be many spanning trees,
+- every spanning tree of a given graph has the same number of edges: $|V|-1$.
+:::
+
+:::def The MST problem
+- **Input:** an undirected graph $G$ with edge weights (rational numbers).
+- **Output:** a spanning tree with **minimum total edge cost** — a **minimum spanning tree** (MST).
+
+The problem is solvable in polynomial time. Kruskal relies on the cycle and cut properties, Prim on a modification of BFS and Dijkstra.
+:::
+
+### Cuts and cycles
+
+:::def Cut
+For a connected weighted graph $G=(V,E)$ and a subset $S\subseteq V$, a **cut** is the set of edges $E'\subseteq E$ with **exactly one end in $S$** and the other in $V\setminus S$.
+:::
+
+:::formula Cut property src="lemma"
+If $E'$ is a cut and $e$ is an edge of **minimum weight in $E'$**, there is an MST containing $e$. Moreover, if $T'$ is contained in some MST and has no edge of $E'$, then $T'\cup\{e\}$ is also contained in some MST — the edge $e$ is **"useful"**.
+:::
+
+:::formula Cycle property src="lemma"
+Let $S$ be a subset of the edges of some MST and $C$ a cycle in $G$. If $e=(u,v)\in C$ has **maximum cost in $C$**, $u$ touches $S$ and $v$ does not, then there is an MST containing $S$ and **not containing $e$** — the edge $e$ is **redundant**.
+:::
+
+Proofs — e.g. in K. Mehlhorn's textbook. **General scheme:** (1) $T=\emptyset$; (2) while $T$ is not an MST, add a minimum-cost edge from some cut $E'$ disjoint from $T$. The cut property guarantees correctness; different choices of $E'$ give Prim and Kruskal.
+
+### Prim's algorithm
+
+It starts from a vertex $s$ and grows the tree; $S$ — the tree's vertices (initially $\{s\}$). Edges with exactly one end in $S$ form a cut — each step adds the other end of the **lightest** edge of that cut. A priority queue keeps vertices with priority = the weight of the lightest edge joining them to $S$ (`dist`); after a vertex is added its edges are relaxed. The tree is in the `parent` attributes.
+
+```pseudo
+MSTPrim(V,w,s){
+  PriorityQueue pq
+  s.dist = 0
+  s.parent = null
+  pq.insert(s)
+  for each u in V\{s}:
+    u.dist = INFINITY
+
+  while(!pq.isEmpty()):
+    u = pq.deleteMin()
+    u.dist = 0
+    for each v in u.adjList:
+      if (w(u,v) < v.dist):
+        v.dist = w(u,v)
+        v.parent = u
+        if (pq.contains(v)): pq.decreaseKey(v)
+        else pq.insert(v)
+}
+```
+
+:::formula Complexity of Prim
+Data size $n=|V|$, $m=|E|$; dominant operation: assignments and priority comparisons. Initialisation $O(n)$, loop: $n\times\text{delMin} + m\times\text{decreaseKey}$.
+$$\text{binary heap: } O(n\log n)+O(m\log n)=O\big((n+m)\log n\big)$$
+$$\text{Fibonacci heap: } O(n\log n + m)$$
+:::
+
+:::own
+Why `u.dist = 0` after leaving the queue? (explanation by the site author) It "closes" the vertex: with positive weights the condition `w(u,v) < v.dist` can never change its parent again, so tree vertices are not relaxed again.
+:::
+
+### Kruskal's algorithm
+
+1. initially $T=\emptyset$,
+2. consider edges in order of **non-decreasing weight** and add those that **do not create a cycle** with the ones added so far; reject the others — until $T$ is a spanning tree.
+
+The problem: quickly check whether an edge creates a cycle. $T$ is always a **forest**, and the edge $(u,v)$ would create a cycle ⇔ $u$ and $v$ are **in the same tree** of the forest — hence the **union-find** structure.
+
+```pseudo
+kruskalMST(V,E,w){
+  T = 0
+  UnionFind uf
+  foreach edge (u,v) in non-decreasing order of weight:
+    if (uf.find(u) != uf.find(v)):
+      T = T + (u,v)
+      uf.union(uf.find(u),uf.find(v))
+  return T
+}
+```
+
+:::formula Complexity of Kruskal
+A fast (tree-based) union-find: `union` in constant time, `find` in almost constant amortised time. The whole is dominated by **sorting the edges**:
+$$O(m\log m)$$
+:::
+
+### Sample questions from the slides
+
+Definitions of a spanning tree and forest, a cut and a cycle; the cut and cycle properties and their interpretation for MST and in the algorithms; the ideas of Prim and Kruskal; complexity analysis; **Prim/Kruskal on a given graph — edges in order of acceptance (ties: alphabetical order)**.
+
 === summary ===
 
 ## 2026/2027 version (M. Sydow)
@@ -240,6 +340,7 @@ The single-source shortest-path specification and 2 example uses; what relaxatio
 - relax(u, v): if u.distance + w < v.distance → update distance and parent.
 - Topo-sort: DFS, decreasing f; possible ⇔ no cycles.
 - DAG O(n + m); Dijkstra (weights ≥ 0, PQ) O((n + m) log n); Bellman-Ford (n−1 rounds) O(nm) + negative-cycle detection.
+- MST: cut property (the lightest edge of a cut is "useful") and cycle property (the heaviest in a cycle is redundant). Prim (PQ, `dist` = weight of the edge to the tree) O((n + m) log n); Kruskal (sorting + union-find) O(m log m); ties — alphabetical.
 
 
 ## Greediness

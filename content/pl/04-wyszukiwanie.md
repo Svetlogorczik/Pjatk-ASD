@@ -246,11 +246,11 @@ Na sprawdzianach 2026/2027 obowiązują poniższe specyfikacje i kod ze slajdów
 - Przykład: S = (3,5,8,2,1,8,4,2,9): search(S, 9, 2) → 3; search(S, 9, 7) → −1.
 :::
 
-Naturalna **operacja dominująca** to **porównanie** klucza z elementem, **rozmiar danych** — długość ciągu len (może też obejmować inne parametry, np. k w algorytmie skoków). **Wyszukiwanie sekwencyjne** (indeksy 0..len−1) ma **W(len) = len**, i tej pesymistycznej złożoności **nie poprawi** zmiana kolejności przeglądania — szukany element zawsze może być pod ostatnim sprawdzanym indeksem.
+Naturalna **operacja dominująca** to **porównanie** klucza z elementem, **rozmiar danych** — długość ciągu len (może też obejmować inne parametry, np. k w algorytmie skoków). **Wyszukiwanie sekwencyjne** (indeksy 0..len−1) ma $W(len)=len$, i tej pesymistycznej złożoności **nie poprawi** zmiana kolejności przeglądania — szukany element zawsze może być pod ostatnim sprawdzanym indeksem.
 
 **Ciąg posortowany.** Dodatkowa własność — **uporządkowanie** — pozwala szukać szybciej. Zmieniona specyfikacja: Input: S — ciąg **niemalejąco posortowanych** liczb całkowitych (wartości mogą się powtarzać), indeksowanych od 0; reszta bez zmian.
 
-**Algorytm skoków co k.** Sprawdzamy co k-ty indeks (pomijając k−1 elementów w każdym „skoku”); po znalezieniu pierwszego elementu większego od klucza wystarczy sprawdzić ostatnie „przeskoczone” k−1 elementów. Dla len → ∞ jest w przeciętnym przypadku **asymptotycznie k razy szybszy** od sekwencyjnego (dla niewielkich k). Przy dobrym k (ćwiczenie: k = √len) W(len) = (1/k)·Θ(len) — ale to **wciąż złożoność liniowa**, tego samego rzędu.
+**Algorytm skoków co k.** Sprawdzamy co k-ty indeks (pomijając k−1 elementów w każdym „skoku”); po znalezieniu pierwszego elementu większego od klucza wystarczy sprawdzić ostatnie „przeskoczone” k−1 elementów. Dla len → ∞ jest w przeciętnym przypadku **asymptotycznie k razy szybszy** od sekwencyjnego (dla niewielkich k). Przy dobrym k (ćwiczenie: k = √len) $W(len)=\frac{1}{k}\cdot\Theta(len)$ — ale to **wciąż złożoność liniowa**, tego samego rzędu.
 
 **Wyszukiwanie binarne — idea:** (1) dopóki długość ciągu jest dodatnia: (2) porównaj klucz ze środkowym elementem; (3) równość → zwróć bieżący indeks; (4) klucz mniejszy → szukaj tylko w lewym podciągu; (5) większy → tylko w prawym; (6) wróć do 1; (7) długość spadła do zera → klucza nie ma.
 
@@ -272,18 +272,18 @@ search(S, len, key){
 }
 ```
 
-Zakłada się, że cały ciąg jest w **pamięci RAM** (o dostępie swobodnym) — sprawdzenie dowolnego S[m] ma czas stały. **Analiza:** rozmiar danych — len; operacja dominująca — porównanie `S[m] == key`; z każdą iteracją bieżący ciąg staje się **2 razy krótszy**, więc **W(len) = Θ(log₂ len)**, **A(len) = Θ(log₂ len)**, **S(len) = O(1)**. (Na liście dowiązaniowej lub „wolnym” dysku dostęp do S[m] nie jest stały — wtedy ta analiza nie działa.)
+Zakłada się, że cały ciąg jest w **pamięci RAM** (o dostępie swobodnym) — sprawdzenie dowolnego S[m] ma czas stały. **Analiza:** rozmiar danych — len; operacja dominująca — porównanie `S[m] == key`; z każdą iteracją bieżący ciąg staje się **2 razy krótszy**, więc $W(len)=\Theta(\log_2 len)$, $A(len)=\Theta(\log_2 len)$, $S(len)=O(1)$. (Na liście dowiązaniowej lub „wolnym” dysku dostęp do S[m] nie jest stały — wtedy ta analiza nie działa.)
 
 ### Statystyki pozycyjne
 
 **k-ta statystyka pozycyjna** — k-ty najmniejszy (lub największy) element ciągu; minimum to przypadek k = 1. W ciągu posortowanym zadanie jest trywialne, więc rozważamy ciągi **nieuporządkowane**.
 
-**Drugi najmniejszy — second(S, len)** (elementy różne). Rozwiązanie proste: znajdź minimum, usuń je, znajdź minimum ponownie — **2·len − 1** porównań. **Algorytm turniejowy (dziel i rządź):** elementy grają w parach, mniejszy przechodzi dalej; zwycięzca = minimum. Drugi najmniejszy jest wśród elementów, które **przegrały ze zwycięzcą** (tylko z nim mógł przegrać). Turniej to drzewo binarne o **Θ(log₂ len)** poziomach; w pierwszej fazie **len − 1** porównań (każde porównanie eliminuje dokładnie jeden element), w drugiej szukamy minimum wśród ok. log₂ len kandydatów: **W(len) = len − 1 + Θ(log₂ len)** — asymptotycznie 2 razy szybciej niż dwukrotne szukanie minimum.
+**Drugi najmniejszy — second(S, len)** (elementy różne). Rozwiązanie proste: znajdź minimum, usuń je, znajdź minimum ponownie — $2\cdot len-1$ porównań. **Algorytm turniejowy (dziel i rządź):** elementy grają w parach, mniejszy przechodzi dalej; zwycięzca = minimum. Drugi najmniejszy jest wśród elementów, które **przegrały ze zwycięzcą** (tylko z nim mógł przegrać). Turniej to drzewo binarne o **Θ(log₂ len)** poziomach; w pierwszej fazie **len − 1** porównań (każde porównanie eliminuje dokładnie jeden element), w drugiej szukamy minimum wśród ok. log₂ len kandydatów: $W(len)=len-1+\Theta(\log_2 len)$ — asymptotycznie 2 razy szybciej niż dwukrotne szukanie minimum.
 
 **k-ty najmniejszy — kthSmallest(S, len, k)** (1 ≤ k ≤ len, nic nie zakładamy o S). Naiwnie: k razy szukamy minimum — ok. k·len porównań.
 
 :::def Procedura partition(S, l, r)
-Bierze **pierwszy** element m podciągu S[l..r] i przestawia elementy tak, że na lewo od m są elementy **niewiększe**, a na prawo **niemniejsze** (niekoniecznie posortowane). **Zwraca** ostateczną pozycję i elementu m. Operacja dominująca: porównanie 2 elementów; rozmiar danych n = r − l + 1; można ją zaprojektować z **W(n) = n + O(1)** i **S(n) = O(1)** (kod — w wykładzie o QuickSort, [temat 7](topic:t07)).
+Bierze **pierwszy** element m podciągu S[l..r] i przestawia elementy tak, że na lewo od m są elementy **niewiększe**, a na prawo **niemniejsze** (niekoniecznie posortowane). **Zwraca** ostateczną pozycję i elementu m. Operacja dominująca: porównanie 2 elementów; rozmiar danych n = r − l + 1; można ją zaprojektować z $W(n)=n+O(1)$ i $S(n)=O(1)$ (kod — w wykładzie o QuickSort, [temat 7](topic:t07)).
 :::
 
 **Algorytm Hoare'a:** wykonaj partition; jeśli zwrócony indeks i = k, zwróć S[k]; jeśli i < k — powtarzaj na części na prawo od i, w przeciwnym razie na lewo („dziel i rządź”, jak w binSearch, ale podział rzadko jest w połowie). Dzięki liniowej partition **przeciętna** złożoność jest **liniowa — Θ(n) niezależnie od k**. Pesymistycznie jest **kwadratowa** (gdy partition za każdym razem trafia na koniec podciągu, który maleje tylko o 1).

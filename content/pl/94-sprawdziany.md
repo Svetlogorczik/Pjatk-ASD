@@ -5,7 +5,7 @@ title: Sprawdziany 2026/2027 — praktyczny i wiedzy
 short: Sprawdziany 2026/2027
 icon: 📝
 eyebrow: Przygotowanie do zaliczenia · 2026/2027
-desc: Typy zadań dopuszczeniowych (binSearch, MergeSort, partition, CountSort, kopiec, a^b), oficjalne przykładowe dane rozwiązane krok po kroku, wersje algorytmów zgodne z odpowiedziami, zadania treningowe i wskazówki do sprawdzianu wiedzy.
+desc: Typy zadań dopuszczeniowych (binSearch, MergeSort, partition, CountSort, kopiec, aᵇ), oficjalne przykładowe dane rozwiązane krok po kroku, wersje algorytmów zgodne z odpowiedziami, zadania treningowe i wskazówki do sprawdzianu wiedzy.
 ---
 
 :::info Skąd jest ta strona
@@ -27,7 +27,7 @@ Na sprawdzianie praktycznym jest ok. 10 zadań, głównie na **znajomość dzia�
 | 3 | **partition()** z QuickSort (wersja z wykładu) | a) zwrócony indeks, b) pierwszy element tablicy po partition, c) liczbę `swap()` — **łącznie z ostatnim** |
 | 4 | **Count Sort** (wersja z wykładu) | tablicę `counts` (zakres 0..max) a) po zliczaniu, b) po sumowaniu, c) po wypisaniu do tablicy wyjściowej |
 | 5 | **Kopiec binarny typu min** (tablica od indeksu 1) | a) po kolejnych `insert()` elementów S, b) jak a) + `delMin()`, c) po jednym `construct()` z S |
-| 6 | prosty algorytm **a^b** | a) specyfikacja, b) pseudokod (b-krotne mnożenie) |
+| 6 | prosty algorytm **aᵇ** | a) specyfikacja, b) pseudokod (b-krotne mnożenie) |
 | 7 | ciąg dalszy 6 | c) analiza **poprawności całkowitej**, d) złożoność **czasowa i pamięciowa** (operacja dominująca, rozmiar danych!) |
 
 Pełny zakres sprawdzianu praktycznego: rzędy funkcji / notacja O, binSearch, selection sort, insertion sort, mergeSort, quickSort/partition, countSort, radixSort, minHeap, BST, in/pre/post-order, BFS/DFS, Kruskal.
@@ -61,7 +61,9 @@ S: 7 13 17 25 30 [41] 52 58 60 61 80 85
 | 1 | 0 | 11 | **5** | 41 | 41 < 60 → l = 6 |
 | 2 | 6 | 11 | **8** | 60 | znaleziono → return 8 |
 
-**Odpowiedź:** a) **5, 8**; b) **8**.
+:::answer
+a) **5, 8**; b) **8**.
+:::
 
 :::tip
 Na sprawdzianie zawsze zapisuj tabelkę l, r, m — jedna pomyłka w dzieleniu (np. (6+11)/2 = 8, nie 9) psuje cały wynik. Przy braku klucza zwracane jest −1, a indeksów porównań jest ok. log₂ n.
@@ -105,7 +107,9 @@ Uwaga na podział: **m = len/2 (w dół)**, lewa część to S[0:m] — przy nie
 | (3, 8) + (5, 7) | 3, 5, 7, 8 | 3 (3<5, 5<8, 7<8; potem 8) |
 | **(0, 2, 4, 6) + (3, 5, 7, 8)** | 0, 2, 3, 4, 5, 6, 7, 8 | 6 (lewy kończy się po 6; 7, 8 bez porównań) |
 
-**Odpowiedź:** a) 1+1+3+1+1+3+6 = **16**; b) ostatni merge: **0, 2, 4, 6 | 3, 5, 7, 8**.
+:::answer
+a) 1+1+3+1+1+3+6 = **16**; b) ostatni merge: **0, 2, 4, 6 | 3, 5, 7, 8**.
+:::
 
 :::tip
 Ostatni `merge()` zawsze scala **dwie posortowane połowy całej tablicy** — wystarczy posortować osobno lewą i prawą połowę. Liczba porównań w merge ciągów długości p i q jest między min(p, q) a p + q − 1.
@@ -155,7 +159,9 @@ swap 3: 1 5 0 4 2 3 {6} 7 8 9
 2. i zatrzymuje się na 8 (indeks 4), j na 2 (indeks 8) → swap(4, 8).
 3. i przechodzi przez 2, 3, 1 i staje na 7 (indeks 7); j schodzi do i — koniec pętli. a[7] = 7 > 6, więc p = 6 → swap(0, 6).
 
-**Odpowiedź:** a) **6**; b) **1**; c) **3** swapy.
+:::answer
+a) **6**; b) **1**; c) **3** swapy.
+:::
 
 :::tip Szybkie sprawdzenie
 Zwrócony indeks = **liczba elementów mniejszych od pivota** (gdy elementy są różne): w przykładzie 5, 4, 3, 1, 2, 0 → 6. Liczba swapów = liczba zamian „par” + 1.
@@ -262,16 +268,19 @@ construct: for(i = n/2; i > 0; i--) downHeap(i)
 Wyniki a) i c) są **różne**, choć oba są poprawnymi kopcami — to częsty haczyk. `construct()` to nie to samo co n razy `insert()`.
 :::
 
-## 6–7. Algorytm a^b: specyfikacja, pseudokod, poprawność, złożoność
+## 6–7. Algorytm aᵇ: specyfikacja, pseudokod, poprawność, złożoność
 
 To zadanie sprawdza definicje z wykładów 1 (poprawność) i 2 (złożoność) — patrz [temat 2](topic:t02) i [temat 3](topic:t03), sekcje „wersja z wykładu 2026/2027”.
 
-**a) Specyfikacja**
-- **nazwa i argumenty:** `power(a, b)`
-- **warunek początkowy:** a, b — liczby naturalne, a > 0 (b może być równe 0)
-- **warunek końcowy:** algorytm zwraca liczbę a^b (w szczególności 1, gdy b = 0)
+### a) Specyfikacja
 
-**b) Pseudokod**
+:::def Specyfikacja power(a, b)
+- **nazwa i argumenty:** `power(a, b)`
+- **warunek początkowy:** $a, b \in \mathbb{N}$, $a > 0$ ($b$ może być równe 0)
+- **warunek końcowy:** algorytm zwraca liczbę $a^b$ (w szczególności $1$, gdy $b = 0$)
+:::
+
+### b) Pseudokod
 
 ```pseudo
 power(a, b){
@@ -285,24 +294,39 @@ power(a, b){
 }
 ```
 
-**c) Poprawność całkowita** = własność stopu + częściowa poprawność.
+### c) Poprawność całkowita
 
-1. **Własność stopu.** Pętla kończy się, gdy i ≥ b. Wartość b jest **stała i skończona** (liczba naturalna), i startuje od 0 i w każdej iteracji **rośnie o 1**. Zatem po dokładnie b iteracjach i = b i algorytm się zatrzymuje.
-2. **Częściowa poprawność — niezmiennik pętli:** `result == a^i  ∧  i <= b`.
-   - **przed pierwszą iteracją:** i = 0, result = 1 = a⁰; i = 0 ≤ b, bo b jest naturalne ✓
-   - **zachowanie:** jeśli przed iteracją result = a^i i i < b (warunek pętli), to po niej result' = a^i · a = a^(i+1) oraz i' = i + 1 ≤ b ✓
-   - **po wyjściu z pętli:** niezmiennik i ¬(i < b) dają i = b, więc result = a^b — to jest warunek końcowy ✓
+Poprawność całkowita = **własność stopu** + **częściowa poprawność**. Dowodzimy obu części osobno.
 
-Skoro algorytm ma własność stopu i jest częściowo poprawny, jest **całkowicie poprawny**.
+**Krok 1 — własność stopu.** Pętla kończy się, gdy $i \ge b$. Wartość $b$ jest **stała i skończona** (liczba naturalna), a $i$ startuje od $0$ i w każdej iteracji **rośnie o 1**. Po dokładnie $b$ iteracjach $i = b$ i algorytm się zatrzymuje.
 
-**d) Złożoność**
-- **rozmiar danych:** wartość wykładnika **b** (a nie wpływa na liczbę operacji — przy założeniu, że mnożenie to jedna operacja),
-- **operacja dominująca:** mnożenie `result * a` (może być też porównanie `i < b`),
-- **złożoność czasowa:** W(b) = A(b) = b, czyli **Θ(b)** — liniowa (porównań jest b + 1, też Θ(b)),
-- **złożoność pamięciowa:** stała liczba zmiennych (result, i) → **S(b) = O(1)**.
+**Krok 2 — częściowa poprawność.** Używamy niezmiennika pętli:
+
+:::formula Niezmiennik pętli
+$$\text{result} = a^{i} \;\wedge\; i \le b$$
+:::
+
+1. **Przed pierwszą iteracją:** $i = 0$, $\text{result} = 1 = a^0$ oraz $0 \le b$, bo $b$ jest naturalne ✓
+2. **Zachowanie:** jeśli przed iteracją $\text{result} = a^i$ i $i < b$ (warunek pętli), to po niej
+$$\text{result}' = a^i \cdot a = a^{i+1}, \qquad i' = i + 1 \le b \;✓$$
+3. **Po wyjściu z pętli:** niezmiennik i $\neg(i < b)$ dają $i = b$, więc $\text{result} = a^b$ — to warunek końcowy ✓
+
+### d) Złożoność
+
+- **rozmiar danych:** wartość wykładnika $b$ ($a$ nie wpływa na liczbę operacji, jeśli mnożenie to jedna operacja),
+- **operacja dominująca:** mnożenie `result * a` (może być też porównanie `i < b`).
+
+:::formula Złożoność czasowa i pamięciowa
+$$W(b) = A(b) = b = \Theta(b) \qquad S(b) = O(1)$$
+Porównań `i < b` jest $b + 1$ — też $\Theta(b)$. Pamięć: stała liczba zmiennych (`result`, `i`).
+:::
+
+:::answer
+Algorytm ma własność stopu i jest częściowo poprawny (niezmiennik $\text{result} = a^i \wedge i \le b$), więc jest **całkowicie poprawny**. Złożoność: czasowa $\Theta(b)$ — liniowa względem wartości $b$, pamięciowa $O(1)$.
+:::
 
 :::exam
-Bez wskazania **operacji dominującej** i **rozmiaru danych** analiza złożoności jest niepełna — prowadzący wprost o tym przypomina. Dopisek na „plus”: względem **liczby bitów** wykładnika (≈ log₂ b) ten algorytm jest wykładniczy (porównaj [temat 3](topic:t03)).
+Bez wskazania **operacji dominującej** i **rozmiaru danych** analiza złożoności jest niepełna — prowadzący wprost o tym przypomina. Dopisek na „plus”: względem **liczby bitów** wykładnika ($\approx \log_2 b$) ten algorytm jest wykładniczy (porównaj [temat 3](topic:t03)).
 :::
 
 ## Sprawdzian wiedzy — na co się przygotować
@@ -444,7 +468,7 @@ post-order: 20, 35, 45, 40, 30, 65, 60, 80, 70, 50
 wysokość: **3** (liczona w krawędziach).
 :::
 
-:::task level=2 source=own title="BFS, DFS, Kruskal i Dijkstra na jednym grafie"
+:::task level=2 source=own title="BFS, DFS, Kruskal, Dijkstra i Prim na jednym grafie"
 Graf nieskierowany z wagami: 1–2 (7), 1–3 (3), 1–4 (5), 2–5 (2), 3–5 (6), 3–6 (4), 4–6 (1), 5–7 (8), 6–7 (9), 2–3 (10).
 
 a) Wykonaj BFS i DFS (wersja rekurencyjna ze slajdów, `time` od 0) od wierzchołka 1, sąsiadów rozpatrując rosnąco. Podaj kolejność odwiedzania, dla BFS odległości `d` i rodziców `p`, dla DFS czasy odwiedzenia i zakończenia `d/f` oraz krawędzie niebędące drzewowymi (jakiego są typu?).
@@ -452,6 +476,8 @@ a) Wykonaj BFS i DFS (wersja rekurencyjna ze slajdów, `time` od 0) od wierzcho�
 b) Podaj kolejność krawędzi dodawanych przez algorytm Kruskala i wagę drzewa.
 
 c) Wykonaj algorytm Dijkstry od wierzchołka 1 (krawędzie działają w obie strony). Podaj kolejność zdejmowania wierzchołków z kolejki oraz końcowe `distance` i `parent`.
+
+d) Wykonaj algorytm Prima ze slajdów od wierzchołka 1. Podaj krawędzie w kolejności akceptacji (dodania do drzewa) i porównaj z Kruskalem.
 ```graph
 1 60 140
 2 180 40
@@ -479,6 +505,12 @@ DFS: **1, 2, 3, 5, 7, 6, 4**; d/f: 1: 0/13, 2: 1/12, 3: 2/11, 5: 3/10, 7: 4/9, 6
 **b)** Krawędzie po wagach: 4–6 (1) ✓, 2–5 (2) ✓, 1–3 (3) ✓, 3–6 (4) ✓, 1–4 (5) ✗ cykl 1-3-6-4, 3–5 (6) ✓, 1–2 (7) ✗ cykl, 5–7 (8) ✓ — mamy 6 krawędzi dla 7 wierzchołków, koniec. Waga: 1 + 2 + 3 + 4 + 6 + 8 = **24**.
 
 **c)** Zdejmowanie z kolejki (distance): 1 (0), 3 (3), 4 (5), 6 (6), 2 (7), 5 (9), 7 (15). Wynik: distance 2 = 7, 3 = 3, 4 = 5, 5 = 9, 6 = 6, 7 = 15; parent 2 ← 1, 3 ← 1, 4 ← 1, 5 ← 3, 6 ← 4, 7 ← 6. Uwaga: 6 najpierw dostaje 7 (przez 3), potem relaksacja z 4 poprawia na 6. Do 5 prowadzą dwie ścieżki długości 9 (przez 3 i przez 2) — warunek relaksacji jest ostry (`>`), więc zostaje rodzic 3.
+
+**d)** Prim od 1 (zdejmowany wierzchołek ← rodzic, waga): 3 ← 1 (3); 6 ← 3 (4); 4 ← 6 (1) — 4 miało dist 5 (przez 1), po dodaniu 6 spada do 1; 5 ← 3 (6); 2 ← 5 (2) — 2 miało dist 7 (przez 1), po dodaniu 5 spada do 2; 7 ← 5 (8). Kolejność akceptacji: **1–3, 3–6, 6–4, 3–5, 5–2, 5–7**, waga $3 + 4 + 1 + 6 + 2 + 8 = 24$.
+
+:::answer
+Kruskal i Prim dają **to samo MST** o wadze **24** (wagi są różne, więc MST jest jednoznaczne), ale w innej kolejności krawędzi.
+:::
 :::
 
 :::task level=2 source=own title="BST: usuwanie we wszystkich wariantach"
@@ -512,7 +544,12 @@ b) Wstaw do niego 66 (zwykły insert BST). Czy nadal jest AVL?
 :::task level=2 source="Wskazówki prowadzącego (przykład)" title="Notacja O z definicji"
 Udowodnij z definicji, że n² + 5n + 2 = O(n²), ale n² + 5n + 2 ≠ O(n).
 ::solution
-**O(n²):** dla n ≥ 1 mamy 5n ≤ 5n² i 2 ≤ 2n², więc n² + 5n + 2 ≤ 8n². Stałe: **c = 8, n₀ = 1** ✓.
-
-**Nie O(n):** przypuśćmy, że istnieją c > 0 i n₀, takie że n² + 5n + 2 ≤ c·n dla n ≥ n₀. Dzieląc przez n: n + 5 + 2/n ≤ c, czyli n ≤ c dla wszystkich n ≥ n₀ — sprzeczność (weź n > max(c, n₀)). ∎
+**Część 1: $n^2 + 5n + 2 = O(n^2)$.** Szukamy stałych $c > 0$ i $n_0$ z definicji. Dla $n \ge 1$ mamy $5n \le 5n^2$ oraz $2 \le 2n^2$, więc
+$$n^2 + 5n + 2 \;\le\; n^2 + 5n^2 + 2n^2 \;=\; 8n^2 \qquad (n \ge 1)$$
+**Część 2: $n^2 + 5n + 2 \ne O(n)$.** Przypuśćmy, że istnieją $c > 0$ i $n_0$, takie że $n^2 + 5n + 2 \le c \cdot n$ dla $n \ge n_0$. Dzieląc przez $n$:
+$$n + 5 + \frac{2}{n} \le c \quad\Longrightarrow\quad n \le c \quad \text{dla każdego } n \ge n_0$$
+— sprzeczność: wystarczy wziąć $n > \max(c, n_0)$. ∎
+:::answer
+$c = 8$, $n_0 = 1$ dowodzi $n^2 + 5n + 2 = O(n^2)$; ograniczenie liniowe $O(n)$ nie istnieje.
+:::
 :::

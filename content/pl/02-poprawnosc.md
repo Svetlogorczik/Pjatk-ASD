@@ -277,7 +277,7 @@ algor1(Arr, len){
 Zwraca **maksimum** z len pierwszych liczb tablicy. Dowód całkowitej poprawności — dwa standardowe kroki:
 
 1. **Stop** — jak wyżej: i rośnie o 1, len stałe i skończone.
-2. **Częściowa poprawność.** Warunek końcowy: `(∀ 0≤j<len: x ≥ Arr[j]) ∧ (∃ 0≤j<len: x == Arr[j])`. Niezmiennik („w i-tej iteracji x jest maksimum z i pierwszych wartości”): `(∀ 0≤j<i: x ≥ Arr[j]) ∧ (∃ 0≤j<len: x == Arr[j])`.
+2. **Częściowa poprawność.** Warunek końcowy: $(\forall_{0\le j<len}\; x\ge Arr[j]) \wedge (\exists_{0\le j<len}\; x = Arr[j])$. Niezmiennik („w i-tej iteracji x jest maksimum z i pierwszych wartości”): $(\forall_{0\le j<i}\; x\ge Arr[j]) \wedge (\exists_{0\le j<len}\; x = Arr[j])$.
    - przed pierwszą iteracją: i = 1, x = Arr[0] — prawda,
    - jest niezmiennikiem dzięki warunkowej aktualizacji x w `if`,
    - po zatrzymaniu (i == len) przyjmuje postać warunku końcowego.

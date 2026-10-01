@@ -67,6 +67,7 @@
     ASD.codeBlock.init();
     ASD.drawer.init();
     ASD.nav.init();
+    ASD.toTop.init();
     ASD.i18n.apply(document);
 
     ASD.util.qsa('.lang-switch__button').forEach(function (b) {

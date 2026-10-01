@@ -13,6 +13,7 @@
 @import url("blocks/article.css");
 @import url("blocks/prose.css");
 @import url("blocks/callout.css");
+@import url("blocks/math.css");
 @import url("blocks/code-block.css");
 @import url("blocks/diagram.css");
 @import url("blocks/task.css");
@@ -20,5 +21,6 @@
 @import url("blocks/pager.css");
 @import url("blocks/hero.css");
 @import url("blocks/toast.css");
+@import url("blocks/to-top.css");
 
 @import url("base/print.css");

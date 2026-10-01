@@ -277,7 +277,7 @@ merge(a1, len1, a2, len2){
 }
 ```
 
-**Analysis of merge:** dominant operation — comparison of 2 elements or indices; data size n = len1 + len2; **W(n) = A(n) = Θ(n)**; unfortunately **S(n) = Θ(n)** (we allocate an array for the merged sequence — avoidable with **linked lists**). **Analysis of mergeSort:** on each recursion level the merge calls work on sequences of total length len, and there are log₂(len) levels: **W(len) = A(len) = Θ(len·log len)** — **linear-logarithmic**. Example from the slides: 100 million logs, 10⁹ comparisons/s: insertionSort ≈ (10⁸)²/10⁹ s = 10⁷ s (**115 days**), mergeSort ≈ 2.65·10⁹/10⁹ s (**2.65 seconds**).
+**Analysis of merge:** dominant operation — comparison of 2 elements or indices; data size n = len1 + len2; $W(n)=A(n)=\Theta(n)$; unfortunately $S(n)=\Theta(n)$ (we allocate an array for the merged sequence — avoidable with **linked lists**). **Analysis of mergeSort:** on each recursion level the merge calls work on sequences of total length len, and there are log₂(len) levels: $W(len)=A(len)=\Theta(len\cdot\log len)$ — **linear-logarithmic**. Example from the slides: 100 million logs, 10⁹ comparisons/s: insertionSort ≈ (10⁸)²/10⁹ s = 10⁷ s (**115 days**), mergeSort ≈ 2.65·10⁹/10⁹ s (**2.65 seconds**).
 
 **Linked lists in mergeSort.** Nodes connected by links (pointers): `początek -> (2)-> (3)-> (5)-> (8)-> null`. **Singly linked** lists suffice (merge traverses each list in one direction). Merge on lists only relinks nodes, so it **uses no extra memory** (apart from the recursion stack), with the same time complexity. Arrays: fast direct access, little memory, but inserting in the middle is linear; lists: inserting/removing a sublist in **constant** time, but slow (linear) access and memory for links.
 
@@ -297,30 +297,32 @@ fibonacci(n){
 The number of recursive calls is an **exponential** function of n — fibonacci(50) takes surprisingly long (the stack may even run out of memory). A **non-recursive** formula is better. Recursion should be avoided when possible and when it does not complicate the algorithm much (time and memory cost — the call stack).
 
 :::def Linear recurrence of order 2
-If sₙ = a·sₙ₋₁ + b·sₙ₋₂, solve the **characteristic equation** x² − ax − b = 0:
-1. one root r: **sₙ = c₁rⁿ + c₂nrⁿ**,
-2. two roots r₁, r₂: **sₙ = c₁r₁ⁿ + c₂r₂ⁿ**,
+If $s_n=a\,s_{n-1}+b\,s_{n-2}$, solve the **characteristic equation** $x^2-ax-b=0$:
+1. one root r: $s_n=c_1r^n+c_2\,n\,r^n$,
+2. two roots r₁, r₂: $s_n=c_1r_1^n+c_2r_2^n$,
 
-the constants c₁, c₂ come from the base values (n = 0, n = 1). For Fibonacci (a = b = 1) this gives **Binet's formula**: F(n) = (1/√5)·(((1+√5)/2)ⁿ − ((1−√5)/2)ⁿ); F(50) = 12 586 269 025.
+the constants c₁, c₂ come from the base values (n = 0, n = 1). For Fibonacci (a = b = 1) this gives **Binet's formula**: 
+$$F(n)=\frac{1}{\sqrt5}\left(\left(\frac{1+\sqrt5}{2}\right)^{n}-\left(\frac{1-\sqrt5}{2}\right)^{n}\right),\qquad F(50)=12\,586\,269\,025$$
+
 :::
 
-**Towers of Hanoi.** n discs on peg A (largest at the bottom), move them to C, one move = one disc from the top, never a larger on a smaller one, auxiliary peg B. hanoi(0) = 0, hanoi(1) = 1, hanoi(2) = 3. Recursively: move n−1 discs to B, the largest to C, n−1 discs from B to C: **hanoi(1) = 1, hanoi(n) = 2·hanoi(n−1) + 1**. "Unfolding the sum": hanoi(n) = Σ_{i=0}^{n−1} 2ⁱ = **2ⁿ − 1**; hanoi(10) = 1023 (grows faster than Fibonacci). The formula could be found **thanks to the recursive formulation of the problem**.
+**Towers of Hanoi.** n discs on peg A (largest at the bottom), move them to C, one move = one disc from the top, never a larger on a smaller one, auxiliary peg B. hanoi(0) = 0, hanoi(1) = 1, hanoi(2) = 3. Recursively: move n−1 discs to B, the largest to C, n−1 discs from B to C: $\text{hanoi}(1)=1,\;\; \text{hanoi}(n)=2\cdot\text{hanoi}(n-1)+1$. "Unfolding the sum": $\text{hanoi}(n)=\sum_{i=0}^{n-1}2^i=2^n-1$; hanoi(10) = 1023 (grows faster than Fibonacci). The formula could be found **thanks to the recursive formulation of the problem**.
 
 ### Three common cases (n = 2ᵏ, t(1) = 0, c > 0 a constant)
 
 | Equation | Solution | Example |
 |---|---|---|
-| t(n) = t(n/2) + c | c·log n = **Θ(log n)** | recursive binSearch |
-| t(n) = t(⌊n/2⌋) + t(⌈n/2⌉) + c | c(n − 1) = **Θ(n)** | recursive maximum (max of left and right half) |
-| t(n) = t(⌊n/2⌋) + t(⌈n/2⌉) + c·n | c·n·log n = **Θ(n log n)** | mergeSort |
+| $t(n)=t(n/2)+c$ | $c\log n=\Theta(\log n)$ | recursive binSearch |
+| $t(n)=t(\lfloor n/2\rfloor)+t(\lceil n/2\rceil)+c$ | $c(n-1)=\Theta(n)$ | recursive maximum (max of left and right half) |
+| $t(n)=t(\lfloor n/2\rfloor)+t(\lceil n/2\rceil)+cn$ | $c\,n\log n=\Theta(n\log n)$ | mergeSort |
 
 :::def The master theorem
-T(n) = a·T(n/b) + f(n), a ≥ 1, b > 1 constants, n/b means ⌊n/b⌋ or ⌈n/b⌉, f asymptotically positive:
-1. f(n) = O(n^(log_b a − ε)) for some ε > 0 ⇒ **T(n) = Θ(n^(log_b a))**,
-2. f(n) = Θ(n^(log_b a)) ⇒ **T(n) = Θ(n^(log_b a)·log n)**,
-3. f(n) = Ω(n^(log_b a + ε)) for some ε > 0 and a·f(n/b) ≤ c·f(n) for some c < 1 (the "regularity condition") ⇒ **T(n) = Θ(f(n))**.
+$T(n)=a\,T(n/b)+f(n)$, a ≥ 1, b > 1 constants, n/b means ⌊n/b⌋ or ⌈n/b⌉, f asymptotically positive:
+1. $f(n)=O(n^{\log_b a-\varepsilon})$ for some ε > 0 ⇒ $T(n)=\Theta(n^{\log_b a})$,
+2. $f(n)=\Theta(n^{\log_b a})$ ⇒ $T(n)=\Theta(n^{\log_b a}\log n)$,
+3. $f(n)=\Omega(n^{\log_b a+\varepsilon})$ for some ε > 0 and $a\,f(n/b)\le c\,f(n)$ for some c < 1 (the "regularity condition") ⇒ $T(n)=\Theta(f(n))$.
 
-Interpretation: compare the order of the overhead f(n) with n^(log_b a) — the higher one determines the order of T(n); if equal, a factor Θ(log n) appears. (Proof: Cormen et al., ch. 4.4.) MergeSort: a = 2, b = 2, f(n) = Θ(n) → case 2 → Θ(n log n).
+Interpretation: compare the order of the overhead f(n) with $n^{\log_b a}$ — the higher one determines the order of T(n); if equal, a factor Θ(log n) appears. (Proof: Cormen et al., ch. 4.4.) MergeSort: a = 2, b = 2, f(n) = Θ(n) → case 2 → Θ(n log n).
 :::
 
 ### Tasks from the slides

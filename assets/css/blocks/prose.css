@@ -145,5 +145,18 @@
 
 @media (max-width: 600px) {
   .prose { font-size: 16px; line-height: 1.7; }
+  .prose__h2 { margin-top: 2em !important; font-size: 1.36em; }
+  .prose__h3 { font-size: 1.15em; }
+  .prose__table { font-size: .86em; }
   .prose__th, .prose__td { padding: 8px 10px; }
+  .prose__list { padding-left: 1.2em; }
+
+  /* Wide blocks use the full screen width on phones: more room for code, tables and diagrams. */
+  .prose > .code-block,
+  .prose > .prose__table-wrap,
+  .prose > .diagram {
+    margin-inline: calc(-1 * var(--gutter));
+    border-inline: 0;
+    border-radius: 0;
+  }
 }

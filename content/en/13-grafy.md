@@ -234,7 +234,7 @@ A drawing is only one of infinitely many graphical representations — distingui
 T is a tree with n vertices ⇔ T has n−1 edges and is acyclic ⇔ T is connected and has n−1 edges ⇔ every two vertices are joined by **exactly one** elementary path ⇔ T is acyclic, but adding any edge creates exactly one cycle.
 :::
 
-**Rooted trees:** a distinguished **root**; **depth (level)** — the distance from the root; **height** — the maximum depth; ancestor/descendant, parent/child, sibling, leaves (no children), subtree. Representation: **parent array** (n[i] — the label of i's parent). **d-ary tree** — every vertex has ≤ d children; **complete** — leaves differ in depth by ≤ 1; level l has ≤ dˡ vertices; for height h: **h + 1 ≤ n ≤ (d^(h+1) − 1)/(d − 1)**. **Ordered tree** — children are linearly ordered (drawn left to right; the standard order — by levels, then by children). **Binary tree** — a 2-ary ordered tree in which it is specified which child is left and which is right.
+**Rooted trees:** a distinguished **root**; **depth (level)** — the distance from the root; **height** — the maximum depth; ancestor/descendant, parent/child, sibling, leaves (no children), subtree. Representation: **parent array** (n[i] — the label of i's parent). **d-ary tree** — every vertex has ≤ d children; **complete** — leaves differ in depth by ≤ 1; level l has ≤ dˡ vertices; for height h: $h+1\le n\le\frac{d^{h+1}-1}{d-1}$. **Ordered tree** — children are linearly ordered (drawn left to right; the standard order — by levels, then by children). **Binary tree** — a 2-ary ordered tree in which it is specified which child is left and which is right.
 
 **Graph representations:** **adjacency matrix** A[i, j] = 1 ⇔ i, j are joined (a loop — 2); symmetric for an undirected graph, zeros on the diagonal for a simple one; the row/column sum — the (out/in) degree; Aᵀ — reversed edges. **Incidence matrix** I[v, e] = 1 ⇔ v is incident with e (digraph: 1 entering, −1 leaving). **Adjacency lists** (for a digraph — the vertices that the outgoing edges enter). Also an edge list, an object representation, "gd0" (binary). **Graph size** — the pair (n, m); a **sparse** graph — m = O(n).
 
@@ -272,7 +272,7 @@ while(!queue.empty()){
 }
 ```
 
-**BFS** visits vertices "in all directions" by increasing distance: attribute `d` — the distance from the start, `p` — the tree. Uses: connected components, distances, transitive closure (n×BFS). Complexity **O(|V| + |E|)**. Undirected graph: no forward or back edges; tree edge: v.d = u.d + 1; cross edge: v.d = u.d or u.d + 1. Directed: no forward edges; tree: v.d = u.d + 1; cross: v.d ≤ u.d + 1; back: 0 ≤ v.d ≤ u.d.
+**BFS** visits vertices "in all directions" by increasing distance: attribute `d` — the distance from the start, `p` — the tree. Uses: connected components, distances, transitive closure (n×BFS). Complexity $O(|V|+|E|)$. Undirected graph: no forward or back edges; tree edge: v.d = u.d + 1; cross edge: v.d = u.d or u.d + 1. Directed: no forward edges; tree: v.d = u.d + 1; cross: v.d ≤ u.d + 1; back: 0 ≤ v.d ≤ u.d.
 
 ```pseudo
 DFS(){
@@ -296,7 +296,7 @@ recursiveDFS(GraphNode v){
 }
 ```
 
-**DFS** (stack or recursion — the same idea, but the visiting order may differ): **discovery time v.d** (becomes grey) and **finishing time v.f** (black). Complexity **O(|V| + |E|)**. **Parenthesis structure:** the intervals [u.d, u.f] and [v.d, v.f] are disjoint or one contains the other. **White-path theorem:** v is a descendant of u in the DFS tree ⇔ at time u.d there is a path from u to v consisting of white vertices only. Undirected graph: no forward or cross edges. Directed — all 4 kinds; when traversing (u, v): **tree** if v is white; **back** if grey; **forward or cross** if black. By times: (v, w) is tree or forward ⇔ v.d < w.d < w.f < v.f; back ⇔ w.d < v.d < v.f < w.f; cross ⇔ w.d < w.f < v.d < v.f. Uses: acyclicity test (no back edges), **topological sort**, strongly connected components, articulation points, bridges, blocks.
+**DFS** (stack or recursion — the same idea, but the visiting order may differ): **discovery time v.d** (becomes grey) and **finishing time v.f** (black). Complexity $O(|V|+|E|)$. **Parenthesis structure:** the intervals [u.d, u.f] and [v.d, v.f] are disjoint or one contains the other. **White-path theorem:** v is a descendant of u in the DFS tree ⇔ at time u.d there is a path from u to v consisting of white vertices only. Undirected graph: no forward or cross edges. Directed — all 4 kinds; when traversing (u, v): **tree** if v is white; **back** if grey; **forward or cross** if black. By times: (v, w) is tree or forward ⇔ v.d < w.d < w.f < v.f; back ⇔ w.d < v.d < v.f < w.f; cross ⇔ w.d < w.f < v.d < v.f. Uses: acyclicity test (no back edges), **topological sort**, strongly connected components, articulation points, bridges, blocks.
 
 ### Sample questions/exercises from the slides
 

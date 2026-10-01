@@ -21,6 +21,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+  <link rel="stylesheet" href="assets/vendor/katex/katex.min.css">
   <link rel="stylesheet" href="assets/css/main.css">
 </head>
 <body class="page">
@@ -87,7 +88,9 @@
   <script src="assets/js/core/theme.js"></script>
   <script src="assets/js/core/loader.js"></script>
   <script src="assets/js/core/router.js"></script>
-  <!-- rendering -->
+  <!-- rendering (KaTeX is vendored so formulas also work offline) -->
+  <script src="assets/vendor/katex/katex.min.js"></script>
+  <script src="assets/js/render/math.js"></script>
   <script src="assets/js/render/highlight.js"></script>
   <script src="assets/js/render/diagrams.js"></script>
   <script src="assets/js/render/markdown.js"></script>
@@ -97,6 +100,7 @@
   <script src="assets/js/components/toc.js"></script>
   <script src="assets/js/components/nav.js"></script>
   <script src="assets/js/components/progress.js"></script>
+  <script src="assets/js/components/to-top.js"></script>
   <!-- pages -->
   <script src="assets/js/pages/home.js"></script>
   <script src="assets/js/pages/topic.js"></script>

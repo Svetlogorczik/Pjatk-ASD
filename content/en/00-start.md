@@ -41,6 +41,18 @@ Content added by the site author — **it was not in the lectures** (e.g. an ext
 An everyday analogy that helps to "feel" a concept. Also written by the site author.
 :::
 
+:::formula
+The key formulas and complexities — highlighted and typeset clearly, e.g. $W(n)=\Theta(n\log n)$.
+:::
+
+:::example
+An example with data, worked out step by step.
+:::
+
+:::answer
+The final answer to an example or a task — what you write in the test.
+:::
+
 ## Where the content comes from
 
 - **The main text** of every topic is the content of the course lectures (files `asd1…asd11`, `Algorytmika`, `Dziel i rządź` (divide and conquer), `FFT`, `Programowanie zachłanne` (greedy programming) and older slides from 2009) — retold in simpler words and extended with step-by-step examples.
