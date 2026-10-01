@@ -19,6 +19,11 @@ desc: The list of lecture files and class problem sets used by the site, the cou
 | sortTwo5-pl.pdf — *Sorting 2* | stability, QuickSort and partition, the n log n lower bound, CountSort, RadixSort | [7](topic:t07) |
 | recursion6-pl.pdf — *Recursion* | factorial, Fibonacci, order-2 linear recurrences, Towers of Hanoi, 3 recurrence schemes, the master theorem | [6](topic:t06) |
 | listsAndArrays7-pl.pdf — *Lists and arrays* | singly/doubly linked and cyclic lists, splice, abstract data structures: stack, queue, deque | [9](topic:t09) |
+| priorityQueue8-pl.pdf — *Priority queue* | definition, naive implementations, binary heap, upheap/downheap, heap in an array, construct O(n), HeapSort, extensions | [12](topic:t12) |
+| dictionary9-pl.pdf — *Dictionaries* | dictionary and ordered dictionary, hash tables, BST (search, insert, delete, successor), AVL and bf | [10](topic:t10), [11](topic:t11) |
+| graphsOne10-pl.pdf — *Introduction to graphs* | graphs and digraphs, paths, cycles, connectivity, trees, representations | [13](topic:t13) |
+| graphsTwo10b-pl.pdf — *Graph and tree traversal* | pre/in/post-order, the traversal scheme, BFS, DFS, edge classification | [10](topic:t10), [13](topic:t13) |
+| shortestPaths12-pl.pdf — *Shortest paths* | relaxation, topological sort, DAG, Dijkstra, Bellman-Ford | [14](topic:t14) |
 | Qualifying-task descriptions, sample data with answers, hints for the theory part | task types for the practical test, scope of the knowledge test | [Tests 2026/2027](page:exams) |
 
 **Recommended literature in 2026/2027:** Cormen, Leiserson, Rivest, Stein — *Introduction to Algorithms* (Polish: *Wprowadzenie do algorytmów*, PWN 2018); K. Mehlhorn, P. Sanders — *Algorithms and Data Structures. The Basic Toolbox*, Springer 2008; G. Mirkowska et al. — *Algorytmy i struktury danych — zadania*, PJWSTK 2005 (problem book, partly with solutions); L. Banachowski, K. Diks, W. Rytter — *Algorytmy i struktury danych*, PWN 2018. Others from the slides: N. Wirth — *Algorithms + Data Structures = Programs*; A. Aho, J. Hopcroft, J. Ullman — *Data Structures and Algorithms*; W. Lipski — *Kombinatoryka dla programistów*; for deeper study: D. Knuth — *The Art of Computer Programming*, Ch. Papadimitriou — *Computational Complexity*.

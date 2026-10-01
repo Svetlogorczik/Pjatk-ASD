@@ -9,8 +9,8 @@ sources: asd11.pdf; Wyklady 2009/wyklad_2.pdf (graphs), asd 09 wyklad_7.pdf (DFS
 exercises: no separate problem set — tasks by the site author (weighted graphs are in topic 14)
 ---
 
-:::exam 2026/2027 practical test
-The algorithms in this topic are within the scope of the **2026/2027 practical test**. **The versions from M. Sydow's slides** apply — they may differ in details from the 2025/2026 versions described here. Versions that reproduce the official sample answers, plus practice tasks: [Tests 2026/2027](page:exams).
+:::exam 2026/2027 tests
+This topic was written from the 2025/2026 lectures. **The 2026/2027 tests use the versions from M. Sydow's slides** — you will find them in the section ["2026/2027 lecture version"](topic:t13#2026-2027-lecture-version-m-sydow-introduction-to-graphs-and) at the end of the topic (code copied from the slides). Qualifying tasks and practice tasks: [Tests 2026/2027](page:exams).
 :::
 
 ## What is a graph?
@@ -210,7 +210,107 @@ With balancing and compression a sequence of m operations costs **O(m · α(n))*
 @include t13-findunion.java
 ```
 
+
+## 2026/2027 lecture version (M. Sydow) — "Introduction to graphs" and "Graph traversal"
+
+:::exam
+In the tests: definitions (graph, digraph, paths, cycles, connectivity, trees), representations and their costs, and **simulating BFS/DFS in the slide version** — visiting order, distances `d` (BFS), times `d/f` (DFS, `time` from 0), the search forest and edge classification. Practice task: [Tests 2026/2027](page:exams).
+:::
+
+:::def Graph and digraph
+A **graph** (undirected) G = (V, E): V — the set of **vertices**, E — the set of **edges**; an edge e = {v, w} is an **unordered** pair of vertices (its **ends**). We say: e **joins** v and w, v and w are **adjacent**, e is **incident** with v and w. An undirected graph represents a **symmetric** relation; a graph with empty V and E is the **null graph**.
+A **directed graph** G = (V, E): an edge (arc) e = (v, w) is an **ordered** pair (**start**, **end**) — e goes from v to w (leaves v, enters w); it represents **any** binary relation.
+:::
+
+A drawing is only one of infinitely many graphical representations — distinguish the graph (an abstract object) from its drawing.
+
+- **Simple graph:** no **loops** (v, v) and no **multiple edges** (in a digraph (v, w) and (w, v) are different edges). **Degree** deg(v) — the number of incident edges (a loop counts twice); degree 0 — an **isolated** vertex.
+- **Path:** an alternating sequence of vertices and edges (v₀, e₀, v₁, …, eₖ, vₗ) where eₖ joins vₖ and vₖ₊₁ (similarly a directed path). **Simple** — no repeated edges; **elementary** — no repeated vertices; **length** — the number of edges (length 0 — a single vertex).
+- **Cycle:** a path of length at least 3 with v₀ == vₗ; **elementary cycle** (except first/last) and **simple**; the **girth** — the length of the shortest elementary cycle.
+- **Connected** ⇔ every two distinct vertices are joined by a path (⇔ a non-empty graph is not a union of two non-empty graphs). **Connected component** — a maximal connected subgraph; c(G) — the number of components. A digraph is **strongly connected** ⇔ for every ordered pair of distinct vertices there is a directed path from the first to the second (strong ⇒ weak connectivity, not conversely); strongly/weakly connected components.
+- **Tree** — a connected acyclic graph; **forest** — acyclic; **leaf** — a vertex of degree 1, the others are **internal**.
+
+:::def Characterisation of trees (equivalent conditions)
+T is a tree with n vertices ⇔ T has n−1 edges and is acyclic ⇔ T is connected and has n−1 edges ⇔ every two vertices are joined by **exactly one** elementary path ⇔ T is acyclic, but adding any edge creates exactly one cycle.
+:::
+
+**Rooted trees:** a distinguished **root**; **depth (level)** — the distance from the root; **height** — the maximum depth; ancestor/descendant, parent/child, sibling, leaves (no children), subtree. Representation: **parent array** (n[i] — the label of i's parent). **d-ary tree** — every vertex has ≤ d children; **complete** — leaves differ in depth by ≤ 1; level l has ≤ dˡ vertices; for height h: **h + 1 ≤ n ≤ (d^(h+1) − 1)/(d − 1)**. **Ordered tree** — children are linearly ordered (drawn left to right; the standard order — by levels, then by children). **Binary tree** — a 2-ary ordered tree in which it is specified which child is left and which is right.
+
+**Graph representations:** **adjacency matrix** A[i, j] = 1 ⇔ i, j are joined (a loop — 2); symmetric for an undirected graph, zeros on the diagonal for a simple one; the row/column sum — the (out/in) degree; Aᵀ — reversed edges. **Incidence matrix** I[v, e] = 1 ⇔ v is incident with e (digraph: 1 entering, −1 leaving). **Adjacency lists** (for a digraph — the vertices that the outgoing edges enter). Also an edge list, an object representation, "gd0" (binary). **Graph size** — the pair (n, m); a **sparse** graph — m = O(n).
+
+| representation | memory |
+|---|---|
+| adjacency matrix | Θ(n²) — always |
+| adjacency lists | Θ(n + m) — adapts to the number of edges |
+| incidence matrix | Θ(n·m) |
+
+### Graph traversal
+
+A systematic visit: start from a start vertex, move only along edges, every vertex and edge **exactly once** (undirected and directed graphs). **General scheme:** put the start into a structure X; while X is non-empty: (1) take out v and visit it, (2) put all unvisited neighbours of v into X. The variant depends on X (**queue → BFS, stack → DFS**) and on the order of neighbours (e.g. alphabetical). One run gives a **search tree**; repeated until everything is visited — a **search forest**. Colours: **white** (unvisited), **grey** (visited, being processed), **black** (finished).
+
+**Edge classification (u, v):** **tree (T)** — v visited from u via (u, v); **forward (F)** — not a tree edge, v is a descendant of u; **back (B)** — v is an ancestor of u; **cross (C)** — the rest.
+
+```pseudo
+for-each node in V:
+  node.color = white; node.d = infinity; node.p = null
+
+s.color = gray; s.d = 0; queue.in(s)
+
+while(!queue.empty()){
+  currNode = queue.out()
+
+  process(currNode)
+
+  for-each node in currNode.adjList:
+     if (node.color == white):
+        queue.in(node)
+        node.color = gray
+        node.d = currNode.d + 1
+        node.p = currNode
+
+  currNode.color = black
+}
+```
+
+**BFS** visits vertices "in all directions" by increasing distance: attribute `d` — the distance from the start, `p` — the tree. Uses: connected components, distances, transitive closure (n×BFS). Complexity **O(|V| + |E|)**. Undirected graph: no forward or back edges; tree edge: v.d = u.d + 1; cross edge: v.d = u.d or u.d + 1. Directed: no forward edges; tree: v.d = u.d + 1; cross: v.d ≤ u.d + 1; back: 0 ≤ v.d ≤ u.d.
+
+```pseudo
+DFS(){
+  time = 0
+  for-each v in V:
+     v.color = white; v.parent = null
+  for-each v in V:
+     if (v.color == white):
+        recursiveDFS(v)
+}
+recursiveDFS(GraphNode v){
+  v.d = time++
+  v.color = gray
+  process(v)
+  for-each u in v.adjList:
+     if (u.color == white):
+        u.parent = v
+        recursiveDFS(u)
+  v.color = black
+  v.f = time++
+}
+```
+
+**DFS** (stack or recursion — the same idea, but the visiting order may differ): **discovery time v.d** (becomes grey) and **finishing time v.f** (black). Complexity **O(|V| + |E|)**. **Parenthesis structure:** the intervals [u.d, u.f] and [v.d, v.f] are disjoint or one contains the other. **White-path theorem:** v is a descendant of u in the DFS tree ⇔ at time u.d there is a path from u to v consisting of white vertices only. Undirected graph: no forward or cross edges. Directed — all 4 kinds; when traversing (u, v): **tree** if v is white; **back** if grey; **forward or cross** if black. By times: (v, w) is tree or forward ⇔ v.d < w.d < w.f < v.f; back ⇔ w.d < v.d < v.f < w.f; cross ⇔ w.d < w.f < v.d < v.f. Uses: acyclicity test (no back edges), **topological sort**, strongly connected components, articulation points, bridges, blocks.
+
+### Sample questions/exercises from the slides
+
+Definitions of graphs, paths and cycles; connectivity, strong/weak connectivity, components; kinds of trees and their properties; representations and their complexities; pre/in/post-order visiting order; **the order of visited vertices, distances (BFS), discovery and finishing times (DFS), the search forest and edge classification**; an algorithm for escaping a maze — BFS or DFS?
+
 === summary ===
+
+## 2026/2027 version (M. Sydow)
+
+- Tree ⇔ connected with n−1 edges ⇔ acyclic with n−1 edges ⇔ exactly one elementary path.
+- Memory: adjacency matrix Θ(n²), lists Θ(n + m), incidence matrix Θ(n·m).
+- BFS (queue): d, p; DFS (recursion): d/f from time = 0; both O(|V| + |E|).
+- Edges T/F/B/C; directed DFS: v white → T, grey → B, black → F or C.
+
 
 ## Graphs
 

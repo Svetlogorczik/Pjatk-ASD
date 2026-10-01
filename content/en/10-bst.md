@@ -9,8 +9,8 @@ sources: asd8.pdf; Asd9.pdf; Wyklady 2009/wyklad_2.pdf (trees), asd 10 wyklad_8.
 exercises: asd 08.pdf (tasks 1–3), asd 09 a.pdf (tasks 1–3)
 ---
 
-:::exam 2026/2027 practical test
-The algorithms in this topic are within the scope of the **2026/2027 practical test**. **The versions from M. Sydow's slides** apply — they may differ in details from the 2025/2026 versions described here. Versions that reproduce the official sample answers, plus practice tasks: [Tests 2026/2027](page:exams).
+:::exam 2026/2027 tests
+This topic was written from the 2025/2026 lectures. **The 2026/2027 tests use the versions from M. Sydow's slides** — you will find them in the section ["2026/2027 lecture version"](topic:t10#2026-2027-lecture-version-m-sydow-dictionaries-bst-and-tree-) at the end of the topic (code copied from the slides). Qualifying tasks and practice tasks: [Tests 2026/2027](page:exams).
 :::
 
 ## The dictionary problem
@@ -206,7 +206,120 @@ Added by the site author — useful in tasks like "if preorder is …, then inor
 - preorder and postorder alone are **not enough** for an ordinary tree (e.g. a tree "root + one child" — is the child left or right?).
 - **BST test from a traversal:** a sequence is the inorder of some BST ⇔ it is **strictly increasing**.
 
+
+## 2026/2027 lecture version (M. Sydow) — "Dictionaries" (BST) and tree traversals
+
+:::exam
+The tests use the BST code from the slides below: **equal keys go right** (`key >= node.key`), and `delete` for a node with two sons uses the **predecessor** (the rightmost node of the left subtree) in the pseudocode — the slide text also mentions the successor variant. Tasks: show the tree after insert/delete (in all variants), pre/in/post-order traversals — see [Tests 2026/2027](page:exams).
+:::
+
+:::def Dictionary and ordered dictionary
+A **dictionary** is an ADS operating on key-value pairs (unique keys): **search(K key)** (returns the value associated with the key; if absent — a special value or an exception), **insert(K key, V value)**, **delete(K key)**.
+An **ordered dictionary** (*Dynamic Ordered Set*) extends the dictionary, for a linearly ordered key type, with: **minimum()**, **maximum()**, **predecessor(K key)** (the immediate predecessor), **successor(K key)** (the immediate successor).
+:::
+
+Uses: a contact list, a configuration system (property-value), compilers (variable name → type and address), a foreign-language dictionary. **Naive implementations** (data size n — number of elements, dominant operation — key comparison): two arrays keys/values; **unsorted:** search O(n), insert O(1), delete O(n); **sorted:** search O(log n), insert O(n), delete O(n) (lists do not help). Efficient implementations: hash tables ([topic 11](topic:t11)), **BST**, **AVL**.
+
+:::def BST
+A binary tree in which every node stores a key (with a value) and satisfies the **BST order condition**: for every node x the key in x is **not smaller** than all keys in the left subtree of x and **not greater** than all keys in the right subtree. (In a binary tree even an only son is unambiguously left or right.) Node fields: **key, value, parent, left, right** (empty — null).
+:::
+
+Example from the slides: 8(3(_, 6(5, _)), 12(_, 15(13, 20))). The tree need not be complete; the minimum (maximum) is found by going from the root all the way left (right): here 3 and 20.
+
+```pseudo
+searchIterative(node, key): \\ wywołanie dla node == root
+  while ((node != null) and (node.key != key))
+    if (key < node.key) node = node.left
+    else node = node.right
+  return node
+
+minimum(node):
+  while (node.left != null) node = node.left
+  return node
+
+successor(node):
+  if (node.right != null) return minimum(node.right)
+  p = node.parent
+  while ((p != null) and (node == p.right))
+    node = p
+    p = p.parent
+  return p
+
+insert(node, key):
+  if (key < node.key) then
+    if node.left == null:
+      n = create new node with key
+      node.left = n
+    else: insert(node.left, key)
+  else: // (key >= node.key)
+    if node.right == null:
+      n = create new node with key
+      node.right = n
+    else: insert(node.right, key)
+```
+
+(There is also a recursive search; maximum and predecessor are symmetric.) **successor:** if the node has a right son — the minimum of the right subtree; otherwise the nearest ancestor from which we had to go left.
+
+**delete — three variants:** a node **with no sons** — remove it and set the parent's pointer to null; **with 1 son** — remove it and "attach" the only son (with its subtree) to the parent; **with 2 sons** — replace it with the node x holding the key of the immediate **successor** (or, as in the pseudocode, the **predecessor**), then remove x (it has at most one son). Examples from the slides on the tree 8(3(_, 6(5, _)), 12(_, 15(13, 20))): insert(7) → 7 becomes the right son of 6; delete(13) → the leaf disappears; delete(12) → 15 (with its subtree) replaces 12; delete(8) with the predecessor → 6 in the root, 5 attached to 3: 6(3(_, 5), 12(_, 15(13, 20))).
+
+```pseudo
+procedure delete(node, key)
+  if (key < node.key) then
+    delete(node.left, key)
+  else if (key > node.key) then
+    delete(node.right, key)
+  else begin { key = node.key
+    if node is a leaf then
+      deletesimple(node)
+    else
+      if (node.left != null) then
+        find x = the rightmost node in node.left
+        node.key:=x.key;
+        delete1(x);
+      else
+        proceed analogously for node.right
+        (we are looking for the leftmost node now)
+
+procedure delete1(node)   // for nodes having only 1 son
+begin
+  subtree = null
+  parent = node.parent
+  if (node.left != null)
+    subtree = node.left
+  else
+    subtree = node.right
+
+  if (parent == null)
+    root = subtree
+  else if (parent.left == node)  // node is the left son
+    parent.left = subtree
+  else // node is the right son
+    parent.right = subtree
+```
+
+:::own
+A note by the site author: by the slide pseudocode a node with **one** son also goes into the "find x = the rightmost node in node.left" branch (it is not a leaf) — the result is still a valid BST, but it looks different from "attaching the son". The slide example (delete(12) → 15 replaces 12) follows the verbal description ("attach the only son"), so in the test use the **verbal description of the three variants**.
+:::
+
+**Analysis** (n — number of elements, dominant operation — key comparison): all ordered-dictionary operations make a number of comparisons **proportional to the tree height**. The height of a **random** BST (every permutation of inserted keys equally likely) is O(log n), so **A(n) = O(log n)**; but in the worst case the tree can be one long branch: **W(n) = O(n)**. Hence AVL trees ([topic 11](topic:t11)).
+
+### Binary tree traversals (lecture "Graph and tree traversal algorithms")
+
+Besides the standard order (by levels, left to right) — three recursive orders starting at the root: **pre-order** (current, left, right), **in-order** (left, current, right), **post-order** (left, right, current). **Geometric interpretation:** draw a line around the tree starting above the root, counter-clockwise — pre-order: output a node when you meet it the **first** time; post-order: the **last** time; in-order: a node with a left son — the **second** time, any other — the first time. Recursion simplifies computing the number of nodes, the height, node depths, the number of leaves, etc.
+
+### Sample questions from the slides
+
+Definition of a dictionary; analysis of naive implementations; ordered dictionary; definition and properties of a BST; operation and analysis of BST operations; **the tree after a given insert or delete (in all variants)**; limitations of BSTs; visiting order for pre/in/post-order; simple recursive functions on trees (number of nodes, height).
+
 === summary ===
+
+## 2026/2027 version (M. Sydow)
+
+- Dictionary: search/insert/delete; ordered: + minimum, maximum, predecessor, successor.
+- Naive: unsorted search O(n), insert O(1), delete O(n); sorted O(log n), O(n), O(n).
+- BST: left ≤ x ≤ right; insert: `key >= node.key` → right; delete: leaf / 1 son (attach) / 2 sons (successor or predecessor).
+- BST: A(n) = O(log n), W(n) = O(n). Traversals: pre (c, l, r), in (l, c, r), post (l, r, c).
+
 
 ## Dictionary
 

@@ -10,7 +10,7 @@ exercises: brak osobnego zestawu — zadania od autora strony (grafy ważone są
 ---
 
 :::exam Sprawdzian 2026/2027
-Algorytmy z tego tematu są w zakresie **sprawdzianu praktycznego 2026/2027**. Obowiązują **wersje ze slajdów M. Sydowa** — mogą się różnić w szczegółach od opisanych tu wersji z 2025/2026. Wersje zgodne z oficjalnymi przykładowymi odpowiedziami i zadania treningowe: [Sprawdziany 2026/2027](page:exams).
+Ten temat powstał na podstawie wykładów 2025/2026. **Na sprawdzianach 2026/2027 obowiązują wersje ze slajdów M. Sydowa** — znajdziesz je w sekcji [„Wersja z wykładu 2026/2027”](topic:t13#wersja-z-wykładu-2026-2027-m-sydow-wprowadzenie-do-grafów-i-) na końcu tematu (kod przepisany ze slajdów). Zadania dopuszczeniowe i zadania treningowe: [Sprawdziany 2026/2027](page:exams).
 :::
 
 ## Czym jest graf?
@@ -210,7 +210,107 @@ Z balansowaniem i kompresją ciąg m operacji kosztuje **O(m · α(n))**, gdzie 
 @include t13-findunion.java
 ```
 
+
+## Wersja z wykładu 2026/2027 (M. Sydow) — „Wprowadzenie do grafów” i „Przeglądanie grafów”
+
+:::exam
+Na sprawdzianach: definicje (graf, digraf, drogi, cykle, spójność, drzewa), reprezentacje i ich koszty oraz **symulacja BFS/DFS w wersji ze slajdów** — kolejność odwiedzania, odległości `d` (BFS), czasy `d/f` (DFS, `time` od 0), las przeszukiwania i klasyfikacja krawędzi. Zadanie treningowe: [Sprawdziany 2026/2027](page:exams).
+:::
+
+:::def Graf i digraf
+**Graf** (nieskierowany) G = (V, E): V — zbiór **wierzchołków**, E — zbiór **krawędzi**; krawędź e = {v, w} to **nieuporządkowana** para wierzchołków (jej **końców**). Mówimy: e **łączy** v i w, v i w są **sąsiednie**, e jest **incydentna** z v i w. Graf nieskierowany reprezentuje relację **symetryczną**; graf z pustymi V i E — **zerowy**.
+**Graf skierowany** G = (V, E): krawędź (łuk) e = (v, w) to **uporządkowana** para (**początek**, **koniec**) — e biegnie od v do w (wychodzi z v, wchodzi do w); reprezentuje **dowolną** relację binarną.
+:::
+
+Rysunek to tylko jedna z nieskończenie wielu reprezentacji graficznych — trzeba odróżniać graf (obiekt abstrakcyjny) od rysunku.
+
+- **Graf prosty:** bez **pętli** (v, v) i **krawędzi wielokrotnych** (w digrafie (v, w) i (w, v) to różne krawędzie). **Stopień** deg(v) — liczba krawędzi incydentnych (pętla liczy się 2 razy); stopień 0 — wierzchołek **izolowany**.
+- **Droga (ścieżka):** naprzemienny ciąg wierzchołków i krawędzi (v₀, e₀, v₁, …, eₖ, vₗ), gdzie eₖ łączy vₖ i vₖ₊₁ (analogicznie droga skierowana). **Prosta** — nie powtarzają się krawędzie; **elementarna** — nie powtarzają się wierzchołki; **długość** — liczba krawędzi (długość 0 — pojedynczy wierzchołek).
+- **Cykl:** droga długości co najmniej 3 z v₀ == vₗ; **cykl elementarny** (poza pierwszym/ostatnim) i **prosty**; **obwód** grafu — długość najkrótszego cyklu elementarnego.
+- **Spójny** ⇔ każde dwa różne wierzchołki są połączone drogą (⇔ niepusty graf nie jest sumą dwóch niepustych grafów). **Składowa spójna** — maksymalny spójny podgraf; c(G) — liczba składowych. Digraf **silnie spójny** ⇔ dla każdej uporządkowanej pary różnych wierzchołków istnieje droga skierowana z pierwszego do drugiego (silna ⇒ słaba spójność, nie odwrotnie); składowe silnie/słabo spójne.
+- **Drzewo** — graf spójny i acykliczny; **las** — acykliczny; **liść** — wierzchołek stopnia 1, pozostałe — **wewnętrzne**.
+
+:::def Charakteryzacja drzew (warunki równoważne)
+T jest drzewem o n wierzchołkach ⇔ T ma n−1 krawędzi i jest acykliczny ⇔ T jest spójny i ma n−1 krawędzi ⇔ każde dwa wierzchołki łączy **dokładnie jedna** droga elementarna ⇔ T jest acykliczny, ale dodanie dowolnej krawędzi tworzy dokładnie jeden cykl.
+:::
+
+**Drzewa ukorzenione:** wyróżniony **korzeń**; **głębokość (poziom)** — odległość od korzenia; **wysokość** — maksymalna głębokość; przodek/potomek, rodzic/dziecko, bliźniak (brat), liście (bez dzieci), poddrzewo. Reprezentacja: **tablica rodziców** (n[i] — etykieta rodzica i). **Drzewo d-arne** — każdy wierzchołek ma ≤ d dzieci; **zupełne** — liście różnią się głębokością o ≤ 1; na poziomie l jest ≤ dˡ wierzchołków; dla wysokości h: **h + 1 ≤ n ≤ (d^(h+1) − 1)/(d − 1)**. **Drzewo uporządkowane** — dzieci mają porządek liniowy (rysowane od lewej do prawej; porządek standardowy — po poziomach, potem według dzieci). **Drzewo binarne** — 2-arne uporządkowane z określeniem, które dziecko jest lewe, a które prawe.
+
+**Reprezentacje grafów:** **macierz sąsiedztwa** A[i, j] = 1 ⇔ i, j połączone (pętla — 2); dla grafu nieskierowanego symetryczna, dla prostego — zera na przekątnej; suma w wierszu/kolumnie — stopień (wyjściowy/wejściowy); Aᵀ — odwrócenie krawędzi. **Macierz incydencji** I[v, e] = 1 ⇔ v incydentny z e (digraf: 1 wchodzące, −1 wychodzące). **Listy sąsiedztwa** (dla digrafu — wierzchołki, do których wchodzą krawędzie wychodzące). Także lista krawędzi, reprezentacja obiektowa, „gd0” (binarna). **Rozmiar grafu** — para (n, m); graf **rzadki** — m = O(n).
+
+| reprezentacja | pamięć |
+|---|---|
+| macierz sąsiedztwa | Θ(n²) — zawsze |
+| listy sąsiedztwa | Θ(n + m) — dostosowuje się do liczby krawędzi |
+| macierz incydencji | Θ(n·m) |
+
+### Przeszukiwanie grafów
+
+Systematyczne odwiedzenie: start z wierzchołka startowego, ruch tylko po krawędzi, każdy wierzchołek i krawędź **dokładnie raz** (grafy nieskierowane i skierowane). **Schemat ogólny:** umieść start w strukturze X; dopóki X niepusta: (1) wyjmij v i odwiedź go, (2) włóż do X kolejno wszystkich nieodwiedzonych sąsiadów v. Wariant zależy od X (**kolejka → BFS, stos → DFS**) i kolejności sąsiadów (np. alfabetycznie). Jedno wykonanie daje **drzewo przeszukiwania**; powtarzane aż do odwiedzenia wszystkiego — **las przeszukiwania**. Kolory: **biały** (nieodwiedzony), **szary** (odwiedzony, przetwarzany), **czarny** (zakończony).
+
+**Klasyfikacja krawędzi (u, v):** **drzewowa (T)** — v odwiedzony z u przez (u, v); **w przód (F)** — nie drzewowa, v potomkiem u; **w tył (B)** — v przodkiem u; **poprzeczna (C)** — pozostałe.
+
+```pseudo
+for-each node in V:
+  node.color = white; node.d = infinity; node.p = null
+
+s.color = gray; s.d = 0; queue.in(s)
+
+while(!queue.empty()){
+  currNode = queue.out()
+
+  process(currNode)
+
+  for-each node in currNode.adjList:
+     if (node.color == white):
+        queue.in(node)
+        node.color = gray
+        node.d = currNode.d + 1
+        node.p = currNode
+
+  currNode.color = black
+}
+```
+
+**BFS** odwiedza wierzchołki „we wszystkich kierunkach” według rosnącej odległości: atrybut `d` — odległość od startu, `p` — drzewo. Zastosowania: składowe spójne, odległości, domknięcie przechodnie (n×BFS). Złożoność **O(|V| + |E|)**. Graf nieskierowany: brak krawędzi w przód i wstecz; drzewowa: v.d = u.d + 1; poprzeczna: v.d = u.d lub u.d + 1. Skierowany: brak w przód; drzewowa: v.d = u.d + 1; poprzeczna: v.d ≤ u.d + 1; wsteczna: 0 ≤ v.d ≤ u.d.
+
+```pseudo
+DFS(){
+  time = 0
+  for-each v in V:
+     v.color = white; v.parent = null
+  for-each v in V:
+     if (v.color == white):
+        recursiveDFS(v)
+}
+recursiveDFS(GraphNode v){
+  v.d = time++
+  v.color = gray
+  process(v)
+  for-each u in v.adjList:
+     if (u.color == white):
+        u.parent = v
+        recursiveDFS(u)
+  v.color = black
+  v.f = time++
+}
+```
+
+**DFS** (stos lub rekurencja — równoważne co do idei, ale kolejność odwiedzania może się różnić): **czas odwiedzenia v.d** (staje się szary) i **zakończenia v.f** (czarny). Złożoność **O(|V| + |E|)**. **Struktura nawiasowa:** przedziały [u.d, u.f] i [v.d, v.f] są rozłączne albo jeden zawiera się w drugim. **Twierdzenie o białej ścieżce:** v jest potomkiem u w drzewie DFS ⇔ w chwili u.d istnieje ścieżka z u do v z samych białych wierzchołków. Graf nieskierowany: brak krawędzi w przód i poprzecznych. Skierowany — wszystkie 4 rodzaje; przy przejściu (u, v): **drzewowa**, jeśli v biały; **wstecz**, jeśli szary; **w przód lub poprzeczna**, jeśli czarny. Przez czasy: (v, w) drzewowa lub w przód ⇔ v.d < w.d < w.f < v.f; w tył ⇔ w.d < v.d < v.f < w.f; poprzeczna ⇔ w.d < w.f < v.d < v.f. Zastosowania: test acykliczności (brak krawędzi wstecz), **sortowanie topologiczne**, składowe silnie spójne, punkty artykulacji, mosty, bloki.
+
+### Przykładowe pytania/ćwiczenia ze slajdów
+
+Definicje grafów, dróg i cykli; spójność, silna/słaba spójność, składowe; rodzaje drzew i ich własności; reprezentacje i ich złożoności; kolejność pre/in/post-order; **kolejność odwiedzanych wierzchołków, odległości (BFS), czasy odwiedzenia i zakończenia (DFS), las przeszukiwania i klasyfikacja krawędzi**; algorytm wychodzenia z labiryntu — BFS czy DFS?
+
 === summary ===
+
+## Wersja 2026/2027 (M. Sydow)
+
+- Drzewo ⇔ spójny i n−1 krawędzi ⇔ acykliczny i n−1 krawędzi ⇔ dokładnie jedna droga elementarna.
+- Pamięć: macierz sąsiedztwa Θ(n²), listy Θ(n + m), macierz incydencji Θ(n·m).
+- BFS (kolejka): d, p; DFS (rekurencja): d/f od time = 0; oba O(|V| + |E|).
+- Krawędzie T/F/B/C; DFS skierowany: v biały → T, szary → B, czarny → F lub C.
+
 
 ## Grafy
 

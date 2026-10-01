@@ -19,6 +19,11 @@ desc: Список лекционных файлов и наборов упра�
 | sortTwo5-pl.pdf — *Sortowanie 2* | устойчивость, QuickSort и partition, нижняя граница n log n, CountSort, RadixSort | [7](topic:t07) |
 | recursion6-pl.pdf — *Rekurencja* | факториал, Фибоначчи, линейные уравнения 2-го порядка, Ханойские башни, 3 схемы рекурсии, основная теорема | [6](topic:t06) |
 | listsAndArrays7-pl.pdf — *Listy i tablice* | одно-/двусвязные и циклические списки, splice, абстрактные структуры данных: стек, очередь, дек | [9](topic:t09) |
+| priorityQueue8-pl.pdf — *Kolejka priorytetowa* | определение, наивные реализации, двоичная куча, upheap/downheap, куча в массиве, construct O(n), HeapSort, расширения | [12](topic:t12) |
+| dictionary9-pl.pdf — *Słowniki* | словарь и упорядоченный словарь, хеш-таблицы, BST (search, insert, delete, successor), AVL и bf | [10](topic:t10), [11](topic:t11) |
+| graphsOne10-pl.pdf — *Wprowadzenie do grafów* | графы и орграфы, пути, циклы, связность, деревья, представления | [13](topic:t13) |
+| graphsTwo10b-pl.pdf — *Przeglądanie grafów i drzew* | pre/in/post-order, схема обхода, BFS, DFS, классификация рёбер | [10](topic:t10), [13](topic:t13) |
+| shortestPaths12-pl.pdf — *Najkrótsze ścieżki* | релаксация, топологическая сортировка, DAG, Дейкстра, Беллман-Форд | [14](topic:t14) |
 | Условия задач допуска, примерные данные с ответами, подсказки к теоретической части | типы задач практического теста, объём теста знаний | [Тесты 2026/2027](page:exams) |
 
 **Рекомендуемая литература 2026/2027:** Cormen, Leiserson, Rivest, Stein — *Introduction to Algorithms* (польск. *Wprowadzenie do algorytmów*, PWN 2018; есть русский перевод «Алгоритмы: построение и анализ»); K. Mehlhorn, P. Sanders — *Algorithms and Data Structures. The Basic Toolbox*, Springer 2008; G. Mirkowska и др. — *Algorytmy i struktury danych — zadania*, PJWSTK 2005 (сборник задач, частично с решениями); L. Banachowski, K. Diks, W. Rytter — *Algorytmy i struktury danych*, PWN 2018. Другие со слайдов: N. Wirth — «Алгоритмы + структуры данных = программы»; A. Aho, J. Hopcroft, J. Ullman — «Структуры данных и алгоритмы»; W. Lipski — *Kombinatoryka dla programistów*; для углублённого изучения: D. Knuth — «Искусство программирования», Ch. Papadimitriou — *Computational Complexity*.

@@ -9,8 +9,8 @@ sources: asd10.pdf; Wyklady 2009/wyklad_9 kopce binarne.pdf; wyklad_10.pdf (prio
 exercises: asd 10.pdf ("ASD 10b": tasks 1–3)
 ---
 
-:::exam 2026/2027 practical test
-The algorithms in this topic are within the scope of the **2026/2027 practical test**. **The versions from M. Sydow's slides** apply — they may differ in details from the 2025/2026 versions described here. Versions that reproduce the official sample answers, plus practice tasks: [Tests 2026/2027](page:exams).
+:::exam 2026/2027 tests
+This topic was written from the 2025/2026 lectures. **The 2026/2027 tests use the versions from M. Sydow's slides** — you will find them in the section ["2026/2027 lecture version"](topic:t12#2026-2027-lecture-version-m-sydow-priority-queue) at the end of the topic (code copied from the slides). Qualifying tasks and practice tasks: [Tests 2026/2027](page:exams).
 :::
 
 ## The priority queue
@@ -173,7 +173,82 @@ Every operation costs **logarithmic** time.
 @include t12-leftist.java
 ```
 
+
+## 2026/2027 lecture version (M. Sydow) — "Priority queue"
+
+:::exam
+The upheap / downheap / construct code from the slides is exactly the one that gives the official answers of the min-heap qualifying task (a heap in an array from index 1). Tasks: perform an operation on a heap and draw the result, apply construct — see [Tests 2026/2027](page:exams).
+:::
+
+:::def Priority queue
+An ADS for processing elements with assigned **priorities** (integers): **insert(e, p)**, **findMin()** (return without removing the element with the smallest priority), **delMin()** (return and remove it). **The lower the number, the higher the priority**; with the opposite interpretation the queue is of "max type" (findMax, delMax).
+:::
+
+Implementations: naive (arrays/lists), **binary heap** (Williams, Floyd 1964), vEB tree, binomial heap, pairing heap, Fibonacci heap, … (the lecture covers only the naive ones and the binary heap). **Naive:** **unsorted** priorities — insert O(1), delMin O(n), construct O(n); **sorted** — insert O(n), delMin O(1), construct O(n log n). A linked list does not help.
+
+:::def Binary heap
+A **complete binary tree** (filled top to bottom and, on each level, left to right) with the **heap order condition**: the priority in each node is **not greater** than the priorities in its descendants.
+:::
+
+Consequences: the minimal priority is always at the **root**; on every root-to-leaf path the priorities are non-decreasing; priorities on a level are **not** sorted; the height of an n-element heap is **Θ(log n)**.
+
+**Operations:** insert(e) — add at the first free place from the left on the last level and restore order upwards (**upheap**); findMin() — the root; delMin() — remove the root, put the last element (rightmost on the last level) in the root and restore order downwards (**downheap**: swap with the smaller son until both sons are not smaller or the last level is reached). Both helper operations assume the heap condition is violated at most at node x. **Complexity** (n — number of elements, dominant operation — priority comparison): at most 1 (upheap) or 2 (downheap) comparisons per level → insert **O(log n)**, findMin **O(1)**, delMin **O(log n)**.
+
+**Heap in an array** (thanks to completeness; index 0 unused; top to bottom, left to right): **parent[i] = i/2** (integer division), **i.left = 2i**, **i.right = 2i + 1**. Example from the slides: the heap 2(6(7(8, 10), 12), 3(9, 4)) is the array [n, 2, 6, 3, 7, 12, 9, 4, 8, 10]; the parent of 12 (index 5) has index 5/2 = 2.
+
+```pseudo
+upheap(i)        // i > 0
+  key = heap[i]
+  parent = i/2
+  while((parent > 0) && (heap[parent] > key))
+    heap[i] = heap[parent]
+    i = parent
+    parent /= 2
+  heap[i] = key
+
+downheap(i)
+  l = 2i          // left son
+  r = 2i + 1      // right son
+  if l <= n and heap[l] < heap[i]:
+    min = l
+  else:
+    min = i
+  if r <= n and heap[r] < heap[min]: // n is the heap size
+    min = r
+  if min != i:
+    swap(i,min)   // swap the elements, not just the indices
+    downheap(min) // continue below
+```
+
+**Fast construct:** instead of n inserts (Θ(n log n)) write all elements into the array in the given order and run `for(i = n/2; i > 0; i--) downHeap(i)` — only **O(n)** in total.
+
+**HeapSort:** insert all elements into the queue (`pq.insert`), then while non-empty — `result.add(pq.delMin())`; **Θ(n log n)** (a larger constant than QuickSort). Other uses (greedy algorithms): Huffman coding, **Dijkstra**, **Prim**.
+
+**Extensions.** Dynamic priority queue: construct, H insert (returns a pointer to the element), findMin, delMin, **decreaseKey(H pointer, T newPriority)**, **delete(H pointer)**; mergeable — additionally **merge(pq1, pq2)**.
+
+| operation | unsorted | sorted | binary heap | binomial heap |
+|---|---|---|---|---|
+| insert | 1 | n | lg n | lg n |
+| findMin | n | 1 | 1 | lg n |
+| delMin | n | 1 | lg n | lg n |
+| decreaseKey | 1 | n | lg n | lg n |
+| delete | 1 | n | lg n | lg n |
+| merge | 1 | n | **n** | **lg n** |
+
+(all in O(·))
+
+### Sample tasks from the slides
+
+Definition of a priority queue and a binary heap; analysis of naive implementations; **perform each operation on a given heap and draw the result**; **apply construct to a given sequence and draw the heap**; the array representation; complexity of heap operations; uses; extensions; complexity of decreaseKey, delete and merge on a binary heap.
+
 === summary ===
+
+## 2026/2027 version (M. Sydow)
+
+- PQ: insert(e, p), findMin, delMin. Heap: complete tree, parent ≤ children; array from 1: parent i/2, sons 2i, 2i+1.
+- insert (upheap) O(log n), findMin O(1), delMin (last to root + downheap) O(log n); construct: downHeap(i) for i = n/2..1 → O(n).
+- HeapSort Θ(n log n); merge on a binary heap O(n).
+
 
 ## Priority queue
 

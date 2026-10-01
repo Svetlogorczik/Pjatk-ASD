@@ -19,6 +19,11 @@ desc: Lista plików wykładowych i zestawów ćwiczeń, z których korzysta stro
 | sortTwo5-pl.pdf — *Sortowanie 2* | stabilność, QuickSort i partition, dolna granica n log n, CountSort, RadixSort | [7](topic:t07) |
 | recursion6-pl.pdf — *Rekurencja* | silnia, Fibonacci, równania liniowe 2. rzędu, wieże Hanoi, 3 schematy rekurencji, twierdzenie o rekurencji uniwersalnej | [6](topic:t06) |
 | listsAndArrays7-pl.pdf — *Listy i tablice* | listy jedno-/dwukierunkowe i cykliczne, splice, abstrakcyjne struktury danych: stos, kolejka, kolejka dwustronna | [9](topic:t09) |
+| priorityQueue8-pl.pdf — *Kolejka priorytetowa* | definicja, implementacje naiwne, kopiec binarny, upheap/downheap, kopiec w tablicy, construct O(n), HeapSort, rozszerzenia | [12](topic:t12) |
+| dictionary9-pl.pdf — *Słowniki* | słownik i słownik uporządkowany, tablice mieszające, BST (search, insert, delete, successor), AVL i bf | [10](topic:t10), [11](topic:t11) |
+| graphsOne10-pl.pdf — *Wprowadzenie do grafów* | grafy i digrafy, drogi, cykle, spójność, drzewa, reprezentacje | [13](topic:t13) |
+| graphsTwo10b-pl.pdf — *Algorytmy przeglądania grafów i drzew* | pre/in/post-order, schemat przeszukiwania, BFS, DFS, klasyfikacja krawędzi | [10](topic:t10), [13](topic:t13) |
+| shortestPaths12-pl.pdf — *Najkrótsze ścieżki* | relaksacja, sortowanie topologiczne, DAG, Dijkstra, Bellman-Ford | [14](topic:t14) |
 | Treści zadań dopuszczeniowych, przykładowe dane z rozwiązaniami, wskazówki do części teoretycznej | typy zadań na sprawdzian praktyczny, zakres sprawdzianu wiedzy | [Sprawdziany 2026/2027](page:exams) |
 
 **Literatura polecana w 2026/2027:** Cormen, Leiserson, Rivest, Stein — *Wprowadzenie do algorytmów*, PWN 2018 (ang. *Introduction to Algorithms*); K. Mehlhorn, P. Sanders — *Algorithms and Data Structures. The Basic Toolbox*, Springer 2008; G. Mirkowska i in. — *Algorytmy i struktury danych — zadania*, PJWSTK 2005 (zbiór zadań, częściowo z rozwiązaniami); L. Banachowski, K. Diks, W. Rytter — *Algorytmy i struktury danych*, PWN 2018. Inne ze slajdów: N. Wirth — *Algorytmy + struktury danych = programy*; A. Aho, J. Hopcroft, J. Ullman — *Algorytmy i struktury danych*; W. Lipski — *Kombinatoryka dla programistów*; do pogłębienia: D. Knuth — *The Art of Computer Programming*, Ch. Papadimitriou — *Computational Complexity*.

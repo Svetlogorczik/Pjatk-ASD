@@ -10,7 +10,7 @@ exercises: asd 08.pdf (zad. 1–3), asd 09 a.pdf (zad. 1–3)
 ---
 
 :::exam Sprawdzian 2026/2027
-Algorytmy z tego tematu są w zakresie **sprawdzianu praktycznego 2026/2027**. Obowiązują **wersje ze slajdów M. Sydowa** — mogą się różnić w szczegółach od opisanych tu wersji z 2025/2026. Wersje zgodne z oficjalnymi przykładowymi odpowiedziami i zadania treningowe: [Sprawdziany 2026/2027](page:exams).
+Ten temat powstał na podstawie wykładów 2025/2026. **Na sprawdzianach 2026/2027 obowiązują wersje ze slajdów M. Sydowa** — znajdziesz je w sekcji [„Wersja z wykładu 2026/2027”](topic:t10#wersja-z-wykładu-2026-2027-m-sydow-słowniki-bst-i-obchody-dr) na końcu tematu (kod przepisany ze slajdów). Zadania dopuszczeniowe i zadania treningowe: [Sprawdziany 2026/2027](page:exams).
 :::
 
 ## Problem słownika
@@ -206,7 +206,120 @@ Dopisane przez autora strony — przydaje się w zadaniach typu „jeśli preord
 - sam preorder i postorder dla zwykłego drzewa **nie wystarczają** (np. drzewo „korzeń + jeden syn” — nie wiadomo, czy lewy, czy prawy).
 - **Test na BST z obiegu:** ciąg jest obiegiem inorder jakiegoś BST ⇔ jest **ściśle rosnący**.
 
+
+## Wersja z wykładu 2026/2027 (M. Sydow) — „Słowniki” (BST) i obchody drzew
+
+:::exam
+Na sprawdzianach obowiązuje poniższy kod BST ze slajdów: **równe klucze idą w prawo** (`key >= node.key`), a `delete` dla węzła z dwoma synami w pseudokodzie używa **poprzednika** (skrajnie prawego węzła lewego poddrzewa) — w tekście slajdów jest też wariant z następnikiem. Zadania: pokaż drzewo po insert/delete (we wszystkich wariantach), obchody pre/in/post-order — patrz [Sprawdziany 2026/2027](page:exams).
+:::
+
+:::def Słownik i słownik uporządkowany
+**Słownik** — ADS operująca na parach klucz-wartość (klucze unikatowe): **search(K key)** (zwraca wartość związaną z kluczem; gdy go nie ma — wartość specjalna lub wyjątek), **insert(K key, V value)**, **delete(K key)**.
+**Słownik uporządkowany** (ang. *Dynamic Ordered Set*) — rozszerzenie słownika dla liniowo uporządkowanego typu kluczy o operacje: **minimum()**, **maximum()**, **predecessor(K key)** (bezpośredni poprzednik), **successor(K key)** (bezpośredni następnik).
+:::
+
+Zastosowania: baza kontaktów, system konfiguracyjny (cecha-wartość), kompilatory (nazwa zmiennej → typ i adres), słownik języka obcego. **Implementacje naiwne** (rozmiar danych n — liczba elementów, operacja dominująca — porównanie klucza): dwie tablice keys/values; **nieposortowane:** search O(n), insert O(1), delete O(n); **posortowane:** search O(log n), insert O(n), delete O(n) (listy nie pomagają). Efektywne implementacje: tablice mieszające ([temat 11](topic:t11)), **BST**, **AVL**.
+
+:::def Drzewo BST
+Drzewo binarne, w którym każdy węzeł przechowuje klucz (z wartością) i spełnia **warunek porządku BST**: dla każdego węzła x klucz w x jest **niemniejszy** niż wszystkie klucze w lewym poddrzewie x i **niewiększy** niż wszystkie klucze w prawym poddrzewie. (W drzewie binarnym nawet jedyny syn jest jednoznacznie lewy albo prawy.) Węzeł: pola **key, value, parent, left, right** (puste — null).
+:::
+
+Przykład ze slajdów: 8(3(_, 6(5, _)), 12(_, 15(13, 20))). Drzewo nie musi być zupełne; minimum (maksimum) — idąc od korzenia skrajnie w lewo (prawo): tu 3 i 20.
+
+```pseudo
+searchIterative(node, key): \\ wywołanie dla node == root
+  while ((node != null) and (node.key != key))
+    if (key < node.key) node = node.left
+    else node = node.right
+  return node
+
+minimum(node):
+  while (node.left != null) node = node.left
+  return node
+
+successor(node):
+  if (node.right != null) return minimum(node.right)
+  p = node.parent
+  while ((p != null) and (node == p.right))
+    node = p
+    p = p.parent
+  return p
+
+insert(node, key):
+  if (key < node.key) then
+    if node.left == null:
+      n = create new node with key
+      node.left = n
+    else: insert(node.left, key)
+  else: // (key >= node.key)
+    if node.right == null:
+      n = create new node with key
+      node.right = n
+    else: insert(node.right, key)
+```
+
+(Jest też wersja rekurencyjna search; maximum i predecessor — symetrycznie.) **successor:** jeśli węzeł ma prawego syna — minimum prawego poddrzewa; w przeciwnym razie najbliższy przodek, z którego trzeba było zejść w lewo.
+
+**delete — trzy warianty:** węzeł **bez synów** — usuwamy i ustawiamy wskaźnik rodzica na null; **z 1 synem** — usuwamy i „podpinamy” jedynego syna (z poddrzewem) do rodzica; **z 2 synami** — zastępujemy go węzłem x z kluczem bezpośredniego **następnika** (lub, jak w pseudokodzie, **poprzednika**), a potem usuwamy x (ma najwyżej jednego syna). Przykłady ze slajdów na drzewie 8(3(_, 6(5, _)), 12(_, 15(13, 20))): insert(7) → 7 prawym synem 6; delete(13) → liść znika; delete(12) → 15 (z poddrzewem) w miejsce 12; delete(8) z poprzednikiem → 6 w korzeniu, 5 podpięte do 3: 6(3(_, 5), 12(_, 15(13, 20))).
+
+```pseudo
+procedure delete(node, key)
+  if (key < node.key) then
+    delete(node.left, key)
+  else if (key > node.key) then
+    delete(node.right, key)
+  else begin { key = node.key
+    if node is a leaf then
+      deletesimple(node)
+    else
+      if (node.left != null) then
+        find x = the rightmost node in node.left
+        node.key:=x.key;
+        delete1(x);
+      else
+        proceed analogously for node.right
+        (we are looking for the leftmost node now)
+
+procedure delete1(node)   // dla węzłów mających tylko 1 syna
+begin
+  subtree = null
+  parent = node.parent
+  if (node.left != null)
+    subtree = node.left
+  else
+    subtree = node.right
+
+  if (parent == null)
+    root = subtree
+  else if (parent.left == node)  // node jest lewym synem
+    parent.left = subtree
+  else // node jest prawym synem
+    parent.right = subtree
+```
+
+:::own
+Uwaga autora strony: według pseudokodu ze slajdów węzeł z **jednym** synem też trafia do gałęzi „find x = the rightmost node in node.left” (bo nie jest liściem) — w wyniku drzewo nadal jest poprawnym BST, ale wygląda inaczej niż przy „podpięciu syna”. Przykład ze slajdów (delete(12) → 15 w miejsce 12) odpowiada opisowi słownemu („podpinamy jedynego syna”), więc na sprawdzianie stosuj **opis słowny trzech wariantów**.
+:::
+
+**Analiza** (n — liczba elementów, operacja dominująca — porównanie kluczy): wszystkie operacje słownika uporządkowanego wykonują liczbę porównań **proporcjonalną do wysokości drzewa**. Wysokość **losowego** BST (każda permutacja wstawianych kluczy jednakowo prawdopodobna) jest O(log n), więc **A(n) = O(log n)**; ale pesymistycznie drzewo może być jedną długą gałęzią: **W(n) = O(n)**. Stąd drzewa AVL ([temat 11](topic:t11)).
+
+### Obchody drzew binarnych (wykład „Algorytmy przeglądania grafów i drzew”)
+
+Oprócz porządku standardowego (po poziomach, od lewej do prawej) — trzy rekurencyjne porządki zaczynające od korzenia: **pre-order** (bieżący, lewy, prawy), **in-order** (lewy, bieżący, prawy), **post-order** (lewy, prawy, bieżący). **Interpretacja geometryczna:** obrysowujemy drzewo linią zaczynającą się nad korzeniem, przeciwnie do ruchu wskazówek zegara — pre-order: wypisz wierzchołek, gdy napotykasz go **pierwszy** raz; post-order: **ostatni** raz; in-order: wierzchołek z lewym synem — **drugi** raz, każdy inny — pierwszy raz. Rekurencja upraszcza obliczanie liczby węzłów, wysokości, głębokości węzłów, liczby liści itp.
+
+### Przykładowe pytania ze slajdów
+
+Definicja słownika; analiza implementacji naiwnych; słownik uporządkowany; definicja i własności BST; działanie i analiza operacji na BST; **drzewo po konkretnej operacji insert, delete (we wszystkich wariantach)**; ograniczenia drzew BST; kolejność odwiedzania dla pre/in/post-order; proste funkcje rekurencyjne na drzewach (liczba węzłów, wysokość).
+
 === summary ===
+
+## Wersja 2026/2027 (M. Sydow)
+
+- Słownik: search/insert/delete; uporządkowany: + minimum, maximum, predecessor, successor.
+- Naiwnie: nieposortowane search O(n), insert O(1), delete O(n); posortowane O(log n), O(n), O(n).
+- BST: lewe ≤ x ≤ prawe; insert: `key >= node.key` → w prawo; delete: liść / 1 syn (podpinamy) / 2 synów (następnik lub poprzednik).
+- BST: A(n) = O(log n), W(n) = O(n). Obchody: pre (b, l, p), in (l, b, p), post (l, p, b).
+
 
 ## Słownik
 

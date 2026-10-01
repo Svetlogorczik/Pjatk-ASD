@@ -10,7 +10,7 @@ exercises: asd 12.pdf (zad. 1–3)
 ---
 
 :::exam Sprawdzian 2026/2027
-Algorytmy z tego tematu są w zakresie **sprawdzianu praktycznego 2026/2027**. Obowiązują **wersje ze slajdów M. Sydowa** — mogą się różnić w szczegółach od opisanych tu wersji z 2025/2026. Wersje zgodne z oficjalnymi przykładowymi odpowiedziami i zadania treningowe: [Sprawdziany 2026/2027](page:exams).
+Ten temat powstał na podstawie wykładów 2025/2026. **Na sprawdzianach 2026/2027 obowiązują wersje ze slajdów M. Sydowa** — znajdziesz je w sekcji [„Wersja z wykładu 2026/2027”](topic:t14#wersja-z-wykładu-2026-2027-m-sydow-znajdowanie-najkrótszych-) na końcu tematu (kod przepisany ze slajdów). Zadania dopuszczeniowe i zadania treningowe: [Sprawdziany 2026/2027](page:exams).
 :::
 
 ## Problemy optymalizacyjne i strategia zachłanna
@@ -150,7 +150,97 @@ Krótkie uzasadnienie od autora strony (na slajdach go nie ma).
 @include t14-greedy.java
 ```
 
+
+## Wersja z wykładu 2026/2027 (M. Sydow) — „Znajdowanie najkrótszych ścieżek”
+
+:::exam
+Na sprawdzianie wiedzy: specyfikacja problemu, relaksacja, sortowanie topologiczne, **trzy warianty (DAG, Dijkstra, Bellman-Ford)** z kodem i złożonościami, wybór najlepszego algorytmu dla danego grafu, **symulacja Dijkstry** (wartości `distance` i `parent`). Zadanie treningowe (Dijkstra + Kruskal): [Sprawdziany 2026/2027](page:exams). Kruskal jest w zakresie sprawdzianu praktycznego — slajdów o drzewach rozpinających w tym zestawie jeszcze nie było.
+:::
+
+:::def Problem najkrótszych ścieżek z jednym źródłem
+**Wejście:** skierowany graf G = (V, E) z wagami krawędzi w : E → ℝ i wierzchołek startowy s ∈ V. **Wyjście:** dla każdego v ∈ V — długość najkrótszej ścieżki **μ(s, v)** z s do v (jeśli istnieje) oraz **rodzic** w drzewie najkrótszych ścieżek.
+:::
+
+Najkrótsza ścieżka może nie istnieć: v nieosiągalny z s (**μ = +∞**) albo istnieje ścieżka przez **ujemny cykl** (**μ = −∞**); w pozostałych przypadkach μ = d ∈ ℝ. **Lemat:** podścieżka najkrótszej ścieżki jest najkrótszą ścieżką. Warianty zależą od własności grafu: skierowany czy nie, **acykliczny** (najszybciej), **wagi nieujemne** (szybciej; dla wag całkowitych — jeszcze lepsza struktura danych).
+
+**Idea (jak BFS):** każdy wierzchołek ma `distance` (najkrótsza znana odległość) i `parent`. Inicjalizacja: s.distance = 0, s.parent = s, pozostałe distance = +∞, parent = null. Wartości są „propagowane” przez krawędzie — **relaksacja**:
+
+```pseudo
+relax((u,v))          # (u,v) jest krawędzią w grafie
+  if u.distance + w(u,v) < v.distance
+    v.distance = u.distance + w(u,v)
+    v.parent = u
+```
+
+Po dowolnym ciągu relaksacji ∀v: v.distance ≥ μ(v) (nie spada poniżej prawdziwej odległości — indukcja). **Lemat (poprawność):** jeśli ciąg relaksacji zawiera (jako podciąg) najkrótszą ścieżkę p = (e₁, …, eₖ) z s do v, to v.distance = μ(s, v) (indukcja po krawędziach ścieżki).
+
+**Sortowanie topologiczne** (tylko digrafy): ustawienie wierzchołków w ciąg tak, by dla każdej krawędzi (u, v) u było przed v. Możliwe ⇔ graf **nie ma cykli**. Sposób: wykonaj **DFS** i ustaw wierzchołki od **największego czasu zakończenia** do najmniejszego (lub iteracyjnie usuwaj wierzchołki o stopniu wejściowym 0 — też liniowo).
+
+**1. DAG:** posortuj topologicznie (O(m + n)), potem dla s = vⱼ relaksuj wszystkie krawędzie wychodzące z vⱼ, vⱼ₊₁, … aż do vₙ. Każda krawędź relaksowana co najwyżej raz → **O(m + n)**. Wierzchołki przed s w porządku są nieosiągalne.
+
+**2. Dijkstra (wagi nieujemne):** bez ujemnych krawędzi nie ma ujemnych cykli, ale zwykłe cykle mogą być (nie da się sortować topologicznie). Relaksujemy w kolejności **niemalejących najkrótszych odległości** od źródła — zapewnia to **kolejka priorytetowa** (priorytet = distance). Analogia: podnoszenie ze stołu sznurków połączonych węzełkami.
+
+```pseudo
+s.distance = 0
+pq.insert(s)
+s.parent = s
+
+for-each v in V except s:
+   v.distance = INFINITY
+   v.parent = null
+
+while(!pq.isEmpty())
+   scannedNode = pq.delMin()
+   for-each v in scannedNode.adjList:
+      if (v.distance > scannedNode.distance + w(scannedNode, v))
+         v.distance = scannedNode.distance + w(scannedNode, v)
+         v.parent = scannedNode
+         if (pq.contains(v)) pq.decreaseKey(v)
+         else pq.insert(v)
+```
+
+(pq z operacją decreaseKey — **adresowalna** kolejka priorytetowa, ze słownikiem mapującym wierzchołki na pozycje.) **Analiza:** n = |V|, m = |E|; operacja dominująca — porównanie priorytetów, aktualizacja atrybutów; inicjalizacja O(n); pętla O(n × (delMin + insert) + m × decreaseKey) = O(n log n) + O(m log n) = **O((n + m) log n)** dla kopca binarnego. Przeciętnie decreaseKey wykonuje się O(n log(m/n)) razy → **O(m + n log(m/n) log n)** (liniowo dla gęstych grafów). Kopiec Fibonacciego (decreaseKey zamortyzowane O(1)): **O(m + n log n)**. Wagi całkowite ≤ C: **O(m + nC)** (monotoniczna kolejka bukietowa).
+
+**3. Bellman-Ford (dowolne wagi):** podejście „siłowe” — najkrótsza ścieżka ma ≤ n − 1 krawędzi, więc (n − 1)-krotna relaksacja wszystkich m krawędzi (w ustalonym ciągu) zawiera każdą najkrótszą ścieżkę jako podciąg: **O(nm)**. Nieosiągalne mają d = ∞. Potem jeszcze raz m relaksacji — jeśli distance nadal maleje, wierzchołek leży na ścieżce z ujemnym cyklem → ustawiamy −∞ (liniowo).
+
+```pseudo
+%% (initialise as in Dijkstra)
+
+for(i = 1; i <= (n-1); i++)
+   for each e in E
+      relax(e)
+
+for each e=(u,v) in E
+   if (u.distance + w(u,v) < v.distance)
+      identifyNegativeCycle(v)
+
+***
+
+identifyNegativeCycle(v)
+   if (v.distance > -infinity)
+      v.distance = -infinity
+      for each w in v.adjList
+         identifyNegativeCycle(w)
+```
+
+| wariant | warunek | złożoność |
+|---|---|---|
+| DAG | graf acykliczny | O(n + m) |
+| Dijkstra | wagi nieujemne | O((n + m) log n) (kopiec binarny) |
+| Bellman-Ford | dowolne wagi | O(nm) |
+
+### Przykładowe zadania ze slajdów
+
+Specyfikacja problemu najkrótszych ścieżek z jednym źródłem i 2 przykłady zastosowań; na czym polega relaksacja; specyfikacja sortowania topologicznego, kiedy możliwe i jak (2 sposoby); **sortowanie topologiczne danego DAG za pomocą DFS**; który z 3 algorytmów będzie najefektywniejszy dla danego grafu; **Dijkstra na danym grafie — wartości wszystkich atrybutów**; Bellman-Ford na danym grafie; analiza złożoności 3 algorytmów.
+
 === summary ===
+
+## Wersja 2026/2027 (M. Sydow)
+
+- relax(u, v): jeśli u.distance + w < v.distance → zmień distance i parent.
+- Topo-sort: DFS, malejące f; możliwe ⇔ brak cykli.
+- DAG O(n + m); Dijkstra (wagi ≥ 0, PQ) O((n + m) log n); Bellman-Ford (n−1 rund) O(nm) + wykrywanie ujemnych cykli.
+
 
 ## Zachłanność
 

@@ -9,11 +9,11 @@ desc: Qualifying-task types (binSearch, MergeSort, partition, CountSort, heap, a
 ---
 
 :::info Where this page comes from
-**The task wording, the sample data with answers and the hints for the theory part** come from the lecturer's 2026/2027 materials (M. Sydow). **The pseudocode** (except the heap) is copied from the 2026/2027 slides; **the step-by-step solutions and the practice tasks** were prepared by the site author — every result was checked with a program that simulates the algorithm. Scoring rules: [Passing the course](page:course).
+**The task wording, the sample data with answers and the hints for the theory part** come from the lecturer's 2026/2027 materials (M. Sydow). **The pseudocode** is copied from the 2026/2027 slides; **the step-by-step solutions and the practice tasks** were prepared by the site author — every result was checked with a program that simulates the algorithm. Scoring rules: [Passing the course](page:course).
 :::
 
 :::warn Algorithm versions
-The lecturer requires **exactly the versions of the algorithms from the slides**. The pseudocode of **search (binSearch), mergeSort/merge, partition/quicksort and countSort** below is **copied from the 2026/2027 slides** (lectures "Wyszukiwanie", "Sortowanie 1", "Sortowanie 2") and gives exactly the official answers. The description of the **binary heap** is still the site author's reconstruction matched to the official answers (there have been no heap slides yet) — if a slide says otherwise, **the slide wins**.
+The lecturer requires **exactly the versions of the algorithms from the slides**. The pseudocode of **search (binSearch), mergeSort/merge, partition/quicksort and countSort** below is **copied from the 2026/2027 slides** (lectures "Wyszukiwanie", "Sortowanie 1", "Sortowanie 2") and gives exactly the official answers. The same holds for the **binary heap** (upheap, downheap, construct — lecture "Kolejka priorytetowa"). If later slides show something different, **the slide wins**.
 :::
 
 ## What the qualifying tasks look like
@@ -199,6 +199,34 @@ A heap in an array from **index 1**: the children of node i are 2i and 2i+1, the
 - `insert(x)`: put it at the end, then **upheap** — swap with the parent while the parent > x.
 - `delMin()`: take the root, **move the last element to the root**, then **downheap** — swap with the **smaller** child while it is smaller.
 - `construct()`: (build from the whole array at once) run downheap for i = n/2, n/2 − 1, …, 1.
+
+Code from the slides (heap in an array, index 0 unused; with equal children downheap picks the **left** one, because the comparison is strict):
+
+```pseudo
+upheap(i)        // i > 0
+  key = heap[i]
+  parent = i/2
+  while((parent > 0) && (heap[parent] > key))
+    heap[i] = heap[parent]
+    i = parent
+    parent /= 2
+  heap[i] = key
+
+downheap(i)
+  l = 2i          // lewy syn
+  r = 2i + 1      // prawy syn
+  if l <= n and heap[l] < heap[i]:
+    min = l
+  else:
+    min = i
+  if r <= n and heap[r] < heap[min]: // n to rozmiar kopca
+    min = r
+  if min != i:
+    swap(i,min)   // zamiana elementów, nie samych indeksów
+    downheap(min) // kontynuuj niżej
+
+construct: for(i = n/2; i > 0; i--) downHeap(i)
+```
 
 **Official example:** S = 15, 17, 3, 0, 16, 2, 19, 5.
 
@@ -416,12 +444,14 @@ post-order: 20, 35, 45, 40, 30, 65, 60, 80, 70, 50
 height: **3** (counted in edges).
 :::
 
-:::task level=2 source=own title="BFS, DFS and Kruskal on one graph"
+:::task level=2 source=own title="BFS, DFS, Kruskal and Dijkstra on one graph"
 An undirected weighted graph: 1–2 (7), 1–3 (3), 1–4 (5), 2–5 (2), 3–5 (6), 3–6 (4), 4–6 (1), 5–7 (8), 6–7 (9), 2–3 (10).
 
-a) Give the BFS and DFS visiting order from vertex 1 (neighbours in increasing order).
+a) Run BFS and DFS (the recursive version from the slides, `time` from 0) from vertex 1, taking neighbours in increasing order. Give the visiting order, for BFS the distances `d` and parents `p`, for DFS the discovery and finishing times `d/f` and the non-tree edges (what type are they?).
 
 b) Give the order of edges added by Kruskal's algorithm and the weight of the tree.
+
+c) Run Dijkstra's algorithm from vertex 1 (edges work both ways). Give the order in which vertices leave the queue and the final `distance` and `parent`.
 ```graph
 1 60 140
 2 180 40
@@ -442,9 +472,41 @@ b) Give the order of edges added by Kruskal's algorithm and the weight of the tr
 2-3 10
 ```
 ::solution
-**a)** BFS: **1, 2, 3, 4, 5, 6, 7**. DFS: **1, 2, 3, 5, 7, 6, 4**.
+**a)** BFS: **1, 2, 3, 4, 5, 6, 7**; d: 1→0, 2→1, 3→1, 4→1, 5→2, 6→2, 7→3; p: 2, 3, 4 ← 1; 5 ← 2; 6 ← 3; 7 ← 5.
+
+DFS: **1, 2, 3, 5, 7, 6, 4**; d/f: 1: 0/13, 2: 1/12, 3: 2/11, 5: 3/10, 7: 4/9, 6: 5/8, 4: 6/7. Tree edges: 1–2, 2–3, 3–5, 5–7, 7–6, 6–4. The rest (1–3, 1–4, 2–5, 3–6) are **back** edges — in an undirected graph DFS gives no forward or cross edges.
 
 **b)** Edges by weight: 4–6 (1) ✓, 2–5 (2) ✓, 1–3 (3) ✓, 3–6 (4) ✓, 1–4 (5) ✗ cycle 1-3-6-4, 3–5 (6) ✓, 1–2 (7) ✗ cycle, 5–7 (8) ✓ — we have 6 edges for 7 vertices, done. Weight: 1 + 2 + 3 + 4 + 6 + 8 = **24**.
+
+**c)** Leaving the queue (distance): 1 (0), 3 (3), 4 (5), 6 (6), 2 (7), 5 (9), 7 (15). Result: distance 2 = 7, 3 = 3, 4 = 5, 5 = 9, 6 = 6, 7 = 15; parent 2 ← 1, 3 ← 1, 4 ← 1, 5 ← 3, 6 ← 4, 7 ← 6. Note: 6 first gets 7 (via 3), then relaxation from 4 improves it to 6. Two paths of length 9 lead to 5 (via 3 and via 2) — the relaxation condition is strict (`>`), so parent 3 stays.
+:::
+
+:::task level=2 source=own title="BST: deletion in all variants"
+For the BST from the traversal task (inserted 50, 30, 70, 20, 40, 60, 80, 35, 45, 65) draw the tree after each operation performed **separately** on the original tree: a) delete(45), b) delete(60), c) delete(50) — in the predecessor variant (as in the slide pseudocode) and the successor variant.
+::hint
+A node with two sons: predecessor = the rightmost node of the left subtree, successor = the leftmost node of the right subtree. That node has at most one son, so it is removed simply (delete1).
+::solution
+**a)** 45 is a leaf — it disappears: 50(30(20, 40(35, _)), 70(60(_, 65), 80)).
+
+**b)** 60 has one son (65) — we "attach" it to the parent: 50(30(20, 40(35, 45)), 70(65, 80)).
+
+**c)** the predecessor of 50 is 45 (rightmost in the left subtree): key 45 goes to the root, leaf 45 disappears:
+```tree
+45(30(20,40(35,_)),70(60(_,65),80))
+```
+the successor of 50 is 60 (leftmost in the right subtree): key 60 goes to the root, and its only son 65 is attached to 70:
+```tree
+60(30(20,40(35,45)),70(65,80))
+```
+:::
+
+:::task level=2 source=own title="Balance factors (AVL)"
+a) Compute bf = height of the left subtree − height of the right subtree for every node of the tree from the previous task (before deletions). Is it an AVL tree?
+b) Insert 66 into it (plain BST insert). Is it still AVL?
+::solution
+**a)** bf: 50 → 0, 30 → −1, 40 → 0, 70 → +1, 60 → −1, leaves (20, 35, 45, 65, 80) → 0. All in {−1, 0, 1} — **yes, it is an AVL tree**.
+
+**b)** 66 lands as the right son of 65. Now bf(65) = −1, bf(60) = −2, bf(70) = +2 — **not AVL** (an AVL tree would fix it with a rotation near 60; rotations are not covered in the lecture).
 :::
 
 :::task level=2 source="Lecturer's hints (example)" title="O notation from the definition"

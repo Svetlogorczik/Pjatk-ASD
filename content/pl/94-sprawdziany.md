@@ -9,11 +9,11 @@ desc: Typy zadań dopuszczeniowych (binSearch, MergeSort, partition, CountSort, 
 ---
 
 :::info Skąd jest ta strona
-**Treści zadań, przykładowe dane z wynikami i wskazówki do części teoretycznej** pochodzą z materiałów prowadzącego na rok 2026/2027 (M. Sydow). **Pseudokody** (poza kopcem) są przepisane ze slajdów 2026/2027; **rozpisanie rozwiązań krok po kroku i zadania treningowe** przygotował autor strony — każdy wynik został sprawdzony programem symulującym algorytm. Zasady punktacji: [Zaliczenie przedmiotu](page:course).
+**Treści zadań, przykładowe dane z wynikami i wskazówki do części teoretycznej** pochodzą z materiałów prowadzącego na rok 2026/2027 (M. Sydow). **Pseudokody** są przepisane ze slajdów 2026/2027; **rozpisanie rozwiązań krok po kroku i zadania treningowe** przygotował autor strony — każdy wynik został sprawdzony programem symulującym algorytm. Zasady punktacji: [Zaliczenie przedmiotu](page:course).
 :::
 
 :::warn Wersje algorytmów
-Prowadzący wymaga **dokładnie wersji algorytmów ze slajdów**. Pseudokody **search (binSearch), mergeSort/merge, partition/quicksort i countSort** poniżej są **przepisane ze slajdów 2026/2027** (wykłady „Wyszukiwanie”, „Sortowanie 1”, „Sortowanie 2”) i dają dokładnie oficjalne odpowiedzi. Opis **kopca binarnego** to na razie rekonstrukcja autora strony dobrana do oficjalnych odpowiedzi (slajdów o kopcach jeszcze nie było) — jeśli slajd powie inaczej, **obowiązuje slajd**.
+Prowadzący wymaga **dokładnie wersji algorytmów ze slajdów**. Pseudokody **search (binSearch), mergeSort/merge, partition/quicksort i countSort** poniżej są **przepisane ze slajdów 2026/2027** (wykłady „Wyszukiwanie”, „Sortowanie 1”, „Sortowanie 2”) i dają dokładnie oficjalne odpowiedzi. To samo dotyczy **kopca binarnego** (upheap, downheap, construct — wykład „Kolejka priorytetowa”). Jeśli na kolejnych slajdach pojawi się coś innego, **obowiązuje slajd**.
 :::
 
 ## Jak wyglądają zadania dopuszczeniowe
@@ -199,6 +199,34 @@ Kopiec w tablicy od **indeksu 1**: dzieci węzła i to 2i i 2i+1, rodzic to i/2.
 - `insert(x)`: wstaw na koniec, potem **upheap** — zamieniaj z rodzicem, dopóki rodzic > x.
 - `delMin()`: zabierz korzeń, **ostatni element przenieś do korzenia**, potem **downheap** — zamieniaj z **mniejszym** dzieckiem, dopóki ono jest mniejsze.
 - `construct()`: (budowa z całej tablicy naraz) wykonaj downheap dla i = n/2, n/2 − 1, …, 1.
+
+Kod ze slajdów (kopiec w tablicy, indeks 0 nieużywany; przy równych dzieciach downheap wybiera **lewe**, bo porównanie jest ostre):
+
+```pseudo
+upheap(i)        // i > 0
+  key = heap[i]
+  parent = i/2
+  while((parent > 0) && (heap[parent] > key))
+    heap[i] = heap[parent]
+    i = parent
+    parent /= 2
+  heap[i] = key
+
+downheap(i)
+  l = 2i          // lewy syn
+  r = 2i + 1      // prawy syn
+  if l <= n and heap[l] < heap[i]:
+    min = l
+  else:
+    min = i
+  if r <= n and heap[r] < heap[min]: // n to rozmiar kopca
+    min = r
+  if min != i:
+    swap(i,min)   // zamiana elementów, nie samych indeksów
+    downheap(min) // kontynuuj niżej
+
+construct: for(i = n/2; i > 0; i--) downHeap(i)
+```
 
 **Oficjalny przykład:** S = 15, 17, 3, 0, 16, 2, 19, 5.
 
@@ -416,12 +444,14 @@ post-order: 20, 35, 45, 40, 30, 65, 60, 80, 70, 50
 wysokość: **3** (liczona w krawędziach).
 :::
 
-:::task level=2 source=own title="BFS, DFS i Kruskal na jednym grafie"
+:::task level=2 source=own title="BFS, DFS, Kruskal i Dijkstra na jednym grafie"
 Graf nieskierowany z wagami: 1–2 (7), 1–3 (3), 1–4 (5), 2–5 (2), 3–5 (6), 3–6 (4), 4–6 (1), 5–7 (8), 6–7 (9), 2–3 (10).
 
-a) Podaj kolejność odwiedzania BFS i DFS od wierzchołka 1 (sąsiadów rozpatrujemy rosnąco).
+a) Wykonaj BFS i DFS (wersja rekurencyjna ze slajdów, `time` od 0) od wierzchołka 1, sąsiadów rozpatrując rosnąco. Podaj kolejność odwiedzania, dla BFS odległości `d` i rodziców `p`, dla DFS czasy odwiedzenia i zakończenia `d/f` oraz krawędzie niebędące drzewowymi (jakiego są typu?).
 
 b) Podaj kolejność krawędzi dodawanych przez algorytm Kruskala i wagę drzewa.
+
+c) Wykonaj algorytm Dijkstry od wierzchołka 1 (krawędzie działają w obie strony). Podaj kolejność zdejmowania wierzchołków z kolejki oraz końcowe `distance` i `parent`.
 ```graph
 1 60 140
 2 180 40
@@ -442,9 +472,41 @@ b) Podaj kolejność krawędzi dodawanych przez algorytm Kruskala i wagę drzewa
 2-3 10
 ```
 ::solution
-**a)** BFS: **1, 2, 3, 4, 5, 6, 7**. DFS: **1, 2, 3, 5, 7, 6, 4**.
+**a)** BFS: **1, 2, 3, 4, 5, 6, 7**; d: 1→0, 2→1, 3→1, 4→1, 5→2, 6→2, 7→3; p: 2, 3, 4 ← 1; 5 ← 2; 6 ← 3; 7 ← 5.
+
+DFS: **1, 2, 3, 5, 7, 6, 4**; d/f: 1: 0/13, 2: 1/12, 3: 2/11, 5: 3/10, 7: 4/9, 6: 5/8, 4: 6/7. Krawędzie drzewowe: 1–2, 2–3, 3–5, 5–7, 7–6, 6–4. Pozostałe (1–3, 1–4, 2–5, 3–6) to krawędzie **w tył** — w grafie nieskierowanym DFS nie daje krawędzi w przód ani poprzecznych.
 
 **b)** Krawędzie po wagach: 4–6 (1) ✓, 2–5 (2) ✓, 1–3 (3) ✓, 3–6 (4) ✓, 1–4 (5) ✗ cykl 1-3-6-4, 3–5 (6) ✓, 1–2 (7) ✗ cykl, 5–7 (8) ✓ — mamy 6 krawędzi dla 7 wierzchołków, koniec. Waga: 1 + 2 + 3 + 4 + 6 + 8 = **24**.
+
+**c)** Zdejmowanie z kolejki (distance): 1 (0), 3 (3), 4 (5), 6 (6), 2 (7), 5 (9), 7 (15). Wynik: distance 2 = 7, 3 = 3, 4 = 5, 5 = 9, 6 = 6, 7 = 15; parent 2 ← 1, 3 ← 1, 4 ← 1, 5 ← 3, 6 ← 4, 7 ← 6. Uwaga: 6 najpierw dostaje 7 (przez 3), potem relaksacja z 4 poprawia na 6. Do 5 prowadzą dwie ścieżki długości 9 (przez 3 i przez 2) — warunek relaksacji jest ostry (`>`), więc zostaje rodzic 3.
+:::
+
+:::task level=2 source=own title="BST: usuwanie we wszystkich wariantach"
+Dla drzewa BST z zadania o obchodach (wstawiono 50, 30, 70, 20, 40, 60, 80, 35, 45, 65) narysuj drzewo po każdej operacji wykonanej **osobno** na oryginalnym drzewie: a) delete(45), b) delete(60), c) delete(50) — w wariancie z poprzednikiem (jak w pseudokodzie ze slajdów) i z następnikiem.
+::hint
+Węzeł z dwoma synami: poprzednik = skrajnie prawy węzeł lewego poddrzewa, następnik = skrajnie lewy węzeł prawego poddrzewa. Ten węzeł ma najwyżej jednego syna, więc usuwa się go prosto (delete1).
+::solution
+**a)** 45 to liść — znika: 50(30(20, 40(35, _)), 70(60(_, 65), 80)).
+
+**b)** 60 ma jednego syna (65) — „podpinamy” go do rodzica: 50(30(20, 40(35, 45)), 70(65, 80)).
+
+**c)** poprzednik 50 to 45 (skrajnie prawy w lewym poddrzewie): klucz 45 trafia do korzenia, liść 45 znika:
+```tree
+45(30(20,40(35,_)),70(60(_,65),80))
+```
+następnik 50 to 60 (skrajnie lewy w prawym poddrzewie): klucz 60 trafia do korzenia, a jego jedyny syn 65 zostaje podpięty do 70:
+```tree
+60(30(20,40(35,45)),70(65,80))
+```
+:::
+
+:::task level=2 source=own title="Współczynniki zrównoważenia (AVL)"
+a) Oblicz bf = wysokość lewego poddrzewa − wysokość prawego dla każdego węzła drzewa z poprzedniego zadania (przed usuwaniem). Czy to drzewo AVL?
+b) Wstaw do niego 66 (zwykły insert BST). Czy nadal jest AVL?
+::solution
+**a)** bf: 50 → 0, 30 → −1, 40 → 0, 70 → +1, 60 → −1, liście (20, 35, 45, 65, 80) → 0. Wszystkie w {−1, 0, 1} — **tak, to drzewo AVL**.
+
+**b)** 66 ląduje jako prawy syn 65. Teraz bf(65) = −1, bf(60) = −2, bf(70) = +2 — **nie jest AVL** (w drzewie AVL naprawiłaby to rotacja w okolicy 60; rotacje nie są omawiane na wykładzie).
 :::
 
 :::task level=2 source="Wskazówki prowadzącego (przykład)" title="Notacja O z definicji"

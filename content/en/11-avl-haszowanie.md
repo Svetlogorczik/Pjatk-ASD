@@ -9,6 +9,10 @@ sources: Wyklady 2009/asd 10 wyklad_8.pdf (dictionary: hash table, BST, AVL); As
 exercises: asd 09.pdf (tasks 1–3)
 ---
 
+:::exam 2026/2027 tests
+This topic was written from the 2025/2026 lectures. **The 2026/2027 tests use the versions from M. Sydow's slides** — you will find them in the section ["2026/2027 lecture version"](topic:t11#2026-2027-lecture-version-m-sydow-dictionaries-hash-tables-a) at the end of the topic (code copied from the slides). Qualifying tasks and practice tasks: [Tests 2026/2027](page:exams).
+:::
+
 ## Why balance trees?
 
 From topic 10 we know that BST operations cost O(h), and h can be as large as n − 1 (e.g. when inserting sorted data). Lecture asd9 announces the solution: **AVL trees**, which guarantee search, insert and delete in **O(log n)** time always.
@@ -157,7 +161,42 @@ A summary prepared by the site author.
 | **AVL** | **O(log n)** | **O(log n)** | **O(log n)** | yes |
 | hash table | **O(1) average**, O(n) worst | O(1) average | O(1) average | **no** |
 
+
+## 2026/2027 lecture version (M. Sydow) — "Dictionaries" (hash tables, AVL)
+
+:::exam
+In the knowledge test: hash tables (hash function, collisions, load factor α, complexity O(α)) and the **definition and idea of an AVL tree** — a typical task: **compute bf for all nodes and decide whether it is AVL**. Rotations are **not** covered. Practice task: [Tests 2026/2027](page:exams).
+:::
+
+**Direct addressing.** If keys are natural numbers from [0, …, m−1], the dictionary is an array indexed by the key — all operations **O(1)**. Two problems: memory proportional to the largest possible key value (m), not the number of stored keys; it works only for natural keys.
+
+:::def Hash table
+Extends direct addressing with a **hash function** hash : U → [0, …, m−1] (U — the universe of keys) that turns a key into an index. Memory is proportional to m (not |U|), and the key type can be anything.
+:::
+
+**Collisions.** Usually m < |U|, so the function is not injective: for some k1 ≠ k2 hash(k1) == hash(k2) — a **collision**. Methods: **repeated hashing** (if the slot is taken, hash again in a reproducible way until a free slot; drawback: at most m elements) and **chaining** (each slot holds a list of elements, searched linearly).
+
+**Required properties of a hash function:** (1) computable very fast (in constant time); (2) **uniform load** — for a key drawn uniformly from U each value in [0, …, m−1] is equally likely. **Load factor α = n/m** (n — number of pairs in the table). Thanks to (2) the worst-case complexity of operations is close to **O(α)** (lists have length close to α). The simplest function for integers: **hash(key) = key mod m** (fast — for m a power of 2 just take the last log₂(m) bits; uniform). Sometimes it must also be hard to invert (e.g. MD5) — modulo does not satisfy that.
+
+**Summary:** hash tables give dictionary operations in **O(α)** and let you balance time and memory with m (larger m — faster, but more memory). They do **not** efficiently support ordered-dictionary operations (minimum, maximum, successor, predecessor — linear).
+
+:::def AVL tree
+(Adelson-Velsky, Landis) — a BST with an extra condition. The **balance factor** of node x: **bf(x) = height of the left subtree of x − height of the right subtree of x**. An AVL tree is a BST in which every node has **bf(x) ∈ {−1, 0, 1}**.
+:::
+
+One can prove that the worst-case height of an AVL tree is **O(log n)**, so all ordered-dictionary operations have **logarithmic worst-case complexity**. Example from the slides: in the tree 8(3(_, 6(5, _)), 12(_, 15(13, 20))) bf(8) = 0, bf(3) = −2, bf(12) = −2, bf(6) = +1, the rest 0 — **not AVL**. **Implementation:** after each modifying operation (as in a BST) we check bf going **up** from the modified node (only there could bf change, by at most 1); with bf = 2 or −2 the fragment is fixed by a **rotation** costing O(1). Hence W(n) = O(log n) for all operations. Other structures exist too (self-organising trees, B-trees, AB-trees, B+…).
+
+### Sample questions from the slides
+
+Hash tables; properties of a hash function; analysis of dictionary operations on a hash table; collision resolution methods; definition, motivation and idea of an AVL tree; **for a given binary tree compute bf of all nodes and say whether it is AVL**; how AVL balance is maintained and what it gives.
+
 === summary ===
+
+## 2026/2027 version (M. Sydow)
+
+- Hash: U → [0..m−1]; collisions: repeated hashing / chaining; α = n/m; operations O(α); hash = key mod m.
+- AVL: bf(x) = h(left) − h(right) ∈ {−1, 0, 1}; height O(log n), W = O(log n); fixed by O(1) rotations.
+
 
 ## AVL
 

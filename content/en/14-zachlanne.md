@@ -9,8 +9,8 @@ sources: ProgramowanieZachlanne.pdf; wyklad_11.pdf (Greedy method I); wyklad_10.
 exercises: asd 12.pdf (tasks 1–3)
 ---
 
-:::exam 2026/2027 practical test
-The algorithms in this topic are within the scope of the **2026/2027 practical test**. **The versions from M. Sydow's slides** apply — they may differ in details from the 2025/2026 versions described here. Versions that reproduce the official sample answers, plus practice tasks: [Tests 2026/2027](page:exams).
+:::exam 2026/2027 tests
+This topic was written from the 2025/2026 lectures. **The 2026/2027 tests use the versions from M. Sydow's slides** — you will find them in the section ["2026/2027 lecture version"](topic:t14#2026-2027-lecture-version-m-sydow-finding-shortest-paths) at the end of the topic (code copied from the slides). Qualifying tasks and practice tasks: [Tests 2026/2027](page:exams).
 :::
 
 ## Optimisation problems and the greedy strategy
@@ -150,7 +150,97 @@ A short justification from the site author (not on the slides).
 @include t14-greedy.java
 ```
 
+
+## 2026/2027 lecture version (M. Sydow) — "Finding shortest paths"
+
+:::exam
+In the knowledge test: the problem specification, relaxation, topological sort, **the three variants (DAG, Dijkstra, Bellman-Ford)** with code and complexities, choosing the best algorithm for a given graph, **simulating Dijkstra** (values of `distance` and `parent`). Practice task (Dijkstra + Kruskal): [Tests 2026/2027](page:exams). Kruskal is in the practical-test scope — there have been no spanning-tree slides in this set yet.
+:::
+
+:::def Single-source shortest paths
+**Input:** a directed graph G = (V, E) with edge weights w : E → ℝ and a start vertex s ∈ V. **Output:** for each v ∈ V — the length of the shortest path **μ(s, v)** from s to v (if it exists) and the **parent** in the shortest-path tree.
+:::
+
+A shortest path may not exist: v is unreachable from s (**μ = +∞**) or there is a path through a **negative cycle** (**μ = −∞**); otherwise μ = d ∈ ℝ. **Lemma:** a subpath of a shortest path is a shortest path. Variants depend on the graph: directed or not, **acyclic** (fastest), **non-negative weights** (faster; for integer weights — an even better data structure).
+
+**Idea (like BFS):** each vertex has `distance` (the shortest known distance) and `parent`. Initialisation: s.distance = 0, s.parent = s, the rest distance = +∞, parent = null. Values are "propagated" along edges — **relaxation**:
+
+```pseudo
+relax((u,v))          # (u,v) is an edge of the graph
+  if u.distance + w(u,v) < v.distance
+    v.distance = u.distance + w(u,v)
+    v.parent = u
+```
+
+After any sequence of relaxations ∀v: v.distance ≥ μ(v) (it never drops below the true distance — induction). **Lemma (correctness):** if the sequence of relaxations contains (as a subsequence) a shortest path p = (e₁, …, eₖ) from s to v, then v.distance = μ(s, v) (induction on the path's edges).
+
+**Topological sort** (digraphs only): an ordering of the vertices such that for every edge (u, v) u comes before v. Possible ⇔ the graph has **no cycles**. Method: run **DFS** and order the vertices from the **largest finishing time** to the smallest (or repeatedly remove vertices of in-degree 0 — also linear).
+
+**1. DAG:** sort topologically (O(m + n)), then for s = vⱼ relax all edges leaving vⱼ, vⱼ₊₁, … up to vₙ. Each edge is relaxed at most once → **O(m + n)**. Vertices before s in the order are unreachable.
+
+**2. Dijkstra (non-negative weights):** without negative edges there are no negative cycles, but ordinary cycles may exist (topological sort impossible). We relax in order of **non-decreasing shortest distances** from the source — guaranteed by a **priority queue** (priority = distance). Analogy: lifting strings tied with knots off a table.
+
+```pseudo
+s.distance = 0
+pq.insert(s)
+s.parent = s
+
+for-each v in V except s:
+   v.distance = INFINITY
+   v.parent = null
+
+while(!pq.isEmpty())
+   scannedNode = pq.delMin()
+   for-each v in scannedNode.adjList:
+      if (v.distance > scannedNode.distance + w(scannedNode, v))
+         v.distance = scannedNode.distance + w(scannedNode, v)
+         v.parent = scannedNode
+         if (pq.contains(v)) pq.decreaseKey(v)
+         else pq.insert(v)
+```
+
+(pq with decreaseKey — an **addressable** priority queue, with a dictionary mapping vertices to positions.) **Analysis:** n = |V|, m = |E|; dominant operation — priority comparison, attribute update; initialisation O(n); loop O(n × (delMin + insert) + m × decreaseKey) = O(n log n) + O(m log n) = **O((n + m) log n)** with a binary heap. On average decreaseKey runs O(n log(m/n)) times → **O(m + n log(m/n) log n)** (linear for dense graphs). Fibonacci heap (decreaseKey amortised O(1)): **O(m + n log n)**. Integer weights ≤ C: **O(m + nC)** (monotone bucket queue).
+
+**3. Bellman-Ford (any weights):** a "brute-force" approach — a shortest path has ≤ n − 1 edges, so (n − 1) rounds of relaxing all m edges (in a fixed order) contain every shortest path as a subsequence: **O(nm)**. Unreachable vertices have d = ∞. Then m more relaxations — if distance still decreases, the vertex lies on a path with a negative cycle → set −∞ (linear).
+
+```pseudo
+%% (initialise as in Dijkstra)
+
+for(i = 1; i <= (n-1); i++)
+   for each e in E
+      relax(e)
+
+for each e=(u,v) in E
+   if (u.distance + w(u,v) < v.distance)
+      identifyNegativeCycle(v)
+
+***
+
+identifyNegativeCycle(v)
+   if (v.distance > -infinity)
+      v.distance = -infinity
+      for each w in v.adjList
+         identifyNegativeCycle(w)
+```
+
+| variant | condition | complexity |
+|---|---|---|
+| DAG | acyclic graph | O(n + m) |
+| Dijkstra | non-negative weights | O((n + m) log n) (binary heap) |
+| Bellman-Ford | any weights | O(nm) |
+
+### Sample tasks from the slides
+
+The single-source shortest-path specification and 2 example uses; what relaxation is; the topological-sort specification, when it is possible and how (2 ways); **topologically sort a given DAG using DFS**; which of the 3 algorithms is most efficient for a given graph; **Dijkstra on a given graph — values of all attributes**; Bellman-Ford on a given graph; complexity analysis of the 3 algorithms.
+
 === summary ===
+
+## 2026/2027 version (M. Sydow)
+
+- relax(u, v): if u.distance + w < v.distance → update distance and parent.
+- Topo-sort: DFS, decreasing f; possible ⇔ no cycles.
+- DAG O(n + m); Dijkstra (weights ≥ 0, PQ) O((n + m) log n); Bellman-Ford (n−1 rounds) O(nm) + negative-cycle detection.
+
 
 ## Greediness
 

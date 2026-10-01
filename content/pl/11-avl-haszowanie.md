@@ -9,6 +9,10 @@ sources: Wyklady 2009/asd 10 wyklad_8.pdf (słownik: tablica haszująca, BST, AV
 exercises: asd 09.pdf (zad. 1–3)
 ---
 
+:::exam Sprawdzian 2026/2027
+Ten temat powstał na podstawie wykładów 2025/2026. **Na sprawdzianach 2026/2027 obowiązują wersje ze slajdów M. Sydowa** — znajdziesz je w sekcji [„Wersja z wykładu 2026/2027”](topic:t11#wersja-z-wykładu-2026-2027-m-sydow-słowniki-tablice-mieszają) na końcu tematu (kod przepisany ze slajdów). Zadania dopuszczeniowe i zadania treningowe: [Sprawdziany 2026/2027](page:exams).
+:::
+
 ## Po co równoważyć drzewa?
 
 Z tematu 10 wiemy, że operacje na BST kosztują O(h), a h może wynosić nawet n − 1 (np. gdy wstawiamy posortowane dane). Wykład asd9 zapowiada rozwiązanie: **drzewa AVL**, które gwarantują wykonanie search, insert i delete w czasie **O(log n)** zawsze.
@@ -157,7 +161,42 @@ Zestawienie przygotowane przez autora strony.
 | **AVL** | **O(log n)** | **O(log n)** | **O(log n)** | tak |
 | tablica haszująca | **średnio O(1)**, najgorzej O(n) | średnio O(1) | średnio O(1) | **nie** |
 
+
+## Wersja z wykładu 2026/2027 (M. Sydow) — „Słowniki” (tablice mieszające, AVL)
+
+:::exam
+Na sprawdzianie wiedzy: tablice mieszające (funkcja mieszająca, kolizje, współczynnik obciążenia α, złożoność O(α)) oraz **definicja i idea drzewa AVL** — zadanie typowe: **policz bf dla wszystkich węzłów i oceń, czy to AVL**. Rotacje **nie** są omawiane. Zadanie treningowe: [Sprawdziany 2026/2027](page:exams).
+:::
+
+**Adresowanie bezpośrednie.** Jeśli klucze to liczby naturalne z [0, …, m−1], słownik to tablica indeksowana kluczem — wszystkie operacje **O(1)**. Dwa problemy: pamięć proporcjonalna do największej możliwej wartości klucza (m), a nie liczby przechowywanych kluczy; działa tylko dla kluczy naturalnych.
+
+:::def Tablica mieszająca
+Rozszerza adresowanie bezpośrednie o **funkcję mieszającą** hash : U → [0, …, m−1] (U — uniwersum kluczy), przeliczającą klucz na indeks. Pamięć jest proporcjonalna do m (a nie |U|), a typ klucza może być dowolny.
+:::
+
+**Kolizje.** Zwykle m < |U|, więc funkcja nie jest różnowartościowa: dla pewnych k1 ≠ k2 hash(k1) == hash(k2) — to **kolizja**. Metody: **mieszanie wielokrotne** (przy zajętym miejscu mieszamy ponownie w sposób odtwarzalny aż do wolnego miejsca; wada: maksymalnie m elementów) i **metoda łańcuchowa** (w każdym miejscu tablicy lista elementów, przeszukiwana liniowo).
+
+**Wymagane własności funkcji mieszającej:** (1) obliczalna bardzo szybko (w czasie stałym); (2) **równomierne obciążenie** — dla klucza z rozkładu jednostajnego na U każda wartość z [0, …, m−1] jednakowo prawdopodobna. **Współczynnik obciążenia α = n/m** (n — liczba par w tablicy). Dzięki (2) pesymistyczna złożoność operacji jest bliska **O(α)** (listy mają długość zbliżoną do α). Najprostsza funkcja dla liczb całkowitych: **hash(key) = key mod m** (szybka — dla m będącego potęgą 2 wystarczy wziąć ostatnie log₂(m) bitów; równomierna). Czasem wymaga się też, by była trudna do odwrócenia (np. MD5) — modulo tego nie spełnia.
+
+**Podsumowanie:** tablice mieszające dają operacje słownika w **O(α)** i pozwalają wyważyć czas i pamięć parametrem m (większe m — szybciej, ale więcej pamięci). **Nie** wspierają efektywnie operacji słownika uporządkowanego (minimum, maksimum, następnik, poprzednik — liniowo).
+
+:::def Drzewo AVL
+(Adelson-Velskij, Landis) — drzewo BST z dodatkowym warunkiem. **Współczynnik zrównoważenia** węzła x: **bf(x) = wysokość lewego poddrzewa x − wysokość prawego poddrzewa x**. Drzewo AVL to BST, w którym dla każdego węzła **bf(x) ∈ {−1, 0, 1}**.
+:::
+
+Można udowodnić, że pesymistyczna wysokość drzewa AVL to **O(log n)**, więc wszystkie operacje słownika uporządkowanego mają **pesymistyczną złożoność logarytmiczną**. Przykład ze slajdów: w drzewie 8(3(_, 6(5, _)), 12(_, 15(13, 20))) bf(8) = 0, bf(3) = −2, bf(12) = −2, bf(6) = +1, pozostałe 0 — **to nie jest AVL**. **Implementacja:** po każdej operacji modyfikującej (jak w BST) sprawdzamy bf idąc **w górę** od zmodyfikowanego węzła (tylko tam bf mógł się zmienić, o najwyżej 1); przy bf = 2 lub −2 naprawiamy fragment drzewa **rotacją** — kosztem O(1). Stąd W(n) = O(log n) dla wszystkich operacji. Istnieją też inne struktury (drzewa samoorganizujące się, B-drzewa, AB-drzewa, B+…).
+
+### Przykładowe pytania ze slajdów
+
+Tablice mieszające; własności funkcji mieszającej; analiza operacji słownika na tablicy mieszającej; sposoby rozwiązywania kolizji; definicja, motywacja i pomysł drzewa AVL; **dla danego drzewa binarnego oblicz bf wszystkich węzłów i powiedz, czy to AVL**; jak zapewnia się zrównoważenie AVL i jaka z tego korzyść.
+
 === summary ===
+
+## Wersja 2026/2027 (M. Sydow)
+
+- Hash: U → [0..m−1]; kolizje: mieszanie wielokrotne / łańcuchowa; α = n/m; operacje O(α); hash = key mod m.
+- AVL: bf(x) = h(lewe) − h(prawe) ∈ {−1, 0, 1}; wysokość O(log n), W = O(log n); naprawa rotacjami O(1).
+
 
 ## AVL
 

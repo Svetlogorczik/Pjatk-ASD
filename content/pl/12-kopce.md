@@ -10,7 +10,7 @@ exercises: asd 10.pdf („ASD 10b”: zad. 1–3)
 ---
 
 :::exam Sprawdzian 2026/2027
-Algorytmy z tego tematu są w zakresie **sprawdzianu praktycznego 2026/2027**. Obowiązują **wersje ze slajdów M. Sydowa** — mogą się różnić w szczegółach od opisanych tu wersji z 2025/2026. Wersje zgodne z oficjalnymi przykładowymi odpowiedziami i zadania treningowe: [Sprawdziany 2026/2027](page:exams).
+Ten temat powstał na podstawie wykładów 2025/2026. **Na sprawdzianach 2026/2027 obowiązują wersje ze slajdów M. Sydowa** — znajdziesz je w sekcji [„Wersja z wykładu 2026/2027”](topic:t12#wersja-z-wykładu-2026-2027-m-sydow-kolejka-priorytetowa) na końcu tematu (kod przepisany ze slajdów). Zadania dopuszczeniowe i zadania treningowe: [Sprawdziany 2026/2027](page:exams).
 :::
 
 ## Kolejka priorytetowa
@@ -173,7 +173,82 @@ Koszt każdej operacji jest **logarytmiczny**.
 @include t12-leftist.java
 ```
 
+
+## Wersja z wykładu 2026/2027 (M. Sydow) — „Kolejka priorytetowa”
+
+:::exam
+Kod upheap / downheap / construct ze slajdów jest dokładnie tym, który daje oficjalne odpowiedzi zadania dopuszczeniowego z kopcem typu min (kopiec w tablicy od indeksu 1). Zadania: wykonaj operację na kopcu i narysuj wynik, zastosuj construct — patrz [Sprawdziany 2026/2027](page:exams).
+:::
+
+:::def Kolejka priorytetowa
+ADS do przetwarzania elementów z przypisanymi **priorytetami** (liczbami całkowitymi): **insert(e, p)**, **findMin()** (zwróć bez usuwania element o najmniejszym priorytecie), **delMin()** (zwróć z usunięciem). **Im niższa liczba, tym wyższy priorytet**; w odwrotnej interpretacji kolejka jest „typu max” (findMax, delMax).
+:::
+
+Implementacje: naiwne (tablice/listy), **kopiec binarny** (Williams, Floyd 1964), drzewo vEB, kopiec dwumianowy, Pairing Heap, kopiec Fibonacciego, … (na wykładzie tylko naiwne i kopiec binarny). **Naiwne:** priorytety **nieposortowane** — insert O(1), delMin O(n), construct O(n); **posortowane** — insert O(n), delMin O(1), construct O(n log n). Lista dowiązaniowa nie poprawia sytuacji.
+
+:::def Kopiec binarny
+**Binarne drzewo zupełne** (wypełniane od góry do dołu i na każdym poziomie od lewej do prawej) z **warunkiem porządku kopca**: priorytet w każdym węźle jest **niewiększy** niż priorytety w węzłach potomnych.
+:::
+
+Wnioski: minimalny priorytet jest zawsze w **korzeniu**; na każdej ścieżce od korzenia do liścia priorytety tworzą ciąg niemalejący; priorytety na poziomie **nie** są posortowane; wysokość n-elementowego kopca to **Θ(log n)**.
+
+**Operacje:** insert(e) — dodaj w pierwszym wolnym od lewej miejscu ostatniego poziomu i przywróć porządek w górę (**upheap**); findMin() — korzeń; delMin() — usuń korzeń, wstaw do korzenia ostatni element (skrajnie prawy na ostatnim poziomie) i przywróć porządek w dół (**downheap**: zamieniaj z mniejszym synem, dopóki oba synowie nie są niemniejsi lub nie dojdziesz do ostatniego poziomu). Obie pomocnicze operacje zakładają, że warunek kopca zakłóca co najwyżej węzeł x. **Złożoność** (n — liczba elementów, op. dominująca — porównanie priorytetów): co najwyżej 1 (upheap) lub 2 (downheap) porównania na poziom → insert **O(log n)**, findMin **O(1)**, delMin **O(log n)**.
+
+**Kopiec w tablicy** (dzięki zupełności, indeks 0 nieużywany, od góry do dołu i od lewej do prawej): **parent[i] = i/2** (dzielenie całkowite), **i.left = 2i**, **i.right = 2i + 1**. Przykład ze slajdów: kopiec 2(6(7(8, 10), 12), 3(9, 4)) to tablica [n, 2, 6, 3, 7, 12, 9, 4, 8, 10]; rodzic 12 (indeks 5) ma indeks 5/2 = 2.
+
+```pseudo
+upheap(i)        // i > 0
+  key = heap[i]
+  parent = i/2
+  while((parent > 0) && (heap[parent] > key))
+    heap[i] = heap[parent]
+    i = parent
+    parent /= 2
+  heap[i] = key
+
+downheap(i)
+  l = 2i          // lewy syn
+  r = 2i + 1      // prawy syn
+  if l <= n and heap[l] < heap[i]:
+    min = l
+  else:
+    min = i
+  if r <= n and heap[r] < heap[min]: // n to rozmiar kopca
+    min = r
+  if min != i:
+    swap(i,min)   // zamiana elementów, nie samych indeksów
+    downheap(min) // kontynuuj niżej
+```
+
+**Szybkie construct:** zamiast n razy insert (Θ(n log n)) wpisujemy wszystkie elementy do tablicy w podanej kolejności i wykonujemy `for(i = n/2; i > 0; i--) downHeap(i)` — łącznie tylko **O(n)**.
+
+**HeapSort:** wstaw wszystkie elementy do kolejki (`pq.insert`), potem dopóki niepusta — `result.add(pq.delMin())`; **Θ(n log n)** (stała większa niż w QuickSort). Inne zastosowania (algorytmy zachłanne): kod Huffmana, **Dijkstra**, **Prim**.
+
+**Rozszerzenia.** Dynamiczna kolejka priorytetowa: construct, H insert (zwraca wskaźnik do elementu), findMin, delMin, **decreaseKey(H pointer, T newPriority)**, **delete(H pointer)**; złączalna — dodatkowo **merge(pq1, pq2)**.
+
+| operacja | nieposort. | posort. | kopiec binarny | kopiec dwumianowy |
+|---|---|---|---|---|
+| insert | 1 | n | lg n | lg n |
+| findMin | n | 1 | 1 | lg n |
+| delMin | n | 1 | lg n | lg n |
+| decreaseKey | 1 | n | lg n | lg n |
+| delete | 1 | n | lg n | lg n |
+| merge | 1 | n | **n** | **lg n** |
+
+(wszystko w O(·))
+
+### Przykładowe zadania ze slajdów
+
+Definicja kolejki priorytetowej i kopca binarnego; analiza implementacji naiwnych; **wykonaj każdą operację na podanym kopcu i narysuj wynik**; **zastosuj construct do podanego ciągu i narysuj kopiec**; reprezentacja tablicowa; złożoność operacji na kopcu; zastosowania; rozszerzenia; złożoność decreaseKey, delete i merge na kopcu binarnym.
+
 === summary ===
+
+## Wersja 2026/2027 (M. Sydow)
+
+- PQ: insert(e, p), findMin, delMin. Kopiec: drzewo zupełne, rodzic ≤ dzieci; tablica od 1: parent i/2, synowie 2i, 2i+1.
+- insert (upheap) O(log n), findMin O(1), delMin (ostatni do korzenia + downheap) O(log n); construct: downHeap(i) dla i = n/2..1 → O(n).
+- HeapSort Θ(n log n); merge na kopcu binarnym O(n).
+
 
 ## Kolejka priorytetowa
 
