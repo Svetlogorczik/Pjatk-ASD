@@ -9,6 +9,10 @@ sources: asd11.pdf; Wyklady 2009/wyklad_2.pdf (grafy), asd 09 wyklad_7.pdf (DFS,
 exercises: brak osobnego zestawu — zadania od autora strony (grafy ważone są w temacie 14)
 ---
 
+:::exam Sprawdzian 2026/2027
+Algorytmy z tego tematu są w zakresie **sprawdzianu praktycznego 2026/2027**. Obowiązują **wersje ze slajdów M. Sydowa** — mogą się różnić w szczegółach od opisanych tu wersji z 2025/2026. Wersje zgodne z oficjalnymi przykładowymi odpowiedziami i zadania treningowe: [Sprawdziany 2026/2027](page:exams).
+:::
+
 ## Czym jest graf?
 
 :::def

@@ -195,7 +195,112 @@ The scheme below is the site author's summary — useful for every "prove total 
 4. **Find a decreasing function** (e.g. `n − i`, `y`, `r − l`) — it must be natural and strictly decrease.
 5. **Compute the complexity:** how many times at most can the decreasing function decrease?
 
+
+## 2026/2027 lecture version (M. Sydow) — definitions for the tests
+
+:::exam
+In 2026/2027 the lecture is given by M. Sydow, and the tests use **his wording and his pseudocode** (C/Java-like syntax, arrays indexed from 0). The text above (from the 2025/2026 lectures) is about the same things, but e.g. lists "definedness" as a separate property — for M. Sydow **total correctness = stop property + partial correctness**. Learn the definitions below **by heart**. The "spec + pseudocode + correctness + complexity for a^b" type of task is solved on the [Tests 2026/2027](page:exams) page.
+:::
+
+According to the slides, the course has three overlapping parts: **analysis of algorithms** (given code — understand what it does and how efficiently), **design of algorithms** (given a specification — design a correct and efficient algorithm) and **data structures**. Design and analysis are necessary steps **before** implementation.
+
+:::def Specification of an algorithm
+A specification expresses the **contract** of an algorithm ("what exactly the algorithm has to do") and consists of:
+- (optionally) the **name** of the algorithm and the **list of arguments** in brackets,
+- the **precondition** (input) — specifies exactly the types and allowed values of the **correct input data**,
+- the **postcondition** (output) — specifies exactly the **correct result** (type and value(s)) that the algorithm must return as a function of the input data.
+
+The conditions may be in natural language, as long as they are stated **precisely**.
+:::
+
+**Example from the slides.** "Return the sum of the numbers in an array of a given length":
+- **name and arguments:** `sum(sequence, len)`
+- **precondition:** `sequence` — an array of integers, `len` — a natural number, the declared length of the array
+- **postcondition:** the algorithm returns an integer that is the sum of the first `len` elements of the array **or zero if the array is empty**
+
+Since len is natural, the array can have length 0 — the specification **must** say what to return then. (If len had to be positive, this case would disappear, but the algorithm would be less general.) Likewise, in `find(arr, len, key)` you must add what is returned when the key is missing (e.g. −1) — otherwise the specification is **incomplete**.
+
+:::def Total and partial correctness
+- **Correct input data** satisfy the precondition; a **correct result** satisfies the postcondition.
+- An algorithm is **totally correct** (for a given specification) ⇔ for **every** correct input: (1) it stops after a finite number of steps (**stop property**) and (2) when it stops, it returns a correct result (**partial correctness**).
+- An algorithm is **partially correct** if: **if** it stops (for correct input), **then** it returns a correct result. Partial correctness **does not guarantee** stopping.
+:::
+
+**An example of a partially but not totally correct algorithm** (a deliberate bug — no `i++`):
+
+```pseudo
+sum(array, len){
+  sum = 0
+  i = 0
+  while(i < len)
+    sum += array[i]
+  return sum
+}
+```
+
+For len > 0 the loop never ends (no stop). It stops only for len = 0 — and then returns 0, a correct result. So it is **partially correct** but **not totally**. (The opposite example: an algorithm that always stops but returns e.g. `sum + 1` — it has the stop property but is not partially correct.)
+
+**Proof of the stop property** for the correct version (with `i++`) — it is enough to note that:
+1. the algorithm stops whenever `i >= len` holds,
+2. `len` is a **constant and finite** natural number,
+3. the value of `i` grows by 1 in every iteration,
+
+so the algorithm stops after a finite number of iterations. **Every** detail matters: growth of the variable alone is not enough — it must grow by a **constant** amount; it is not enough that len is constant — it must also be **finite**.
+
+:::def Loop invariant
+A **loop invariant** is a logical predicate satisfying the condition: **if** it holds **before** entering (any) iteration of the loop, **then** it also holds **after leaving that iteration**.
+:::
+
+The analogy with **mathematical induction**: if the predicate is true just before the first iteration (the base case) and is an invariant (the inductive step), then it is also true after leaving the loop — regardless of the number of iterations. We build the invariant so that **when the loop ends it is equivalent to the postcondition**.
+
+**How to find an invariant (technique from the slides):**
+1. write a predicate expressing the **postcondition**,
+2. transform it so that it contains all the important variables of the algorithm (especially the loop counter), expresses the **current** value of the returned variable, and satisfies the definition of an invariant,
+3. check that it holds just **before the first iteration**.
+
+**Example from the slides — `algor1`** (input: Arr — an array of integers, len > 0):
+
+```pseudo
+algor1(Arr, len){
+  i = 1
+  x = Arr[0]
+  while(i < len){
+    if(Arr[i] > x){
+      x = Arr[i]
+    }
+    i++
+  }
+  return x
+}
+```
+
+It returns the **maximum** of the first len numbers of the array. Proof of total correctness — the two standard steps:
+
+1. **Stop** — as above: i grows by 1, len is constant and finite.
+2. **Partial correctness.** Postcondition: `(∀ 0≤j<len: x ≥ Arr[j]) ∧ (∃ 0≤j<len: x == Arr[j])`. Invariant ("in the i-th iteration x is the maximum of the first i values"): `(∀ 0≤j<i: x ≥ Arr[j]) ∧ (∃ 0≤j<len: x == Arr[j])`.
+   - before the first iteration: i = 1, x = Arr[0] — true,
+   - it is an invariant thanks to the conditional update of x in the `if`,
+   - when the loop stops (i == len) it takes the form of the postcondition.
+
+### What you must know after lecture 1 (from the slides)
+
+1. Give from memory the exact definitions of: specification, correct input and output data, total and partial correctness, loop invariant.
+2. For a given computational task, create a precise specification.
+3. Give an example of an algorithm that is partially correct but without the stop property, and vice versa.
+4. Prove the stop property of a given algorithm.
+5. Find an invariant for a simple loop and prove that it is an invariant.
+6. Using an invariant, prove partial correctness of an algorithm.
+
 === summary ===
+
+## 2026/2027 version (M. Sydow)
+
+- **Specification** = (name + arguments) + **precondition** + **postcondition**.
+- **Total correctness** = **stop property** + **partial correctness** (for every correct input).
+- **Partial:** *if* it stops, *then* the result is correct (does not guarantee stopping).
+- **Loop invariant:** true before an iteration ⇒ true after it (like the inductive step).
+- **Stop:** the counter grows by a **constant**, the bound is **constant and finite**.
+
 
 ## Definitions
 

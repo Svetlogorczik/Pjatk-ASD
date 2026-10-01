@@ -195,7 +195,112 @@ Poniższy schemat to podsumowanie autora strony — przydaje się przy każdym z
 4. **Znajdź funkcję malejącą** (np. `n − i`, `y`, `r − l`) — musi być naturalna i ostro maleć.
 5. **Policz złożoność:** ile razy maksymalnie może zmaleć funkcja malejąca?
 
+
+## Wersja z wykładu 2026/2027 (M. Sydow) — definicje na sprawdzian
+
+:::exam
+W roku 2026/2027 wykład prowadzi M. Sydow i na sprawdzianach obowiązują **jego sformułowania i jego pseudokod** (składnia podobna do C/Java, tablice indeksowane od 0). Treść powyżej (z wykładów 2025/2026) mówi o tym samym, ale np. wyróżnia dodatkowo „określoność” — u M. Sydowa **poprawność całkowita = własność stopu + częściowa poprawność**. Ucz się poniższych definicji **na pamięć**. Zadania typu „spec + pseudokod + poprawność + złożoność dla a^b” są rozwiązane na stronie [Sprawdziany 2026/2027](page:exams).
+:::
+
+Kurs według slajdów składa się z trzech nakładających się części: **analizy algorytmów** (dany kod — zrozumieć, co i jak efektywnie robi), **projektowania algorytmów** (dana specyfikacja — zaprojektować poprawny i efektywny algorytm) oraz **struktur danych**. Projekt i analiza algorytmu to niezbędne kroki **przed** implementacją.
+
+:::def Specyfikacja algorytmu
+Specyfikacja wyraża **kontrakt** algorytmu („co dokładnie algorytm ma zrobić”) i składa się z:
+- (opcjonalnie) **nazwy** algorytmu i **listy argumentów** w nawiasach,
+- **warunku początkowego** (wejście) — dokładnie określa typy i dopuszczalne wartości **poprawnych danych wejściowych**,
+- **warunku końcowego** (wyjście) — dokładnie określa **prawidłowy wynik** (typ i wartość/wartości), jaki ma zwrócić algorytm jako funkcja danych wejściowych.
+
+Warunki mogą być w języku naturalnym, o ile są sformułowane **ściśle**.
+:::
+
+**Przykład ze slajdów.** „Zwróć sumę liczb w tablicy o podanej długości”:
+- **nazwa i argumenty:** `sum(sequence, len)`
+- **warunek początkowy:** `sequence` — tablica liczb całkowitych, `len` — liczba naturalna, zadeklarowana długość tablicy
+- **warunek końcowy:** algorytm zwraca liczbę całkowitą będącą sumą pierwszych `len` elementów tablicy **lub zero, jeśli tablica jest pusta**
+
+Skoro len jest naturalne, tablica może mieć długość 0 — specyfikacja **musi** powiedzieć, co wtedy zwrócić. (Gdyby len musiało być dodatnie, ten przypadek by znikł, ale algorytm byłby mniej ogólny.) Podobnie w `find(arr, len, key)` trzeba dopisać, co zwracamy, gdy klucza nie ma (np. −1) — inaczej specyfikacja jest **niepełna**.
+
+:::def Poprawność całkowita i częściowa
+- **Poprawne dane wejściowe** — spełniają warunek początkowy; **poprawny wynik** — spełnia warunek końcowy.
+- Algorytm jest **całkowicie poprawny** (przy danej specyfikacji) ⇔ dla **każdych** poprawnych danych wejściowych: (1) zatrzymuje się po skończonej liczbie kroków (**własność stopu**) i (2) przy zatrzymaniu zwraca poprawny wynik (**częściowa poprawność**).
+- Algorytm jest **częściowo poprawny**, jeśli: **jeżeli** zatrzyma się (dla poprawnych danych), **to** zwraca poprawny wynik. Częściowa poprawność **nie gwarantuje** zatrzymania.
+:::
+
+**Przykład algorytmu częściowo, ale nie całkowicie poprawnego** (celowa usterka — brak `i++`):
+
+```pseudo
+sum(array, len){
+  sum = 0
+  i = 0
+  while(i < len)
+    sum += array[i]
+  return sum
+}
+```
+
+Dla len > 0 pętla nigdy się nie kończy (brak stopu). Zatrzymuje się tylko dla len = 0 — i wtedy zwraca 0, czyli poprawny wynik. Zatem jest **częściowo poprawny**, ale **nie całkowicie**. (Odwrotny przykład: algorytm, który zawsze się zatrzymuje, ale zwraca np. `sum + 1` — ma stop, nie jest częściowo poprawny.)
+
+**Dowód własności stopu** dla poprawnej wersji (z `i++`) — wystarczy zauważyć, że:
+1. algorytm zatrzyma się, kiedykolwiek zajdzie `i >= len`,
+2. `len` jest **stałą i skończoną** liczbą naturalną,
+3. wartość `i` rośnie o 1 w każdej iteracji,
+
+więc po skończonej liczbie iteracji algorytm się zatrzyma. Ważny jest **każdy** szczegół: nie wystarczy sam wzrost zmiennej — potrzebny jest wzrost o **stałą** wartość; nie wystarczy, że len jest stałe — musi być też **skończone**.
+
+:::def Niezmiennik pętli
+**Niezmiennik pętli** to predykat logiczny spełniający warunek: **jeśli** jest spełniony **przed** wejściem w (dowolną) iterację pętli, **to** jest także spełniony **po wyjściu z tej iteracji**.
+:::
+
+Analogia z **indukcją matematyczną**: jeśli predykat jest prawdziwy tuż przed pierwszą iteracją (baza indukcji) i jest niezmiennikiem (krok indukcyjny), to jest prawdziwy także po wyjściu z pętli — niezależnie od liczby iteracji. Niezmiennik budujemy tak, by **w momencie zakończenia pętli był równoważny warunkowi końcowemu**.
+
+**Jak znaleźć niezmiennik (technika ze slajdów):**
+1. zapisz predykat wyrażający **warunek końcowy**,
+2. przekształć go tak, aby zawierał wszystkie istotne zmienne algorytmu (zwłaszcza licznik pętli), wyrażał **bieżącą** wartość zwracanej zmiennej i spełniał definicję niezmiennika,
+3. sprawdź, czy jest spełniony tuż **przed pierwszą iteracją**.
+
+**Przykład ze slajdów — `algor1`** (wejście: Arr — tablica liczb całkowitych, len > 0):
+
+```pseudo
+algor1(Arr, len){
+  i = 1
+  x = Arr[0]
+  while(i < len){
+    if(Arr[i] > x){
+      x = Arr[i]
+    }
+    i++
+  }
+  return x
+}
+```
+
+Zwraca **maksimum** z len pierwszych liczb tablicy. Dowód całkowitej poprawności — dwa standardowe kroki:
+
+1. **Stop** — jak wyżej: i rośnie o 1, len stałe i skończone.
+2. **Częściowa poprawność.** Warunek końcowy: `(∀ 0≤j<len: x ≥ Arr[j]) ∧ (∃ 0≤j<len: x == Arr[j])`. Niezmiennik („w i-tej iteracji x jest maksimum z i pierwszych wartości”): `(∀ 0≤j<i: x ≥ Arr[j]) ∧ (∃ 0≤j<len: x == Arr[j])`.
+   - przed pierwszą iteracją: i = 1, x = Arr[0] — prawda,
+   - jest niezmiennikiem dzięki warunkowej aktualizacji x w `if`,
+   - po zatrzymaniu (i == len) przyjmuje postać warunku końcowego.
+
+### Co na pewno trzeba umieć po wykładzie 1 (ze slajdów)
+
+1. Podać z pamięci dokładne definicje: specyfikacji, poprawnych danych wejściowych i wyjściowych, całkowitej i częściowej poprawności, niezmiennika pętli.
+2. Dla danego zadania obliczeniowego stworzyć ścisłą specyfikację.
+3. Podać przykład algorytmu częściowo poprawnego, ale bez własności stopu, i odwrotnie.
+4. Udowodnić własność stopu podanego algorytmu.
+5. Znaleźć niezmiennik dla prostej pętli i udowodnić, że jest niezmiennikiem.
+6. Przy użyciu niezmiennika udowodnić częściową poprawność algorytmu.
+
 === summary ===
+
+## Wersja 2026/2027 (M. Sydow)
+
+- **Specyfikacja** = (nazwa + argumenty) + **warunek początkowy** + **warunek końcowy**.
+- **Całkowita poprawność** = **własność stopu** + **częściowa poprawność** (dla każdych poprawnych danych).
+- **Częściowa:** *jeżeli* się zatrzyma, *to* wynik poprawny (nie gwarantuje stopu).
+- **Niezmiennik pętli:** prawdziwy przed iteracją ⇒ prawdziwy po niej (jak krok indukcyjny).
+- **Stop:** licznik rośnie o **stałą**, granica **stała i skończona**.
+
 
 ## Definicje
 

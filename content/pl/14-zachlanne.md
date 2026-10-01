@@ -9,6 +9,10 @@ sources: ProgramowanieZachlanne.pdf; wyklad_11.pdf (Metoda zachłanna I); wyklad
 exercises: asd 12.pdf (zad. 1–3)
 ---
 
+:::exam Sprawdzian 2026/2027
+Algorytmy z tego tematu są w zakresie **sprawdzianu praktycznego 2026/2027**. Obowiązują **wersje ze slajdów M. Sydowa** — mogą się różnić w szczegółach od opisanych tu wersji z 2025/2026. Wersje zgodne z oficjalnymi przykładowymi odpowiedziami i zadania treningowe: [Sprawdziany 2026/2027](page:exams).
+:::
+
 ## Problemy optymalizacyjne i strategia zachłanna
 
 W **problemie optymalizacyjnym** spośród wielu możliwych rozwiązań szukamy **najlepszego** ze względu na jakąś cechę. Najczęściej rozwiązanie powstaje jako **ciąg decyzji** podejmowanych po kolei.

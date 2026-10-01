@@ -9,6 +9,10 @@ sources: asd5.pdf (§2 QuickSort, §3 CountSort, RadixSort); asd6.pdf (QuickSort
 exercises: asd 05.pdf (zad. 2, 5), asd 06.pdf (zad. 1, 3)
 ---
 
+:::exam Sprawdzian 2026/2027
+Algorytmy z tego tematu są w zakresie **sprawdzianu praktycznego 2026/2027**. Obowiązują **wersje ze slajdów M. Sydowa** — mogą się różnić w szczegółach od opisanych tu wersji z 2025/2026. Wersje zgodne z oficjalnymi przykładowymi odpowiedziami i zadania treningowe: [Sprawdziany 2026/2027](page:exams).
+:::
+
 ## QuickSort — szybkie sortowanie (Hoare, 1960)
 
 QuickSort to jeden z najczęściej używanych algorytmów sortowania — dla „losowych” danych jest uważany za najszybszy. To kolejny przykład zasady **dziel i rządź**, ale z odwrotnym rozłożeniem pracy niż w MergeSort:

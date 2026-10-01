@@ -9,6 +9,10 @@ sources: asd4.pdf; asd5.pdf (§1 MergeSort); asd6.pdf (recursion and the stack);
 exercises: asd 05.pdf (task 3), asd 06.pdf (task 2)
 ---
 
+:::exam 2026/2027 practical test
+The algorithms in this topic are within the scope of the **2026/2027 practical test**. **The versions from M. Sydow's slides** apply — they may differ in details from the 2025/2026 versions described here. Versions that reproduce the official sample answers, plus practice tasks: [Tests 2026/2027](page:exams).
+:::
+
 ## What is recursion?
 
 :::def

@@ -228,7 +228,120 @@ Wykład przypomina o ograniczeniach tej analizy:
 
 Ważną cechą jest też **prostota** algorytmu. Prostszy algorytm warto wybrać, gdy program będzie uruchamiany **tylko kilka razy** albo tylko dla **małych danych**.
 
+
+## Wersja z wykładu 2026/2027 (M. Sydow) — definicje na sprawdzian
+
+:::exam
+Na sprawdzianach 2026/2027 obowiązują sformułowania M. Sydowa. Najważniejsze różnice względem treści powyżej: oznaczenia **W(n)**, **A(n)**, **S(n)** (bez „wrażliwości” Δ, δ), **pięć** wariantów notacji asymptotycznej (także **o** i **ω**) oraz alternatywna definicja przez **granicę ilorazu**. Analiza złożoności bez podania **operacji dominującej** i **rozmiaru danych** jest niepełna.
+:::
+
+Dobry algorytm ma dwie cechy: zwraca **prawidłowy wynik** (poprawność całkowita — [temat 2](topic:t02)) i jest **wydajny** — osiąga wynik przy minimalnym nakładzie zasobów: ilości pracy (czasu) i pamięci. Niższa złożoność = wydajniejszy algorytm. Miara szybkości powinna być **niezależna od języka/platformy** i możliwie **niezależna od danych** — dlatego **zliczamy podstawowe operacje**.
+
+:::def Operacje dominujące
+Zbiór **operacji dominujących** to zbiór takich operacji, których liczba jest **proporcjonalna do liczby wszystkich operacji** wykonanych przez cały algorytm. Operacją dominującą **nie** jest np. operacja wykonywana jednokrotnie; natomiast **każda pętla** lub odgałęzienie instrukcji warunkowej powinna zawierać operację dominującą.
+:::
+
+Przykład ze slajdów — `find(arr, len, key)` (zwraca indeks klucza lub −1):
+
+```pseudo
+find(arr, len, key){
+  i = 0
+  while(i < len){
+    if(arr[i] == key)
+      return i
+    i++
+  }
+  return -1
+}
+```
+
+| Kandydat | Dominująca? |
+|---|---|
+| przypisanie `i = 0` | nie (wykonywane raz) |
+| porównanie `i < len` | tak |
+| porównanie `arr[i] == key` | tak |
+| obie naraz | tak (choć nie jest to konieczne) |
+| `return i` | nie (najwyżej raz) |
+| `i++` | tak |
+
+**Dwa kroki niezbędne przed analizą złożoności:** (1) wyznaczyć zbiór **operacji dominujących**, (2) wyznaczyć funkcję argumentów, która stanowi **rozmiar danych wejściowych**. W `find` rozmiar danych to **długość tablicy** (len = n).
+
+:::def Złożoność czasowa i pamięciowa
+- **Złożoność czasowa** — liczba operacji dominujących, jakie wykona algorytm, **jako funkcja rozmiaru danych**.
+- **Pesymistyczna złożoność czasowa:** **W(n) = sup { t(d) : d ∈ Dₙ }**, gdzie Dₙ — zbiór wszystkich danych rozmiaru n, t(d) — liczba operacji dominujących dla danych d (W — *worst*).
+- **Przeciętna złożoność czasowa:** **A(n) = Σ_{k≥0} pₙₖ · k = Σ P(Xₙ = k) · k = E(Xₙ)** — wartość oczekiwana zmiennej losowej Xₙ (liczby operacji dominujących dla losowych danych rozmiaru n); wymaga założenia **modelu losowości danych** (rozkładu pₙₖ) (A — *average*).
+- **Złożoność pamięciowa S(n)** — liczba jednostek pamięci użyta przez algorytm jako funkcja rozmiaru danych; analogicznie pesymistyczna **SW(n)** i przeciętna **SA(n)**. Gdy pamięć nie zależy od danych: **S(n) = const = O(1)**.
+:::
+
+Dla `find` liczba porównań `arr[i] == key` wynosi od 1 (klucz na początku — wariant „optymistyczny”) do n (na końcu lub brak — „pesymistyczny”), więc **W(n) = n**. Zakładając, że klucz jest z równym prawdopodobieństwem 1/n na każdej pozycji (k-ta pozycja → k porównań): **A(n) = Σ_{k=1..n} (1/n)·k = (n+1)/2** — „przeciętnie w połowie tablicy”. Pamięć: **SA(n) = O(1)**.
+
+### Pięć wariantów notacji asymptotycznej
+
+Interesuje nas **charakter tempa wzrostu**, a nie konkretna funkcja: np. w A(n) = 3,45·n + 2 nieistotny jest składnik „+2”, a jeśli chodzi tylko o to, że funkcja jest **liniowa**, to i stała 3,45.
+
+| Notacja | Odpowiednik | Znaczenie |
+|---|---|---|
+| f = **Θ(g)** | = | ten sam rząd wielkości: f = O(g) ∧ g = O(f) |
+| f = **O(g)** („duże o”) | ≤ | ograniczenie górne **nieostre** |
+| f = **Ω(g)** („duże omega”) | ≥ | ograniczenie dolne **nieostre** |
+| f = **o(g)** („małe o”) | < | ograniczenie górne **ostre** |
+| f = **ω(g)** („małe omega”) | > | ograniczenie dolne **ostre** |
+
+Wielkie litery — ograniczenia z „równością” (nieostre), małe — ostre. Analogia z liczbami nie jest pełna, bo porządek na liczbach jest liniowy, a na rzędach funkcji nie.
+
+:::def Definicje
+- **f(n) = O(g(n)) ⇔ ∃ c>0 ∃ n₀ ∀ n≥n₀: f(n) ≤ c·g(n)** — g jest ograniczeniem górnym rzędu wielkości f.
+- **f(n) = Θ(g(n)) ⇔ f(n) = O(g(n)) ∧ g(n) = O(f(n))** — taki sam rząd wielkości.
+- f(n) = Ω(g(n)) ⇔ ∃ c>0 ∃ n₀ ∀ n≥n₀: f(n) ≥ c·g(n) (równoważnie g = O(f)).
+- f(n) = o(g(n)) ⇔ ∀ c>0 ∃ n₀ ∀ n≥n₀: f(n) ≤ c·g(n) (dla **każdej** stałej, nie dla jakiejś).
+- f(n) = ω(g(n)) ⇔ ∀ c>0 ∃ n₀ ∀ n≥n₀: f(n) ≥ c·g(n).
+:::
+
+:::own
+Slajdy podają definicje kwantyfikatorowe O i Θ oraz znaczenie pozostałych symboli; definicje Ω, o, ω w tej samej postaci dopisał autor strony (standardowe, jak w podręczniku Cormena).
+:::
+
+**Definicja przez granicę** (równoważna; f, g dodatnie): oblicz lim_{n→∞} f(n)/g(n). Jeśli granica istnieje, to:
+- **∞** → f ma **wyższy** rząd: f = ω(g),
+- **stała dodatnia** → rzędy **równe**: f = Θ(g),
+- **0** → f ma **niższy** rząd: f = o(g).
+
+**Przykłady ze slajdów:** A(n) = (n+1)/2 = O(n); SA(n) = O(1); f(n) = 3n² + 2n − 7 **nie** jest O(n), ale jest O(n²) i także O(n³) (mniej dokładne ograniczenie); n² + n − 3 = Θ(n²) — wystarczy skupić się na **dominującym** składniku. W(n) = o(n) znaczy: „rząd złożoności pesymistycznej jest istotnie mniejszy niż liniowy”.
+
+:::warn Uwagi o zapisie
+Znak „=” w f(n) = O(g(n)) **nie** oznacza zwykłej równości — to tylko rodzaj notacji. Nie można np. odejmować stronami, a notacji używamy głównie **po prawej stronie** „=”. Zapisy „O(f(n)) = n” czy „O(f(n)) = O(g(n))” **nie mają sensu**. Dozwolona jest forma rozszerzona, np. **f(n) = g(n) + O(h(n))**, co znaczy f(n) − g(n) = O(h(n)).
+:::
+
+### Najczęściej spotykane rzędy (ze slajdów)
+
+stała (S(n) = 3 = Θ(1)) ≺ logarytmiczna (W(n) = 2 + lg₂ n = Θ(log n)) ≺ liniowa (A(n) = 2n + 1 = Θ(n)) ≺ liniowo-logarytmiczna (1,44·n log n = Θ(n log n)) ≺ kwadratowa (3n² + 4 = Θ(n²)) ≺ sześcienna (Θ(n³)) ≺ pod-wykładnicza (Θ(n^(log n))) ≺ wykładnicza (Θ(2ⁿ)) ≺ silniowa (Θ(n!)).
+
+Algorytmy o złożoności czasowej wyższej niż wielomianowa uważa się za **niepraktyczne** poza małymi danymi.
+
+**Praktyczne reguły (ze slajdów):**
+- suma kilku składników → rząd wyznacza **składnik dominujący**; wielomian ma rząd składnika o najwyższym stopniu,
+- każda funkcja potęgowa n^α (α ∈ ℝ) ma **inny** rząd, zależny od α,
+- jest tylko **jeden** rząd logarytmiczny — podstawa logarytmu nie ma znaczenia,
+- log_β n jest ostro niższego rzędu od **dowolnej** potęgi n^α (nawet α = 0,0001),
+- każda funkcja wykładnicza γⁿ ma inny rząd zależnie od γ, i każda (γ > 1) jest ostro wyższego rzędu od każdej potęgi n^α.
+
+### Pytania kontrolne (ze slajdów)
+
+- Czym mierzymy „szybkość” algorytmu? Jakie 2 kroki trzeba wykonać przed analizą złożoności czasowej?
+- Definicja na pamięć i wyznaczanie dla danego algorytmu: operacji dominującej, rozmiaru danych, W(n), A(n) (dla bardzo prostych algorytmów), złożoności pamięciowej.
+- Jaki jest cel notacji asymptotycznej? Definicje (na pamięć) i interpretacja 5 wariantów.
+- Udowodnić z definicji, że wyrażenie z notacją asymptotyczną jest prawdziwe lub fałszywe — np. **n² + 5n + 2 = O(n²)** (c = 8, n₀ = 1), ale **≠ O(n)** (rozwiązanie: [Sprawdziany 2026/2027](page:exams)).
+
 === summary ===
+
+## Wersja 2026/2027 (M. Sydow)
+
+- Przed analizą: **operacje dominujące** + **rozmiar danych**.
+- **W(n) = sup{t(d) : d ∈ Dₙ}**, **A(n) = Σ pₙₖ·k = E(Xₙ)**, **S(n)** (SW, SA); stała pamięć: S(n) = O(1).
+- 5 notacji: Θ (=), O (≤), Ω (≥), o (<), ω (>); O: ∃c>0 ∃n₀ ∀n≥n₀ f ≤ c·g; Θ: O w obie strony.
+- Granica f/g: ∞ → ω, stała > 0 → Θ, 0 → o.
+- find: W(n) = n, A(n) = (n+1)/2, SA(n) = O(1).
+
 
 ## Podstawy
 

@@ -9,6 +9,10 @@ sources: asd10.pdf; Wyklady 2009/wyklad_9 kopce binarne.pdf; wyklad_10.pdf (prio
 exercises: asd 10.pdf ("ASD 10b": tasks 1–3)
 ---
 
+:::exam 2026/2027 practical test
+The algorithms in this topic are within the scope of the **2026/2027 practical test**. **The versions from M. Sydow's slides** apply — they may differ in details from the 2025/2026 versions described here. Versions that reproduce the official sample answers, plus practice tasks: [Tests 2026/2027](page:exams).
+:::
+
 ## The priority queue
 
 In an ordinary queue we serve whoever came first. In a **priority queue** — whoever is **most important** (has the highest priority), regardless of arrival order.

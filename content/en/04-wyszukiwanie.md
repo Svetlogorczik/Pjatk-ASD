@@ -9,6 +9,10 @@ sources: asd3.pdf; Dziel-RzadzC.pdf (min-max); Wyklady 2009/wyklad_3.pdf and asd
 exercises: asd 03.pdf (task 3), asd 05.pdf (task 4)
 ---
 
+:::exam 2026/2027 practical test
+The algorithms in this topic are within the scope of the **2026/2027 practical test**. **The versions from M. Sydow's slides** apply — they may differ in details from the 2025/2026 versions described here. Versions that reproduce the official sample answers, plus practice tasks: [Tests 2026/2027](page:exams).
+:::
+
 ## The search problem
 
 We have a sequence (an array) and ask: **is the element a in it, and if so — at which position?** It is one of the most common tasks in computing: looking up a contact in your phone, a product in a shop, a word in a dictionary.

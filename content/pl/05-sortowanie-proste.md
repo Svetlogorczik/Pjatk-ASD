@@ -9,6 +9,10 @@ sources: asd2.pdf (§2 Sortowanie); Dziel-RzadzC.pdf (InsertionSort rekurencyjni
 exercises: asd 05.pdf (zad. 1)
 ---
 
+:::exam Sprawdzian 2026/2027
+Algorytmy z tego tematu są w zakresie **sprawdzianu praktycznego 2026/2027**. Obowiązują **wersje ze slajdów M. Sydowa** — mogą się różnić w szczegółach od opisanych tu wersji z 2025/2026. Wersje zgodne z oficjalnymi przykładowymi odpowiedziami i zadania treningowe: [Sprawdziany 2026/2027](page:exams).
+:::
+
 ## Problem sortowania
 
 Sortowanie to jeden z najczęściej rozwiązywanych problemów na komputerach. Powód jest prosty: **z uporządkowanych danych dużo łatwiej korzystać** (pomyśl o słowniku, książce telefonicznej albo o wyszukiwaniu binarnym z tematu 4).

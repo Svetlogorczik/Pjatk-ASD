@@ -8,6 +8,16 @@ eyebrow: Откуда материалы
 desc: Список лекционных файлов и наборов упражнений, использованных на сайте, литература предмета и дополнительные материалы.
 ---
 
+## Лекции 2026/2027 (M. Sydow)
+
+| Файл | Содержание | Тема на сайте |
+|---|---|---|
+| correctness1-pl.pdf — *(1) Poprawność algorytmów* | организация, псевдокод, спецификация, полная и частичная корректность, свойство остановки, инварианты | [2](topic:t02) (раздел «версия лекции 2026/2027») |
+| complexity2-pl.pdf — *Złożoność obliczeniowa algorytmów* | доминирующие операции, размер данных, W(n), A(n), S(n), 5 асимптотических нотаций, порядки функций | [3](topic:t03) (раздел «версия лекции 2026/2027») |
+| Условия задач допуска, примерные данные с ответами, подсказки к теоретической части | типы задач практического теста, объём теста знаний | [Тесты 2026/2027](page:exams) |
+
+**Рекомендуемая литература 2026/2027:** Cormen, Leiserson, Rivest, Stein — *Introduction to Algorithms* (польск. *Wprowadzenie do algorytmów*, PWN 2018; есть русский перевод «Алгоритмы: построение и анализ»); K. Mehlhorn, P. Sanders — *Algorithms and Data Structures. The Basic Toolbox*, Springer 2008; G. Mirkowska и др. — *Algorytmy i struktury danych — zadania*, PJWSTK 2005 (сборник задач, частично с решениями); L. Banachowski, K. Diks, W. Rytter — *Algorytmy i struktury danych*, PWN 2018. Другие со слайдов: N. Wirth — «Алгоритмы + структуры данных = программы»; A. Aho, J. Hopcroft, J. Ullman — «Структуры данных и алгоритмы»; W. Lipski — *Kombinatoryka dla programistów*; для углублённого изучения: D. Knuth — «Искусство программирования», Ch. Papadimitriou — *Computational Complexity*.
+
 ## Лекции (2025/2026)
 
 | Файл | Содержание | Тема на сайте |

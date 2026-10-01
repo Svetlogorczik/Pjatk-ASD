@@ -228,7 +228,120 @@ The lecture reminds us of the limits of this analysis:
 
 **Simplicity** is also an important property. A simpler algorithm is worth choosing when the program will be run **only a few times** or only for **small inputs**.
 
+
+## 2026/2027 lecture version (M. Sydow) — definitions for the tests
+
+:::exam
+The 2026/2027 tests use M. Sydow's wording. The main differences from the text above: the notations **W(n)**, **A(n)**, **S(n)** (no "sensitivity" Δ, δ), **five** variants of asymptotic notation (also **o** and **ω**) and an alternative definition via the **limit of the ratio**. A complexity analysis without stating the **dominant operation** and the **data size** is incomplete.
+:::
+
+A good algorithm has two features: it returns a **correct result** (total correctness — [topic 2](topic:t02)) and it is **efficient** — it achieves the result with minimal use of resources: amount of work (time) and memory. Lower complexity = a more efficient algorithm. A measure of speed should be **independent of the language/platform** and as **independent of the data** as possible — so we **count basic operations**.
+
+:::def Dominant operations
+A set of **dominant operations** is a set of operations whose number is **proportional to the number of all operations** performed by the whole algorithm. A dominant operation is **not**, e.g., an operation executed only once; on the other hand, **every loop** or branch of a conditional statement should contain a dominant operation.
+:::
+
+Example from the slides — `find(arr, len, key)` (returns the index of the key or −1):
+
+```pseudo
+find(arr, len, key){
+  i = 0
+  while(i < len){
+    if(arr[i] == key)
+      return i
+    i++
+  }
+  return -1
+}
+```
+
+| Candidate | Dominant? |
+|---|---|
+| assignment `i = 0` | no (executed once) |
+| comparison `i < len` | yes |
+| comparison `arr[i] == key` | yes |
+| both together | yes (though not necessary) |
+| `return i` | no (at most once) |
+| `i++` | yes |
+
+**Two steps required before a complexity analysis:** (1) determine the set of **dominant operations**, (2) determine the function of the arguments that is the **size of the input data**. In `find` the data size is the **length of the array** (len = n).
+
+:::def Time and space complexity
+- **Time complexity** — the number of dominant operations the algorithm performs, **as a function of the data size**.
+- **Worst-case (pessimistic) time complexity:** **W(n) = sup { t(d) : d ∈ Dₙ }**, where Dₙ is the set of all inputs of size n and t(d) the number of dominant operations for input d (W — *worst*).
+- **Average time complexity:** **A(n) = Σ_{k≥0} pₙₖ · k = Σ P(Xₙ = k) · k = E(Xₙ)** — the expected value of the random variable Xₙ (the number of dominant operations for random input of size n); it requires assuming a **model of data randomness** (the distribution pₙₖ) (A — *average*).
+- **Space complexity S(n)** — the number of memory units used by the algorithm as a function of the data size; analogously worst-case **SW(n)** and average **SA(n)**. When memory does not depend on the data: **S(n) = const = O(1)**.
+:::
+
+For `find` the number of comparisons `arr[i] == key` ranges from 1 (key at the start — the "optimistic" case) to n (at the end or missing — "pessimistic"), so **W(n) = n**. Assuming the key is at each position with equal probability 1/n (k-th position → k comparisons): **A(n) = Σ_{k=1..n} (1/n)·k = (n+1)/2** — "on average in the middle of the array". Memory: **SA(n) = O(1)**.
+
+### Five variants of asymptotic notation
+
+We are interested in the **character of the growth rate**, not the specific function: e.g. in A(n) = 3.45·n + 2 the "+2" is irrelevant, and if we only care that the function is **linear**, so is the constant 3.45.
+
+| Notation | Analogue | Meaning |
+|---|---|---|
+| f = **Θ(g)** | = | the same order: f = O(g) ∧ g = O(f) |
+| f = **O(g)** ("big O") | ≤ | **non-strict** upper bound |
+| f = **Ω(g)** ("big omega") | ≥ | **non-strict** lower bound |
+| f = **o(g)** ("little o") | < | **strict** upper bound |
+| f = **ω(g)** ("little omega") | > | **strict** lower bound |
+
+Capital letters — bounds "with equality" (non-strict), small letters — strict. The analogy with numbers is not complete, because numbers are linearly ordered and orders of functions are not.
+
+:::def Definitions
+- **f(n) = O(g(n)) ⇔ ∃ c>0 ∃ n₀ ∀ n≥n₀: f(n) ≤ c·g(n)** — g is an upper bound on the order of f.
+- **f(n) = Θ(g(n)) ⇔ f(n) = O(g(n)) ∧ g(n) = O(f(n))** — the same order of magnitude.
+- f(n) = Ω(g(n)) ⇔ ∃ c>0 ∃ n₀ ∀ n≥n₀: f(n) ≥ c·g(n) (equivalently g = O(f)).
+- f(n) = o(g(n)) ⇔ ∀ c>0 ∃ n₀ ∀ n≥n₀: f(n) ≤ c·g(n) (for **every** constant, not for some).
+- f(n) = ω(g(n)) ⇔ ∀ c>0 ∃ n₀ ∀ n≥n₀: f(n) ≥ c·g(n).
+:::
+
+:::own
+The slides give the quantifier definitions of O and Θ and the meaning of the other symbols; the definitions of Ω, o, ω in the same form were added by the site author (standard, as in Cormen's textbook).
+:::
+
+**Definition via a limit** (equivalent; f, g positive): compute lim_{n→∞} f(n)/g(n). If the limit exists, then:
+- **∞** → f has a **higher** order: f = ω(g),
+- **a positive constant** → the orders are **equal**: f = Θ(g),
+- **0** → f has a **lower** order: f = o(g).
+
+**Examples from the slides:** A(n) = (n+1)/2 = O(n); SA(n) = O(1); f(n) = 3n² + 2n − 7 is **not** O(n), but it is O(n²) and also O(n³) (a less precise bound); n² + n − 3 = Θ(n²) — it is enough to focus on the **dominant** term. W(n) = o(n) means: "the order of the worst-case complexity is significantly lower than linear".
+
+:::warn Remarks on the notation
+The "=" in f(n) = O(g(n)) does **not** mean ordinary equality — it is just a kind of notation. You cannot, e.g., subtract both sides, and the notation is used mainly on the **right-hand side** of "=". Writing "O(f(n)) = n" or "O(f(n)) = O(g(n))" **makes no sense**. An extended form is allowed, e.g. **f(n) = g(n) + O(h(n))**, meaning f(n) − g(n) = O(h(n)).
+:::
+
+### The most common orders (from the slides)
+
+constant (S(n) = 3 = Θ(1)) ≺ logarithmic (W(n) = 2 + lg₂ n = Θ(log n)) ≺ linear (A(n) = 2n + 1 = Θ(n)) ≺ linear-logarithmic (1.44·n log n = Θ(n log n)) ≺ quadratic (3n² + 4 = Θ(n²)) ≺ cubic (Θ(n³)) ≺ sub-exponential (Θ(n^(log n))) ≺ exponential (Θ(2ⁿ)) ≺ factorial (Θ(n!)).
+
+Algorithms with time complexity higher than polynomial are considered **impractical** except for small inputs.
+
+**Practical rules (from the slides):**
+- a sum of several terms → the order is determined by the **dominant term**; a polynomial has the order of its highest-degree term,
+- every power function n^α (α ∈ ℝ) has a **different** order, depending on α,
+- there is only **one** logarithmic order — the base of the logarithm does not matter,
+- log_β n has a strictly lower order than **any** power n^α (even α = 0.0001),
+- every exponential function γⁿ has a different order depending on γ, and every one (γ > 1) has a strictly higher order than every power n^α.
+
+### Control questions (from the slides)
+
+- What do we measure the "speed" of an algorithm with? Which 2 steps must be done before a time-complexity analysis?
+- Definition by heart and determining for a given algorithm: dominant operation, data size, W(n), A(n) (for very simple algorithms), space complexity.
+- What is the purpose of asymptotic notation? Definitions (by heart) and interpretation of the 5 variants.
+- Prove from the definition that an expression with asymptotic notation is true or false — e.g. **n² + 5n + 2 = O(n²)** (c = 8, n₀ = 1), but **≠ O(n)** (solution: [Tests 2026/2027](page:exams)).
+
 === summary ===
+
+## 2026/2027 version (M. Sydow)
+
+- Before the analysis: **dominant operations** + **data size**.
+- **W(n) = sup{t(d) : d ∈ Dₙ}**, **A(n) = Σ pₙₖ·k = E(Xₙ)**, **S(n)** (SW, SA); constant memory: S(n) = O(1).
+- 5 notations: Θ (=), O (≤), Ω (≥), o (<), ω (>); O: ∃c>0 ∃n₀ ∀n≥n₀ f ≤ c·g; Θ: O both ways.
+- Limit of f/g: ∞ → ω, constant > 0 → Θ, 0 → o.
+- find: W(n) = n, A(n) = (n+1)/2, SA(n) = O(1).
+
 
 ## Basics
 

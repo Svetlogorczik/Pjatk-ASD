@@ -9,6 +9,10 @@ sources: asd11.pdf; Wyklady 2009/wyklad_2.pdf (graphs), asd 09 wyklad_7.pdf (DFS
 exercises: no separate problem set — tasks by the site author (weighted graphs are in topic 14)
 ---
 
+:::exam 2026/2027 practical test
+The algorithms in this topic are within the scope of the **2026/2027 practical test**. **The versions from M. Sydow's slides** apply — they may differ in details from the 2025/2026 versions described here. Versions that reproduce the official sample answers, plus practice tasks: [Tests 2026/2027](page:exams).
+:::
+
 ## What is a graph?
 
 :::def

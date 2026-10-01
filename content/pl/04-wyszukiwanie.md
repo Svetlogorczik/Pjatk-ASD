@@ -9,6 +9,10 @@ sources: asd3.pdf; Dziel-RzadzC.pdf (min-max); Wyklady 2009/wyklad_3.pdf i asd 0
 exercises: asd 03.pdf (zad. 3), asd 05.pdf (zad. 4)
 ---
 
+:::exam Sprawdzian 2026/2027
+Algorytmy z tego tematu są w zakresie **sprawdzianu praktycznego 2026/2027**. Obowiązują **wersje ze slajdów M. Sydowa** — mogą się różnić w szczegółach od opisanych tu wersji z 2025/2026. Wersje zgodne z oficjalnymi przykładowymi odpowiedziami i zadania treningowe: [Sprawdziany 2026/2027](page:exams).
+:::
+
 ## Problem wyszukiwania
 
 Mamy ciąg (tablicę) i pytamy: **czy jest w nim element a, a jeśli tak — na której pozycji?** To jedno z najczęstszych zadań w informatyce: szukanie kontaktu w telefonie, produktu w sklepie, słowa w słowniku.

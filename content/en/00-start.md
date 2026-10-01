@@ -45,7 +45,8 @@ An everyday analogy that helps to "feel" a concept. Also written by the site aut
 
 - **The main text** of every topic is the content of the course lectures (files `asd1…asd11`, `Algorytmika`, `Dziel i rządź` (divide and conquer), `FFT`, `Programowanie zachłanne` (greedy programming) and older slides from 2009) — retold in simpler words and extended with step-by-step examples.
 - **The tasks** follow **the same logic** as the class exercises, but with **changed data and wording**, so you can study without copying old problem sets. Each task says which class exercise it is modelled on. Tasks marked "by the site author" have no counterpart in the sets.
-- **Information about passing the course** comes from the official 2025/2026 rules document — see [Passing the course](page:course), where its validity is also discussed.
+- **Information about passing the course** is up to date for **2026/2027** (lecturer: M. Sydow) — see [Passing the course](page:course) and [Tests 2026/2027](page:exams) (task types, official examples solved step by step, practice tasks).
+- **Note:** topics 1–14 were written mainly from the 2025/2026 lectures (a different lecturer). In 2026/2027 the tests use **the versions of algorithms and definitions from M. Sydow's slides** — topics [2](topic:t02) and [3](topic:t03) already have sections with his definitions, and the algorithm topics link to versions that match the official examples.
 
 :::tip
 Code in the boxes can be copied with the "Copy" button. Most examples are in Java (as in the lectures) or in the lecture's pseudocode. The course itself is taught in Polish, so the key Polish terms are given in brackets — they are what you will hear in class.

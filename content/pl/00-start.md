@@ -45,7 +45,8 @@ Analogia z życia codziennego, która pomaga „poczuć” pojęcie. Też jest o
 
 - **Tekst główny** każdego tematu to treść wykładów z przedmiotu (pliki `asd1…asd11`, `Algorytmika`, `Dziel i rządź`, `FFT`, `Programowanie zachłanne` oraz starsze slajdy z 2009 r.) — opowiedziana prostszym językiem i uzupełniona przykładami krok po kroku.
 - **Zadania** mają **tę samą logikę** co zadania z ćwiczeń, ale **zmienione dane i treść** — żeby można było się uczyć bez kopiowania starych zestawów. Przy każdym zadaniu jest informacja, na którym ćwiczeniu się wzoruje. Zadania oznaczone jako „od autora strony” nie mają odpowiednika w zestawach.
-- **Informacje o zaliczeniu** pochodzą z dokumentu z zasadami zaliczenia z roku 2025/2026 — sprawdź zakładkę [Zaliczenie przedmiotu](page:course), tam jest też opisana ich aktualność.
+- **Informacje o zaliczeniu** są aktualne na rok **2026/2027** (wykład: M. Sydow) — zobacz [Zaliczenie przedmiotu](page:course) i [Sprawdziany 2026/2027](page:exams) (typy zadań, oficjalne przykłady rozwiązane krok po kroku, zadania treningowe).
+- **Uwaga:** tematy 1–14 powstały głównie na podstawie wykładów z 2025/2026 (inny prowadzący). W 2026/2027 na sprawdzianach obowiązują **wersje algorytmów i definicji ze slajdów M. Sydowa** — w tematach [2](topic:t02) i [3](topic:t03) są już sekcje z jego definicjami, a w tematach z algorytmami — odnośniki do wersji zgodnych z oficjalnymi przykładami.
 
 :::tip
 Kod w ramkach można skopiować przyciskiem „Kopiuj”. Większość przykładów jest w Javie (tak jak na wykładzie) albo w pseudokodzie z wykładu.

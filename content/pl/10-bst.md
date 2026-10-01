@@ -9,6 +9,10 @@ sources: asd8.pdf; Asd9.pdf; Wyklady 2009/wyklad_2.pdf (drzewa), asd 10 wyklad_8
 exercises: asd 08.pdf (zad. 1–3), asd 09 a.pdf (zad. 1–3)
 ---
 
+:::exam Sprawdzian 2026/2027
+Algorytmy z tego tematu są w zakresie **sprawdzianu praktycznego 2026/2027**. Obowiązują **wersje ze slajdów M. Sydowa** — mogą się różnić w szczegółach od opisanych tu wersji z 2025/2026. Wersje zgodne z oficjalnymi przykładowymi odpowiedziami i zadania treningowe: [Sprawdziany 2026/2027](page:exams).
+:::
+
 ## Problem słownika
 
 Najczęściej wykonywane operacje na zbiorze to **wstawianie**, **usuwanie** i **wyszukiwanie** elementu. Struktura, która to umożliwia, to **słownik**. Przykłady: bazy danych, tablice identyfikatorów w kompilatorach, słowniki języków naturalnych, kontakty w telefonie.

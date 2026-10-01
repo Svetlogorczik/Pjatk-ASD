@@ -9,6 +9,10 @@ sources: asd4.pdf; asd5.pdf (§1 MergeSort); asd6.pdf (rekursja a stos); Dziel-R
 exercises: asd 05.pdf (zad. 3), asd 06.pdf (zad. 2)
 ---
 
+:::exam Sprawdzian 2026/2027
+Algorytmy z tego tematu są w zakresie **sprawdzianu praktycznego 2026/2027**. Obowiązują **wersje ze slajdów M. Sydowa** — mogą się różnić w szczegółach od opisanych tu wersji z 2025/2026. Wersje zgodne z oficjalnymi przykładowymi odpowiedziami i zadania treningowe: [Sprawdziany 2026/2027](page:exams).
+:::
+
 ## Czym jest rekursja?
 
 :::def

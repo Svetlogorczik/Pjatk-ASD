@@ -9,6 +9,10 @@ sources: asd5.pdf (§2 QuickSort, §3 CountSort, RadixSort); asd6.pdf (QuickSort
 exercises: asd 05.pdf (tasks 2, 5), asd 06.pdf (tasks 1, 3)
 ---
 
+:::exam 2026/2027 practical test
+The algorithms in this topic are within the scope of the **2026/2027 practical test**. **The versions from M. Sydow's slides** apply — they may differ in details from the 2025/2026 versions described here. Versions that reproduce the official sample answers, plus practice tasks: [Tests 2026/2027](page:exams).
+:::
+
 ## QuickSort — quick sort (Hoare, 1960)
 
 QuickSort is one of the most widely used sorting algorithms — for "random" data it is considered the fastest. It is another example of **divide and conquer**, but with the work distributed the opposite way to MergeSort:

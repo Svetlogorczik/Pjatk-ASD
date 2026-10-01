@@ -9,6 +9,10 @@ sources: asd2.pdf (§2 Sorting); Dziel-RzadzC.pdf (recursive InsertionSort); Wyk
 exercises: asd 05.pdf (task 1)
 ---
 
+:::exam 2026/2027 practical test
+The algorithms in this topic are within the scope of the **2026/2027 practical test**. **The versions from M. Sydow's slides** apply — they may differ in details from the 2025/2026 versions described here. Versions that reproduce the official sample answers, plus practice tasks: [Tests 2026/2027](page:exams).
+:::
+
 ## The sorting problem
 
 Sorting is one of the problems computers solve most often. The reason is simple: **ordered data are much easier to use** (think of a dictionary, a phone book, or binary search from topic 4).

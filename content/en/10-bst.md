@@ -9,6 +9,10 @@ sources: asd8.pdf; Asd9.pdf; Wyklady 2009/wyklad_2.pdf (trees), asd 10 wyklad_8.
 exercises: asd 08.pdf (tasks 1–3), asd 09 a.pdf (tasks 1–3)
 ---
 
+:::exam 2026/2027 practical test
+The algorithms in this topic are within the scope of the **2026/2027 practical test**. **The versions from M. Sydow's slides** apply — they may differ in details from the 2025/2026 versions described here. Versions that reproduce the official sample answers, plus practice tasks: [Tests 2026/2027](page:exams).
+:::
+
 ## The dictionary problem
 
 The most frequent operations on a set are **inserting**, **deleting** and **searching** for an element. A structure that supports them is a **dictionary** (*słownik*). Examples: databases, identifier tables in compilers, natural-language dictionaries, phone contacts.

@@ -9,6 +9,10 @@ sources: ProgramowanieZachlanne.pdf; wyklad_11.pdf (Greedy method I); wyklad_10.
 exercises: asd 12.pdf (tasks 1–3)
 ---
 
+:::exam 2026/2027 practical test
+The algorithms in this topic are within the scope of the **2026/2027 practical test**. **The versions from M. Sydow's slides** apply — they may differ in details from the 2025/2026 versions described here. Versions that reproduce the official sample answers, plus practice tasks: [Tests 2026/2027](page:exams).
+:::
+
 ## Optimisation problems and the greedy strategy
 
 In an **optimisation problem** we look, among many possible solutions, for the **best** one with respect to some property. Usually a solution is built as a **sequence of decisions** made one after another.

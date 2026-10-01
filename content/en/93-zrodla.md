@@ -8,6 +8,16 @@ eyebrow: Where the materials come from
 desc: The list of lecture files and class problem sets used by the site, the course literature and additional materials.
 ---
 
+## Lectures 2026/2027 (M. Sydow)
+
+| File | Content | Topic on the site |
+|---|---|---|
+| correctness1-pl.pdf — *(1) Correctness of algorithms* | organisation, pseudocode, specification, total and partial correctness, stop property, invariants | [2](topic:t02) (section "2026/2027 lecture version") |
+| complexity2-pl.pdf — *Computational complexity of algorithms* | dominant operations, data size, W(n), A(n), S(n), 5 asymptotic notations, orders of functions | [3](topic:t03) (section "2026/2027 lecture version") |
+| Qualifying-task descriptions, sample data with answers, hints for the theory part | task types for the practical test, scope of the knowledge test | [Tests 2026/2027](page:exams) |
+
+**Recommended literature in 2026/2027:** Cormen, Leiserson, Rivest, Stein — *Introduction to Algorithms* (Polish: *Wprowadzenie do algorytmów*, PWN 2018); K. Mehlhorn, P. Sanders — *Algorithms and Data Structures. The Basic Toolbox*, Springer 2008; G. Mirkowska et al. — *Algorytmy i struktury danych — zadania*, PJWSTK 2005 (problem book, partly with solutions); L. Banachowski, K. Diks, W. Rytter — *Algorytmy i struktury danych*, PWN 2018. Others from the slides: N. Wirth — *Algorithms + Data Structures = Programs*; A. Aho, J. Hopcroft, J. Ullman — *Data Structures and Algorithms*; W. Lipski — *Kombinatoryka dla programistów*; for deeper study: D. Knuth — *The Art of Computer Programming*, Ch. Papadimitriou — *Computational Complexity*.
+
 ## Lectures (2025/2026)
 
 | File | Content | Topic on this site |
