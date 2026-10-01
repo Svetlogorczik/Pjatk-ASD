@@ -9,6 +9,10 @@ sources: asd6.pdf (stos); asd7.pdf (listy); Wyklady 2009/asd 09 wyklad_7.pdf (li
 exercises: asd 07.pdf (zad. 1–3)
 ---
 
+:::exam Sprawdzian 2026/2027
+Ten temat powstał na podstawie wykładów 2025/2026. **Na sprawdzianach 2026/2027 obowiązują wersje ze slajdów M. Sydowa** — znajdziesz je w sekcji [„Wersja z wykładu 2026/2027”](topic:t09#wersja-z-wykładu-2026-2027-m-sydow-listy-i-tablice-ads) na końcu tematu (kod przepisany ze slajdów). Zadania dopuszczeniowe i zadania treningowe: [Sprawdziany 2026/2027](page:exams).
+:::
+
 ## Abstrakcyjna struktura danych
 
 Wykład asd6 wprowadza ważną myśl: **najpierw definiujemy, co struktura umie** (jakie ma operacje i jak się one zachowują), a **dopiero potem**, osobno, jak ją zaimplementować.
@@ -200,7 +204,80 @@ Ciekawy wariant MergeSortu bez rekursji: wkładamy do **kolejki** jednoelementow
 @include t09-list-algorithms.java
 ```
 
+
+## Wersja z wykładu 2026/2027 (M. Sydow) — „Listy i tablice, ADS”
+
+:::exam
+Na sprawdzianie wiedzy pojawiają się: definicja **abstrakcyjnej struktury danych** i odróżnienie jej od struktur konkretnych, interfejsy stosu, kolejki i kolejki dwustronnej oraz ich implementacje (tabela poniżej) wraz ze złożonościami.
+:::
+
+Na ciągach wyróżniamy dwa typy operacji: **dostęp absolutny** (przez indeks) i **modyfikacja** (w miejscu wskazanym przez konkretny element). **Tablice** dają dostęp absolutny w czasie stałym, ale wstawienie w środek jest liniowe (przesuwanie). **Listy dowiązaniowe** zapewniają szybkie modyfikacje: dodanie/usunięcie pierwszego lub ostatniego elementu, elementu za/przed wskazanym, wstawienie/usunięcie podciągu, łączenie ciągów, odwracanie.
+
+**Lista dowiązaniowa** — konkretna struktura złożona z **węzłów** (przechowują elementy) połączonych **dowiązaniami** (wskaźnikami). Warianty: jednokierunkowe, dwukierunkowe, cykliczne.
+
+```pseudo
+Class SLNode<Type>{
+ Type element
+ SLNode<Type> next //wskazuje kolejny węzeł w liście
+}
+
+Class SList<Type>{
+ SLNode<Type> head //wskazuje początek listy (jedyny dostęp do listy)
+}
+
+print(SList l){
+ node = l.head
+ while(node not null)
+   print node.element
+   node = node.next
+}
+```
+
+Ostatni wskaźnik zawsze wskazuje NULL; w pustej liście head = NULL. Charakterystyczne dla algorytmów na listach: `while(node not null)` (działa też dla pustej listy) i przejście `node = node.next`. Lista **dwukierunkowa** (`DLNode`: next i prev; czasem dodatkowy wskaźnik na koniec) zużywa na dowiązania 2 razy więcej pamięci, ale pozwala chodzić w obie strony. Pytanie kontrolne ze slajdów: jaka lista do dowiązaniowej wersji InsertionSort? (Odpowiedź autora strony: dwukierunkowa — element „przepychamy” wstecz.) **Lista cykliczna** — ostatni węzeł dowiązany do pierwszego; w dwukierunkowej cyklicznej zawsze (next.prev) == (prev.next) == this. Podobnie „tablice cykliczne” — indeksy modulo n (np. kolejka na tablicy).
+
+**Operacje na ciągach:** isEmpty, first, last, insertAfter/insertBefore, moveAfter/moveBefore, removeAfter/removeBefore, pushBack/pushFront, popBack/popFront, concat, splice, size, findNext. Większość modyfikacji to szczególny przypadek **splice(a, b, t)** — wytnij podlistę (a,…,b) i wstaw ją tuż za t; na liście dwukierunkowej ma **stałą złożoność**, np. moveAfter(a, b) = splice(a, a, b).
+
+```pseudo
+splice(a,b,t){
+ // cut out (a,...,b):
+ a' = a.prev; b' = b.next; a'.next = b'; b'.prev = a'
+ // insert (a,...,b) after t:
+ t'= t.next;  b.next = t'; a.prev = t; t.next = a; t'.prev = b
+}
+```
+
+**Listy vs tablice:** + modyfikacje w czasie stałym (tablice: liniowym), + dynamiczny rozmiar; − narzut pamięci na dowiązania (do 8 bajtów na dowiązanie w 64 bitach), − wolny (liniowy) dostęp absolutny.
+
+:::def Abstrakcyjna struktura danych
+**ADS** jest zdefiniowana przez **zestaw operacji**, które można wykonać na danych, bez wnikania w sposób implementacji — ukrywa implementację (listy, tablice, drzewa…) i eksponuje tylko **interfejs**.
+- **Stos (LIFO):** push(Type e), Type pop() (zdejmij i zwróć ostatnio dodany — modyfikująca), Type top() (zwróć bez zdejmowania).
+- **Kolejka (FIFO):** inject(Type e), Type out() (wyjmij najdawniej dodany — modyfikująca), Type front() (zwróć bez wyjmowania). Nazwy bywają różne (np. in zamiast inject), znaczenie — zawsze takie.
+- **Kolejka dwustronna (deque):** first(), last(), pushFront(Type), pushBack(Type), popFront(), popBack() — uogólnienie stosu i kolejki.
+:::
+
+| ADS | Implementacja (wszystkie operacje w czasie **stałym**) |
+|---|---|
+| Stos | lista jednokierunkowa, tablica |
+| Kolejka | lista jednokierunkowa (ze wskaźnikiem na koniec), tablica cykliczna |
+| Kolejka dwustronna | lista dwukierunkowa, tablica cykliczna |
+
+Świadomy wybór implementacji może istotnie wpłynąć na złożoność operacji. Dlaczego? (wyjaśnienie autora strony) Stos: wszystko dzieje się na jednym końcu (head listy / koniec tablicy). Kolejka: dodajemy na końcu, wyjmujemy z początku — w zwykłej tablicy trzeba by przesuwać, w cyklicznej indeksy „zawijają się” modulo n. Deque: popBack na liście jednokierunkowej wymagałby przejścia całej listy, stąd dwukierunkowa.
+
+### Przykładowe zadania ze slajdów
+
+- Opisz listę jedno-, dwukierunkową i cykliczną; pseudokod klas; proste funkcje (dodaj na końcu, liczba elementów).
+- Przykłady algorytmów, gdzie wystarcza lista jednokierunkowa, a gdzie potrzebna dwukierunkowa; porównaj listy i tablice.
+- Zaimplementuj kolejkę i stos na liście i na tablicy, porównaj (złożoność, wady/zalety).
+- Zaprojektuj ADS — kolejkę z dodatkową szybką operacją **odwracania kolejności** (pomysł autora strony: deque na liście dwukierunkowej + flaga „odwrócona”, która zamienia rolami oba końce — odwrócenie w O(1)).
+
 === summary ===
+
+## Wersja 2026/2027 (M. Sydow)
+
+- ADS = zestaw operacji (interfejs). Stos: push/pop/top (LIFO). Kolejka: inject/out/front (FIFO). Deque: first/last/pushFront/pushBack/popFront/popBack.
+- Stos: lista 1-kier./tablica; kolejka: lista 1-kier./tablica cykliczna; deque: lista 2-kier./tablica cykliczna — wszystko O(1).
+- splice(a, b, t) na liście 2-kier. — O(1).
+
 
 ## ADT
 

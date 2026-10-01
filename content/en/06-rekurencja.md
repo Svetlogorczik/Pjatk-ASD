@@ -9,8 +9,8 @@ sources: asd4.pdf; asd5.pdf (§1 MergeSort); asd6.pdf (recursion and the stack);
 exercises: asd 05.pdf (task 3), asd 06.pdf (task 2)
 ---
 
-:::exam 2026/2027 practical test
-The algorithms in this topic are within the scope of the **2026/2027 practical test**. **The versions from M. Sydow's slides** apply — they may differ in details from the 2025/2026 versions described here. Versions that reproduce the official sample answers, plus practice tasks: [Tests 2026/2027](page:exams).
+:::exam 2026/2027 tests
+This topic was written from the 2025/2026 lectures. **The 2026/2027 tests use the versions from M. Sydow's slides** — you will find them in the section ["2026/2027 lecture version"](topic:t06#2026-2027-lecture-version-m-sydow-sorting-1-mergesort-and-re) at the end of the topic (code copied from the slides). Qualifying tasks and practice tasks: [Tests 2026/2027](page:exams).
 :::
 
 ## What is recursion?
@@ -239,7 +239,106 @@ Who "wins": the work spread over the leaves of the recursion tree (n^(log_b a)) 
 The theorem **does not cover** recurrences like T(n) = T(n − 1) + n (the "1 ; n−1" split) — there is no division by b. Such recurrences are solved by unrolling: T(n) = n + (n−1) + … = Θ(n²).
 :::
 
+
+## 2026/2027 lecture version (M. Sydow) — "Sorting 1" (MergeSort) and "Recursion"
+
+:::exam
+The tests use **mergeSort(S, len)** from the slides below: **m = len/2**, so for odd length **the left half is shorter** (7 → 3 | 4). `merge` uses the strict inequality `a1[i] < a2[j]`. The qualifying task — the number of comparisons and the sequences in the last `merge()` — is solved on the [Tests 2026/2027](page:exams) page.
+:::
+
+**Merge Sort** — "divide and conquer": (1) split the sequence into 2 halves, (2) sort each half separately (recursively, while they have length > 1), (3) merge the sorted halves — merging two sorted sequences needs only linearly many comparisons.
+
+```pseudo
+mergeSort(S, len){
+  if(len <= 1) return S[0:len]
+  m = len/2
+  return merge(mergeSort(S[0:m], m), m,
+               mergeSort(S[m:len], len-m), len-m)
+}
+```
+
+S[a:b] (Python-like notation) is the subsequence of elements S[i], a ≤ i < b; `merge(a1, len1, a2, len2)` merges two sorted subsequences and returns the merged sorted sequence:
+
+```pseudo
+merge(a1, len1, a2, len2){
+
+  i = j = k = 0;
+  result[len1 + len2] // (alokacja pamięci)
+
+  while((i < len1) && (j < len2))
+    if(a1[i] < a2[j]) result[k++] = a1[i++];
+    else result[k++] = a2[j++];
+
+  while(i < len1) result[k++] = a1[i++];
+
+  while(j < len2) result[k++] = a2[j++];
+
+  return result;
+}
+```
+
+**Analysis of merge:** dominant operation — comparison of 2 elements or indices; data size n = len1 + len2; **W(n) = A(n) = Θ(n)**; unfortunately **S(n) = Θ(n)** (we allocate an array for the merged sequence — avoidable with **linked lists**). **Analysis of mergeSort:** on each recursion level the merge calls work on sequences of total length len, and there are log₂(len) levels: **W(len) = A(len) = Θ(len·log len)** — **linear-logarithmic**. Example from the slides: 100 million logs, 10⁹ comparisons/s: insertionSort ≈ (10⁸)²/10⁹ s = 10⁷ s (**115 days**), mergeSort ≈ 2.65·10⁹/10⁹ s (**2.65 seconds**).
+
+**Linked lists in mergeSort.** Nodes connected by links (pointers): `początek -> (2)-> (3)-> (5)-> (8)-> null`. **Singly linked** lists suffice (merge traverses each list in one direction). Merge on lists only relinks nodes, so it **uses no extra memory** (apart from the recursion stack), with the same time complexity. Arrays: fast direct access, little memory, but inserting in the middle is linear; lists: inserting/removing a sublist in **constant** time, but slow (linear) access and memory for links.
+
+### Recursion (lecture "Rekurencja")
+
+Aspects of recursion: **mathematical** (a definition referring to itself — a **base case** is necessary), **algorithmic** (the "divide and conquer" technique) and **programming** (a function calling itself). Example: n! = (n−1)!·n, 0! = 1 — without the base case the definition "unfolds forever" (2! = 1!·2 = 0!·1·2 = (−1)!·0·1·2…).
+
+**Fibonacci:** F(0) = 0, F(1) = 1, F(n+1) = F(n) + F(n−1): 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, …
+
+```pseudo
+fibonacci(n){
+   if (n < 2) return n;
+   else return (fibonacci(n-1) + fibonacci(n-2));
+}
+```
+
+The number of recursive calls is an **exponential** function of n — fibonacci(50) takes surprisingly long (the stack may even run out of memory). A **non-recursive** formula is better. Recursion should be avoided when possible and when it does not complicate the algorithm much (time and memory cost — the call stack).
+
+:::def Linear recurrence of order 2
+If sₙ = a·sₙ₋₁ + b·sₙ₋₂, solve the **characteristic equation** x² − ax − b = 0:
+1. one root r: **sₙ = c₁rⁿ + c₂nrⁿ**,
+2. two roots r₁, r₂: **sₙ = c₁r₁ⁿ + c₂r₂ⁿ**,
+
+the constants c₁, c₂ come from the base values (n = 0, n = 1). For Fibonacci (a = b = 1) this gives **Binet's formula**: F(n) = (1/√5)·(((1+√5)/2)ⁿ − ((1−√5)/2)ⁿ); F(50) = 12 586 269 025.
+:::
+
+**Towers of Hanoi.** n discs on peg A (largest at the bottom), move them to C, one move = one disc from the top, never a larger on a smaller one, auxiliary peg B. hanoi(0) = 0, hanoi(1) = 1, hanoi(2) = 3. Recursively: move n−1 discs to B, the largest to C, n−1 discs from B to C: **hanoi(1) = 1, hanoi(n) = 2·hanoi(n−1) + 1**. "Unfolding the sum": hanoi(n) = Σ_{i=0}^{n−1} 2ⁱ = **2ⁿ − 1**; hanoi(10) = 1023 (grows faster than Fibonacci). The formula could be found **thanks to the recursive formulation of the problem**.
+
+### Three common cases (n = 2ᵏ, t(1) = 0, c > 0 a constant)
+
+| Equation | Solution | Example |
+|---|---|---|
+| t(n) = t(n/2) + c | c·log n = **Θ(log n)** | recursive binSearch |
+| t(n) = t(⌊n/2⌋) + t(⌈n/2⌉) + c | c(n − 1) = **Θ(n)** | recursive maximum (max of left and right half) |
+| t(n) = t(⌊n/2⌋) + t(⌈n/2⌉) + c·n | c·n·log n = **Θ(n log n)** | mergeSort |
+
+:::def The master theorem
+T(n) = a·T(n/b) + f(n), a ≥ 1, b > 1 constants, n/b means ⌊n/b⌋ or ⌈n/b⌉, f asymptotically positive:
+1. f(n) = O(n^(log_b a − ε)) for some ε > 0 ⇒ **T(n) = Θ(n^(log_b a))**,
+2. f(n) = Θ(n^(log_b a)) ⇒ **T(n) = Θ(n^(log_b a)·log n)**,
+3. f(n) = Ω(n^(log_b a + ε)) for some ε > 0 and a·f(n/b) ≤ c·f(n) for some c < 1 (the "regularity condition") ⇒ **T(n) = Θ(f(n))**.
+
+Interpretation: compare the order of the overhead f(n) with n^(log_b a) — the higher one determines the order of T(n); if equal, a factor Θ(log n) appears. (Proof: Cormen et al., ch. 4.4.) MergeSort: a = 2, b = 2, f(n) = Θ(n) → case 2 → Θ(n log n).
+:::
+
+### Tasks from the slides
+
+- Pros and cons of recursion; the recursive definition of Fibonacci and the first terms; the Hanoi move sequence for n = 3 and n = 4.
+- The order-2 linear recurrence theorem for Fibonacci; the 3 equation schemes with example algorithms.
+- Recursive binSearch and recursive minimum: code, time and space complexity, comparison with the non-recursive version.
+- The master theorem for mergeSort and recursive binSearch (by the site author: a = 1, b = 2, f = Θ(1) → case 2 → Θ(log n)).
+
 === summary ===
+
+## 2026/2027 version (M. Sydow)
+
+- mergeSort(S, len): m = len/2 (left shorter), merge with `<`; merge: W = A = Θ(n), S = Θ(n); mergeSort Θ(len log len).
+- Hanoi: hanoi(n) = 2·hanoi(n−1) + 1 = 2ⁿ − 1. Recursive Fibonacci — exponentially many calls; Binet's formula.
+- t(n/2) + c → Θ(log n); 2t(n/2) + c → Θ(n); 2t(n/2) + cn → Θ(n log n).
+- Master theorem: f vs n^(log_b a): smaller → Θ(n^(log_b a)); equal → ·log n; larger (+ regularity) → Θ(f).
+
 
 ## Recursion
 

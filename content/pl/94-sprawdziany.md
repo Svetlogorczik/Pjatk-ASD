@@ -9,11 +9,11 @@ desc: Typy zadań dopuszczeniowych (binSearch, MergeSort, partition, CountSort, 
 ---
 
 :::info Skąd jest ta strona
-**Treści zadań, przykładowe dane z wynikami i wskazówki do części teoretycznej** pochodzą z materiałów prowadzącego na rok 2026/2027 (M. Sydow). **Rozpisanie rozwiązań krok po kroku, pseudokody i zadania treningowe** przygotował autor strony — każdy wynik został sprawdzony programem symulującym algorytm. Zasady punktacji: [Zaliczenie przedmiotu](page:course).
+**Treści zadań, przykładowe dane z wynikami i wskazówki do części teoretycznej** pochodzą z materiałów prowadzącego na rok 2026/2027 (M. Sydow). **Pseudokody** (poza kopcem) są przepisane ze slajdów 2026/2027; **rozpisanie rozwiązań krok po kroku i zadania treningowe** przygotował autor strony — każdy wynik został sprawdzony programem symulującym algorytm. Zasady punktacji: [Zaliczenie przedmiotu](page:course).
 :::
 
 :::warn Wersje algorytmów
-Prowadzący wymaga **dokładnie wersji algorytmów ze slajdów**. Pseudokody poniżej autor strony dobrał tak, żeby dawały **dokładnie oficjalne przykładowe odpowiedzi** — ale to nie są kopie slajdów. Jeśli slajd mówi inaczej, **obowiązuje slajd**. Szczególnie porównaj: sposób wyboru środka w binSearch i MergeSort, zachowanie partition dla elementów równych pivotowi oraz kierunek ostatniej pętli w CountSort.
+Prowadzący wymaga **dokładnie wersji algorytmów ze slajdów**. Pseudokody **search (binSearch), mergeSort/merge, partition/quicksort i countSort** poniżej są **przepisane ze slajdów 2026/2027** (wykłady „Wyszukiwanie”, „Sortowanie 1”, „Sortowanie 2”) i dają dokładnie oficjalne odpowiedzi. Opis **kopca binarnego** to na razie rekonstrukcja autora strony dobrana do oficjalnych odpowiedzi (slajdów o kopcach jeszcze nie było) — jeśli slajd powie inaczej, **obowiązuje slajd**.
 :::
 
 ## Jak wyglądają zadania dopuszczeniowe
@@ -35,16 +35,17 @@ Pełny zakres sprawdzianu praktycznego: rzędy funkcji / notacja O, binSearch, s
 ## 1. Binary Search
 
 ```pseudo
-binSearch(S, len, key){
+search(S, len, key){
   l = 0
   r = len - 1
   while(l <= r){
-    m = (l + r) / 2          // dzielenie całkowite (w dół)
+    m = (l + r)/2
     if(S[m] == key) return m
-    if(S[m] < key) l = m + 1
-    else r = m - 1
+    else
+      if(S[m] > key) r = m - 1
+      else l = m + 1
   }
-  return -1                  // brak klucza
+  return -1
 }
 ```
 
@@ -69,17 +70,28 @@ Na sprawdzianie zawsze zapisuj tabelkę l, r, m — jedna pomyłka w dzieleniu (
 ## 2. Merge Sort
 
 ```pseudo
-mergeSort(S, l, r){
-  if(l < r){
-    m = (l + r) / 2          // lewa połowa S[l..m] jest o 1 dłuższa przy nieparzystej długości
-    mergeSort(S, l, m)
-    mergeSort(S, m + 1, r)
-    merge(S, l, m, r)        // scala posortowane S[l..m] i S[m+1..r]
-  }
+mergeSort(S, len){
+  if(len <= 1) return S[0:len]
+  m = len/2
+  return merge(mergeSort(S[0:m], m), m,
+               mergeSort(S[m:len], len-m), len-m)
+}
+
+merge(a1, len1, a2, len2){
+  i = j = k = 0;
+  result[len1 + len2] // (alokacja pamięci)
+  while((i < len1) && (j < len2))
+    if(a1[i] < a2[j]) result[k++] = a1[i++];
+    else result[k++] = a2[j++];
+  while(i < len1) result[k++] = a1[i++];
+  while(j < len2) result[k++] = a2[j++];
+  return result;
 }
 ```
 
-`merge` porównuje pierwsze elementy obu ciągów i przepisuje mniejszy; **gdy jeden ciąg się skończy, resztę drugiego przepisuje bez porównań**. Liczba porównań w jednym `merge` = liczba elementów wypisanych, zanim któryś ciąg się wyczerpie.
+Uwaga na podział: **m = len/2 (w dół)**, lewa część to S[0:m] — przy nieparzystej długości **lewa połowa jest o 1 krótsza** (np. dla 7 elementów: 3 | 4). Zapis S[a:b] oznacza elementy S[i] dla a ≤ i < b.
+
+`merge` porównuje pierwsze elementy obu ciągów i przepisuje mniejszy; **gdy jeden ciąg się skończy, resztę drugiego przepisuje bez porównań**. Liczba porównań w jednym `merge` = liczba elementów wypisanych, zanim któryś ciąg się wyczerpie. Przy **równych** elementach warunek `a1[i] < a2[j]` jest fałszywy, więc pierwszy idzie element z **prawego** ciągu — ta wersja nie jest stabilna (zamiana `<` na `<=` czyni ją stabilną; slajdy pytają, które miejsce kodu decyduje o stabilności).
 
 **Oficjalny przykład:** S = 6, 2, 4, 0, 3, 8, 7, 5.
 
@@ -105,20 +117,29 @@ Pivotem jest **pierwszy element**. Dwa indeksy idą do siebie: lewy szuka elemen
 
 ```pseudo
 partition(a, l, r){
-  m = a[l]                   // pivot
-  i = l + 1
-  j = r
+  i = l + 1;
+  j = r;
+  p = a[l]; //"pivot"
+  temp;
   do{
-    while(i < r && a[i] <= m) i++
-    while(j > i && a[j] >= m) j--
-    if(i < j) swap(a, i, j)
-  } while(i < j)
-  if(a[i] > m) p = i - 1
-  else p = i
-  swap(a, l, p)              // ostatni swap — liczy się!
-  return p
+    while((i < r) && (a[i] <= p)) i++;
+    while((j > i) && (a[j] >= p)) j--;
+    if(i < j) {temp = a[i]; a[i] = a[j]; a[j] = temp;}
+  }while(i < j);
+  // when (i==r):
+  if(a[i] > p) {a[l] = a[i - 1]; a[i - 1] = p; return i - 1;}
+  else {a[l] = a[i]; a[i] = p; return i;}
+}
+
+quicksort(a, l, r){
+  if(l >= r) return;
+  k = partition(a, l, r);
+  quicksort(a, l, k - 1);
+  quicksort(a, k + 1, r);
 }
 ```
+
+Na slajdzie zamiana pary to trzy przypisania przez `temp`, a końcowe wstawienie pivota (`a[l] = …; … = p`) to też zamiana — w zadaniach dopuszczeniowych liczy się ją jako ostatni `swap()`. Przykład ze slajdów: 5,2,1,7,2,6,1,3,4,8,6,0 → 3,2,1,0,2,4,1,5,6,8,6,7 (zwraca 7).
 
 **Oficjalny przykład:** S = 6, 5, 9, 4, 8, 3, 1, 7, 2, 0 (pivot 6).
 
@@ -143,20 +164,21 @@ Zwrócony indeks = **liczba elementów mniejszych od pivota** (gdy elementy są 
 ## 4. Count Sort
 
 ```pseudo
-countSort(S, len, k){        // elementy z zakresu 0..k
-  counts[0..k] = 0
-  // faza 1: zliczanie
-  for(i = 0; i < len; i++) counts[S[i]]++
-  // faza 2: sumowanie (sumy prefiksowe)
-  for(j = 1; j <= k; j++) counts[j] += counts[j - 1]
-  // faza 3: wypisywanie od końca (dzięki temu sortowanie jest stabilne)
-  for(i = len - 1; i >= 0; i--){
-    counts[S[i]]--
-    result[counts[S[i]]] = S[i]
-  }
-  return result
+countSort(a, l){
+  max = maxValue(a, l);
+  l1 = max + 1;
+  counts[l1];
+  result[l];
+  for(i = 0; i < l1; i++) counts[i] = 0;
+
+  for(i = 0; i < l; i++) counts[a[i]]++;
+  for(i = 1; i < l1; i++) counts[i] += counts[i - 1];
+  for(i = l - 1; i >= 0; i--)
+    result[--counts[a[i]]] = a[i];
 }
 ```
+
+Przykład ze slajdów: dla (3,2,5,1,2,6,8,1,2,4) max = 8, counts po fazie 1: 0,2,3,1,1,1,1,0,1, po fazie 2: 0,2,5,6,7,8,9,9,10. Przedrostkowe `--counts[a[i]]` najpierw zmniejsza licznik, a potem używa go jako indeksu.
 
 **Oficjalny przykład:** S = 2, 2, 4, 2, 5, 3, 5, 2, 1, 0, 1, 5, 0, 2, 0 (max = 5, więc counts ma indeksy 0..5).
 
@@ -300,19 +322,19 @@ Zapisuj l, r, m w tabelce. W b) klucza nie ma — algorytm kończy się, gdy l >
 :::task level=1 source=own title="Merge Sort — liczba porównań i ostatni merge"
 Dla ciągów policz łączną liczbę porównań i podaj ciągi przy ostatnim `merge()`:
 
-a) S = 9, 1, 6, 3, 8, 2, 7 (długość nieparzysta — lewa połowa ma 4 elementy)
+a) S = 9, 1, 6, 3, 8, 2, 7 (długość nieparzysta — m = 7/2 = 3, lewa część ma 3 elementy)
 
 b) S = 5, 1, 8, 3, 9, 4, 0, 6, 2, 7
 ::hint
 Najpierw podziel aż do pojedynczych elementów, potem scalaj od dołu i licz porównania w każdym merge osobno.
 ::solution
-**a)** Podział: (9, 1, 6, 3) | (8, 2, 7) → (9, 1)(6, 3) | (8, 2)(7).
+**a)** Podział: (9, 1, 6) | (3, 8, 2, 7) → (9) | (1, 6) oraz (3, 8) | (2, 7).
 
-Merge: (9)+(1): 1; (6)+(3): 1; (1, 9)+(3, 6): 1 vs 3 → 1; 9 vs 3 → 3; 9 vs 6 → 6; zostaje 9 → **3**. (8)+(2): 1; (2, 8)+(7): 2 vs 7 → 2; 8 vs 7 → 7; zostaje 8 → **2**. Ostatni: (1, 3, 6, 9)+(2, 7, 8): 1v2, 3v2, 3v7, 6v7, 9v7, 9v8 → **6**, zostaje 9.
+Merge: (1)+(6): 1; (9)+(1, 6): 9v1, 9v6 → **2**, zostaje 9; (3)+(8): 1; (2)+(7): 1; (3, 8)+(2, 7): 3v2, 3v7, 8v7 → **3**, zostaje 8. Ostatni: (1, 6, 9)+(2, 3, 7, 8): 1v2, 6v2, 6v3, 6v7, 9v7, 9v8 → **6**, zostaje 9.
 
-Razem 1+1+3+1+2+6 = **14**; ostatni merge: **1, 3, 6, 9 | 2, 7, 8**.
+Razem 1+2+1+1+3+6 = **14**; ostatni merge: **1, 6, 9 | 2, 3, 7, 8**.
 
-**b)** Razem **24** porównania; ostatni merge: **1, 3, 5, 8, 9 | 0, 2, 4, 6, 7**.
+**b)** Razem **22** porównania; ostatni merge: **1, 3, 5, 8, 9 | 0, 2, 4, 6, 7**.
 :::
 
 :::task level=2 source=own title="partition() — dwie tablice"

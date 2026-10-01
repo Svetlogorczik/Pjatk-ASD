@@ -9,8 +9,8 @@ sources: asd2.pdf (§2 Sorting); Dziel-RzadzC.pdf (recursive InsertionSort); Wyk
 exercises: asd 05.pdf (task 1)
 ---
 
-:::exam 2026/2027 practical test
-The algorithms in this topic are within the scope of the **2026/2027 practical test**. **The versions from M. Sydow's slides** apply — they may differ in details from the 2025/2026 versions described here. Versions that reproduce the official sample answers, plus practice tasks: [Tests 2026/2027](page:exams).
+:::exam 2026/2027 tests
+This topic was written from the 2025/2026 lectures. **The 2026/2027 tests use the versions from M. Sydow's slides** — you will find them in the section ["2026/2027 lecture version"](topic:t05#2026-2027-lecture-version-m-sydow-sorting-1) at the end of the topic (code copied from the slides). Qualifying tasks and practice tasks: [Tests 2026/2027](page:exams).
 :::
 
 ## The sorting problem
@@ -183,7 +183,71 @@ The site author's tips for tasks like "show how algorithm … works on the array
 - In InsertionSort give **the inserted element x** and how many elements were shifted.
 - Finally count the comparisons — instructors often ask for it.
 
+
+## 2026/2027 lecture version (M. Sydow) — "Sorting 1"
+
+:::exam
+The tests use the versions of **selectionSort** and **insertionSort** from the slides below (arrays from 0, the counter `next`, the condition `temp < arr[curr - 1]`). Questions from the slides: the idea, operation, **code** and analysis of each algorithm.
+:::
+
+:::def The sorting problem
+- **Input:** S — a sequence of elements that can be ordered by a linear order relation ≤_R (e.g. natural numbers); len — its length (a natural number).
+- **Output:** S' — a sequence of the same elements as S, ordered **non-decreasingly** (∀ 0 < i < len: S[i−1] ≤_R S[i]).
+:::
+
+For simplicity the course sorts natural numbers — apart from CountSort this does not affect the algorithms. Sorting speeds up searching and database operations, helps visualisation and computing statistics.
+
+**Selection Sort** — find the minimum, swap it with the first element and repeat on the sequence from the next index, while the current sequence has more than 1 element.
+
+```pseudo
+selectionSort(S, len){
+  i = 0
+  while(i < len){
+    mini = indexOfMin(S, i, len)
+    swap(S, i, mini)
+    i++
+  }
+}
+```
+
+`indexOfMin(S, i, len)` returns the index of the minimum among S[j], i ≤ j < len; `swap(S, i, mini)` swaps S[i] and S[mini]. **Analysis:** dominant operation — comparison of 2 elements; data size — len. In the i-th iteration we look for the minimum in a sequence of length len − i: **W(len) = Σ_{i=1}^{len−1} i = len(len−1)/2 = Θ(len²)**. **A(len) = W(len)** — the algorithm always does the same number of comparisons, **even for an already sorted sequence**.
+
+**Insertion Sort** — from the second position (`next`) we "push" the current element backwards (comparing) until it finds its place and the first next + 1 elements are sorted.
+
+```pseudo
+insertionSort(arr, len){
+
+  for(next = 1; next < len; next++){
+
+    curr = next;
+    temp = arr[next];
+
+    while((curr > 0) && (temp < arr[curr - 1])){
+
+      arr[curr] = arr[curr - 1];
+      curr--;
+    }
+
+    arr[curr] = temp;
+  }
+}
+```
+
+The invariant of the outer loop is analogous to SelectionSort (the initial fragment is sorted). **Worst case:** **reverse-sorted** data: **W(n) = n(n−1)/2 = ½n² + Θ(n) = Θ(n²)**. For **already sorted** data **n − 1** comparisons suffice — the algorithm "**adapts the amount of work**" to how sorted the data is. **On average** (every permutation of 1..n equally likely) the i-th iteration makes on average (1/i)·Σ_{j=1}^{i} j = (i+1)/2 comparisons, in total **A(n) = Σ_{i=1}^{n−1} (i+1)/2 = ¼n² + Θ(n) = Θ(n²)** — 2 times faster than SelectionSort, but still quadratic (3 times more data → about 9 times longer).
+
+Quadratic complexity is too high for large data — e.g. a billion numbers is only 8 GB in RAM. The solution: **MergeSort** ([topic 6](topic:t06)).
+
+### Sample questions from the slides
+
+The essence of the sorting problem and its uses; selectionSort, insertionSort, mergeSort — idea, operation, code, analysis; lists vs arrays (pros and cons); the merge function on lists instead of arrays.
+
 === summary ===
+
+## 2026/2027 version (M. Sydow)
+
+- Selection: W = A = len(len−1)/2 = Θ(len²) — also for sorted input.
+- Insertion: W = n(n−1)/2 (reverse sorted), sorted: n − 1, A = ¼n² + Θ(n).
+
 
 ## Terms
 

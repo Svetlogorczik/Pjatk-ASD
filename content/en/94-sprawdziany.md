@@ -9,11 +9,11 @@ desc: Qualifying-task types (binSearch, MergeSort, partition, CountSort, heap, a
 ---
 
 :::info Where this page comes from
-**The task wording, the sample data with answers and the hints for the theory part** come from the lecturer's 2026/2027 materials (M. Sydow). **The step-by-step solutions, the pseudocode and the practice tasks** were prepared by the site author — every result was checked with a program that simulates the algorithm. Scoring rules: [Passing the course](page:course).
+**The task wording, the sample data with answers and the hints for the theory part** come from the lecturer's 2026/2027 materials (M. Sydow). **The pseudocode** (except the heap) is copied from the 2026/2027 slides; **the step-by-step solutions and the practice tasks** were prepared by the site author — every result was checked with a program that simulates the algorithm. Scoring rules: [Passing the course](page:course).
 :::
 
 :::warn Algorithm versions
-The lecturer requires **exactly the versions of the algorithms from the slides**. The site author chose the pseudocode below so that it gives **exactly the official sample answers** — but it is not a copy of the slides. If a slide says otherwise, **the slide wins**. Compare in particular: how the middle is chosen in binSearch and MergeSort, how partition treats elements equal to the pivot, and the direction of the last loop in CountSort.
+The lecturer requires **exactly the versions of the algorithms from the slides**. The pseudocode of **search (binSearch), mergeSort/merge, partition/quicksort and countSort** below is **copied from the 2026/2027 slides** (lectures "Wyszukiwanie", "Sortowanie 1", "Sortowanie 2") and gives exactly the official answers. The description of the **binary heap** is still the site author's reconstruction matched to the official answers (there have been no heap slides yet) — if a slide says otherwise, **the slide wins**.
 :::
 
 ## What the qualifying tasks look like
@@ -35,16 +35,17 @@ Full scope of the practical test: orders of functions / O notation, binSearch, s
 ## 1. Binary Search
 
 ```pseudo
-binSearch(S, len, key){
+search(S, len, key){
   l = 0
   r = len - 1
   while(l <= r){
-    m = (l + r) / 2          // integer division (rounded down)
+    m = (l + r)/2
     if(S[m] == key) return m
-    if(S[m] < key) l = m + 1
-    else r = m - 1
+    else
+      if(S[m] > key) r = m - 1
+      else l = m + 1
   }
-  return -1                  // key not found
+  return -1
 }
 ```
 
@@ -69,17 +70,28 @@ In the test always write the l, r, m table — one slip in the division (e.g. (6
 ## 2. Merge Sort
 
 ```pseudo
-mergeSort(S, l, r){
-  if(l < r){
-    m = (l + r) / 2          // for odd length the left half S[l..m] is longer by 1
-    mergeSort(S, l, m)
-    mergeSort(S, m + 1, r)
-    merge(S, l, m, r)        // merges sorted S[l..m] and S[m+1..r]
-  }
+mergeSort(S, len){
+  if(len <= 1) return S[0:len]
+  m = len/2
+  return merge(mergeSort(S[0:m], m), m,
+               mergeSort(S[m:len], len-m), len-m)
+}
+
+merge(a1, len1, a2, len2){
+  i = j = k = 0;
+  result[len1 + len2] // (alokacja pamięci)
+  while((i < len1) && (j < len2))
+    if(a1[i] < a2[j]) result[k++] = a1[i++];
+    else result[k++] = a2[j++];
+  while(i < len1) result[k++] = a1[i++];
+  while(j < len2) result[k++] = a2[j++];
+  return result;
 }
 ```
 
-`merge` compares the first elements of both sequences and copies the smaller one; **once one sequence runs out, the rest of the other is copied without comparisons**. The number of comparisons in one `merge` = the number of elements output before one of the sequences is exhausted.
+Watch the split: **m = len/2 (rounded down)**, the left part is S[0:m] — for odd length **the left half is shorter by 1** (e.g. for 7 elements: 3 | 4). S[a:b] means the elements S[i] with a ≤ i < b.
+
+`merge` compares the first elements of both sequences and copies the smaller one; **once one sequence runs out, the rest of the other is copied without comparisons**. The number of comparisons in one `merge` = the number of elements output before one of the sequences is exhausted. For **equal** elements the condition `a1[i] < a2[j]` is false, so the element from the **right** sequence goes first — this version is not stable (changing `<` to `<=` makes it stable; the slides ask which place in the code decides stability).
 
 **Official example:** S = 6, 2, 4, 0, 3, 8, 7, 5.
 
@@ -105,20 +117,29 @@ The pivot is **the first element**. Two indices move towards each other: the lef
 
 ```pseudo
 partition(a, l, r){
-  m = a[l]                   // pivot
-  i = l + 1
-  j = r
+  i = l + 1;
+  j = r;
+  p = a[l]; //"pivot"
+  temp;
   do{
-    while(i < r && a[i] <= m) i++
-    while(j > i && a[j] >= m) j--
-    if(i < j) swap(a, i, j)
-  } while(i < j)
-  if(a[i] > m) p = i - 1
-  else p = i
-  swap(a, l, p)              // the last swap — it counts!
-  return p
+    while((i < r) && (a[i] <= p)) i++;
+    while((j > i) && (a[j] >= p)) j--;
+    if(i < j) {temp = a[i]; a[i] = a[j]; a[j] = temp;}
+  }while(i < j);
+  // when (i==r):
+  if(a[i] > p) {a[l] = a[i - 1]; a[i - 1] = p; return i - 1;}
+  else {a[l] = a[i]; a[i] = p; return i;}
+}
+
+quicksort(a, l, r){
+  if(l >= r) return;
+  k = partition(a, l, r);
+  quicksort(a, l, k - 1);
+  quicksort(a, k + 1, r);
 }
 ```
+
+On the slide a pair swap is three assignments via `temp`, and the final placement of the pivot (`a[l] = …; … = p`) is a swap too — in the qualifying tasks it counts as the last `swap()`. Example from the slides: 5,2,1,7,2,6,1,3,4,8,6,0 → 3,2,1,0,2,4,1,5,6,8,6,7 (returns 7).
 
 **Official example:** S = 6, 5, 9, 4, 8, 3, 1, 7, 2, 0 (pivot 6).
 
@@ -143,20 +164,21 @@ The returned index = **the number of elements smaller than the pivot** (when the
 ## 4. Count Sort
 
 ```pseudo
-countSort(S, len, k){        // elements from the range 0..k
-  counts[0..k] = 0
-  // phase 1: counting
-  for(i = 0; i < len; i++) counts[S[i]]++
-  // phase 2: summing (prefix sums)
-  for(j = 1; j <= k; j++) counts[j] += counts[j - 1]
-  // phase 3: output from the end (this makes the sort stable)
-  for(i = len - 1; i >= 0; i--){
-    counts[S[i]]--
-    result[counts[S[i]]] = S[i]
-  }
-  return result
+countSort(a, l){
+  max = maxValue(a, l);
+  l1 = max + 1;
+  counts[l1];
+  result[l];
+  for(i = 0; i < l1; i++) counts[i] = 0;
+
+  for(i = 0; i < l; i++) counts[a[i]]++;
+  for(i = 1; i < l1; i++) counts[i] += counts[i - 1];
+  for(i = l - 1; i >= 0; i--)
+    result[--counts[a[i]]] = a[i];
 }
 ```
+
+Example from the slides: for (3,2,5,1,2,6,8,1,2,4) max = 8, counts after phase 1: 0,2,3,1,1,1,1,0,1, after phase 2: 0,2,5,6,7,8,9,9,10. The prefix `--counts[a[i]]` first decrements the counter and then uses it as the index.
 
 **Official example:** S = 2, 2, 4, 2, 5, 3, 5, 2, 1, 0, 1, 5, 0, 2, 0 (max = 5, so counts has indices 0..5).
 
@@ -300,19 +322,19 @@ Write l, r, m in a table. In b) the key is missing — the algorithm ends when l
 :::task level=1 source=own title="Merge Sort — number of comparisons and the last merge"
 For the sequences count the total number of comparisons and give the sequences in the last `merge()`:
 
-a) S = 9, 1, 6, 3, 8, 2, 7 (odd length — the left half has 4 elements)
+a) S = 9, 1, 6, 3, 8, 2, 7 (odd length — m = 7/2 = 3, the left part has 3 elements)
 
 b) S = 5, 1, 8, 3, 9, 4, 0, 6, 2, 7
 ::hint
 First split down to single elements, then merge bottom-up and count the comparisons in each merge separately.
 ::solution
-**a)** Split: (9, 1, 6, 3) | (8, 2, 7) → (9, 1)(6, 3) | (8, 2)(7).
+**a)** Split: (9, 1, 6) | (3, 8, 2, 7) → (9) | (1, 6) and (3, 8) | (2, 7).
 
-Merges: (9)+(1): 1; (6)+(3): 1; (1, 9)+(3, 6): 1 vs 3 → 1; 9 vs 3 → 3; 9 vs 6 → 6; 9 remains → **3**. (8)+(2): 1; (2, 8)+(7): 2 vs 7 → 2; 8 vs 7 → 7; 8 remains → **2**. Last: (1, 3, 6, 9)+(2, 7, 8): 1v2, 3v2, 3v7, 6v7, 9v7, 9v8 → **6**, 9 remains.
+Merges: (1)+(6): 1; (9)+(1, 6): 9v1, 9v6 → **2**, 9 remains; (3)+(8): 1; (2)+(7): 1; (3, 8)+(2, 7): 3v2, 3v7, 8v7 → **3**, 8 remains. Last: (1, 6, 9)+(2, 3, 7, 8): 1v2, 6v2, 6v3, 6v7, 9v7, 9v8 → **6**, 9 remains.
 
-Total 1+1+3+1+2+6 = **14**; last merge: **1, 3, 6, 9 | 2, 7, 8**.
+Total 1+2+1+1+3+6 = **14**; last merge: **1, 6, 9 | 2, 3, 7, 8**.
 
-**b)** Total **24** comparisons; last merge: **1, 3, 5, 8, 9 | 0, 2, 4, 6, 7**.
+**b)** Total **22** comparisons; last merge: **1, 3, 5, 8, 9 | 0, 2, 4, 6, 7**.
 :::
 
 :::task level=2 source=own title="partition() — two arrays"

@@ -10,7 +10,7 @@ exercises: asd 05.pdf (zad. 2, 5), asd 06.pdf (zad. 1, 3)
 ---
 
 :::exam Sprawdzian 2026/2027
-Algorytmy z tego tematu są w zakresie **sprawdzianu praktycznego 2026/2027**. Obowiązują **wersje ze slajdów M. Sydowa** — mogą się różnić w szczegółach od opisanych tu wersji z 2025/2026. Wersje zgodne z oficjalnymi przykładowymi odpowiedziami i zadania treningowe: [Sprawdziany 2026/2027](page:exams).
+Ten temat powstał na podstawie wykładów 2025/2026. **Na sprawdzianach 2026/2027 obowiązują wersje ze slajdów M. Sydowa** — znajdziesz je w sekcji [„Wersja z wykładu 2026/2027”](topic:t07#wersja-z-wykładu-2026-2027-m-sydow-sortowanie-2) na końcu tematu (kod przepisany ze slajdów). Zadania dopuszczeniowe i zadania treningowe: [Sprawdziany 2026/2027](page:exams).
 :::
 
 ## QuickSort — szybkie sortowanie (Hoare, 1960)
@@ -227,7 +227,90 @@ Zbiorcza tabela przygotowana przez autora strony na podstawie wyników z wykład
 | CountingSort | O(n + m) | O(n + m) | O(n + m) | tak |
 | RadixSort | O(d(n + k)) | O(d(n + k)) | O(n + k) | tak |
 
+
+## Wersja z wykładu 2026/2027 (M. Sydow) — „Sortowanie 2”
+
+:::exam
+Na sprawdzianach obowiązuje poniższy kod **partition / quicksort / countSort** ze slajdów. Zadania dopuszczeniowe (partition, CountSort) są rozwiązane krok po kroku na stronie [Sprawdziany 2026/2027](page:exams).
+:::
+
+:::def Stabilność
+Algorytm sortujący jest **stabilny** ⇔ zachowuje pierwotny względny porządek elementów o tej samej wartości. Np. 4, 2ₐ, 3, 1, 2_b, 5, 2_c → 1, 2ₐ, 2_b, 2_c, 3, 4, 5. Przydatne przy sortowaniu rekordów wieloatrybutowych po kolei po kilku atrybutach (np. wiek, pensja) — sortowanie po kolejnym atrybucie nie niszczy wyników poprzedniego.
+:::
+
+**QuickSort** (C.A.R. Hoare, „dziel i zwyciężaj”): partition wybiera **oś (pivot)** — w tym wykładzie **pierwszy** element — i przestawia elementy tak, że na lewo są niewiększe, na prawo niemniejsze; zwraca indeks osi. Przykład: 5,2,1,7,2,6,1,3,4,8,6,0 → 3,2,1,0,2,4,1,**5**,6,8,6,7 (zwraca 7). Potem rekurencyjnie sortujemy części na lewo i na prawo od osi (jeśli oś trafi na koniec, jedna część jest pusta).
+
+```pseudo
+partition(a, l, r){
+
+  i = l + 1;
+  j = r;
+  p = a[l]; //"pivot"
+  temp;
+
+  do{
+    while((i < r) && (a[i] <= p)) i++;
+    while((j > i) && (a[j] >= p)) j--;
+    if(i < j) {temp = a[i]; a[i] = a[j]; a[j] = temp;}
+  }while(i < j);
+  // when (i==r):
+  if(a[i] > p) {a[l] = a[i - 1]; a[i - 1] = p; return i - 1;}
+  else {a[l] = a[i]; a[i] = p; return i;}
+}
+
+quicksort(a, l, r){
+
+    if(l >= r) return;
+    k = partition(a, l, r);
+    quicksort(a, l, k - 1);
+    quicksort(a, k + 1, r);
+}
+```
+
+**Analiza partition:** indeks i idzie w prawo, dopóki nie napotka liczby większej od p, j w lewo, dopóki nie napotka mniejszej — wtedy je zamieniamy; na końcu p zamieniamy z ostatnim elementem „lewego” ciągu. Porównanie jest wykonywane raz dla każdej pozycji indeksu — łącznie tyle, ile elementów minus jeden: **W(n) = A(n) = Θ(n)**, **S(n) = O(1)** (działa **w miejscu**).
+
+**Analiza QuickSort:** na każdym poziomie rekurencji łącznie Θ(n) porównań, więc wszystko zależy od **głębokości rekurencji**. Oś zawsze w połowie → głębokość Θ(log n) → **Θ(n log n)**. Oś zawsze na końcu (np. ciąg **posortowany lub odwrotnie posortowany**) → ciąg krótszy tylko o 1, głębokość Θ(n) → **W(n) = Θ(n²)**. Przeciętnie (każda permutacja jednakowo prawdopodobna) głębokość Θ(log n): **A(n) = Θ(n log n)** ze stałą ok. **1,44** — QuickSort jest przeciętnie szybszy od MergeSort. Wersja podstawowa **nie jest stabilna**; istnieją ulepszenia (gwarantowane n log n, stabilność).
+
+**Dolna granica.** Sortowanie przez porównania to **drzewo decyzyjne**: każdy węzeł to porównanie „a < b?”, liście to wszystkie **n!** permutacje. Wysokość binarnego drzewa o n! liściach to co najmniej log₂(n!) = **Θ(n log n)** — nie istnieje algorytm sortujący przez porównania o niższym rzędzie złożoności **przeciętnej i pesymistycznej** niż Θ(n log n). Szybciej można tylko **bez porównań** — kosztem pamięci („**czas vs pamięć**”).
+
+**CountSort** (adresowanie bezpośrednie, dane w RAM). Elementy to liczby **naturalne**. Tablice pomocnicze: **counts** (długość = maksymalna liczba + 1) i **result**. Trzy fazy: (1) zliczanie wystąpień, (2) przyrostowe sumowanie od lewej do prawej (ile elementów jest niewiększych od danego), (3) ponowne przejście wejścia i wysłanie każdego elementu do result pod adres z counts (licznik zmniejszamy o 1 przed użyciem); **dla stabilności wejście przechodzimy „od tyłu”**.
+
+```pseudo
+countSort(a, l){
+
+    max = maxValue(a, l);
+    l1 = max + 1;
+    counts[l1];
+    result[l];
+    for(i = 0; i < l1; i++) counts[i] = 0;
+
+    for(i = 0; i < l; i++) counts[a[i]]++;
+    for(i = 1; i < l1; i++) counts[i] += counts[i - 1];
+    for(i = l - 1; i >= 0; i--)
+       result[--counts[a[i]]] = a[i];
+}
+```
+
+Przykład ze slajdów: (3,2,5,1,2,6,8,1,2,4), max = 8 → counts po fazie 1: 0,2,3,1,1,1,1,0,1; po fazie 2: 0,2,5,6,7,8,9,9,10. **Analiza:** operacja dominująca — przypisanie wartości w tablicy; rozmiar danych: n (długość) i **m (maksymalna wartość)**; **A(n,m) = W(n,m) = 2n + 2m = Θ(n + m)** — liniowa; **S(n,m) = n + m = Θ(n + m)**. Słaby wybór, gdy m ≫ n (np. ciąg (10⁹, 1) — miliard kroków i tablica długości 10⁹).
+
+**RadixSort** — schemat sortowania wieloelementowych obiektów stałej długości (łańcuchy, liczby wielocyfrowe) za pomocą pomocniczego **stabilnego** algorytmu: najpierw po **ostatniej** pozycji, potem po przedostatniej, … aż do pierwszej. Dla małego alfabetu (cyfry 0–9, litery) dobrym pomocniczym algorytmem jest CountSort. Przykład: (212, 305, 115, 202, 131) → po ostatniej: (131, 212, 202, 305, 115) → po środkowej: (202, 305, 212, 115, 131) → po pierwszej: (115, 131, 202, 212, 305).
+
+### Przykładowe pytania ze slajdów
+
+- Definicja stabilności i do czego służy; dla każdego z 5 algorytmów — czy jest stabilny i **które miejsce w kodzie** o tym decyduje.
+- Specyfikacja partition i jej wynik na danej tablicy; analiza (czas, pamięć). Pseudokod QuickSort, analiza, ulepszenia.
+- Dolna granica sortowania przez porównania.
+- CountSort na danym ciągu — końcowa zawartość counts; analiza. Porównanie parami 5 algorytmów sortowania.
+- Rozszerzenie CountSort na liczby całkowite (także ujemne). RadixSort na ciągu liczb 3-cyfrowych; złożoność dla liczb d-cyfrowych (odpowiedź autora strony: d przebiegów CountSort, czyli Θ(d·(n + 10))).
+
 === summary ===
+
+## Wersja 2026/2027 (M. Sydow)
+
+- partition (pivot = pierwszy): W = A = Θ(n), S = O(1); QuickSort A = Θ(n log n) (≈1,44), W = Θ(n²) dla posortowanych.
+- Dolna granica przez porównania: log₂ n! = Θ(n log n).
+- CountSort: W = A = Θ(n + m), S = Θ(n + m), stabilny (faza 3 od tyłu). RadixSort: od ostatniej pozycji, stabilny pomocniczy.
+
 
 ## QuickSort
 

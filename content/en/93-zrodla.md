@@ -14,6 +14,11 @@ desc: The list of lecture files and class problem sets used by the site, the cou
 |---|---|---|
 | correctness1-pl.pdf — *(1) Correctness of algorithms* | organisation, pseudocode, specification, total and partial correctness, stop property, invariants | [2](topic:t02) (section "2026/2027 lecture version") |
 | complexity2-pl.pdf — *Computational complexity of algorithms* | dominant operations, data size, W(n), A(n), S(n), 5 asymptotic notations, orders of functions | [3](topic:t03) (section "2026/2027 lecture version") |
+| searching3-pl.pdf — *Searching* | divide and conquer, sequential search, jumps of k, binary search (`search` code), order statistics, tournament, partition, Hoare's algorithm | [4](topic:t04) (section "2026/2027 lecture version") |
+| sortOne4-pl.pdf — *Sorting 1* | the sorting problem, SelectionSort, InsertionSort, MergeSort and merge, linked lists | [5](topic:t05), [6](topic:t06) |
+| sortTwo5-pl.pdf — *Sorting 2* | stability, QuickSort and partition, the n log n lower bound, CountSort, RadixSort | [7](topic:t07) |
+| recursion6-pl.pdf — *Recursion* | factorial, Fibonacci, order-2 linear recurrences, Towers of Hanoi, 3 recurrence schemes, the master theorem | [6](topic:t06) |
+| listsAndArrays7-pl.pdf — *Lists and arrays* | singly/doubly linked and cyclic lists, splice, abstract data structures: stack, queue, deque | [9](topic:t09) |
 | Qualifying-task descriptions, sample data with answers, hints for the theory part | task types for the practical test, scope of the knowledge test | [Tests 2026/2027](page:exams) |
 
 **Recommended literature in 2026/2027:** Cormen, Leiserson, Rivest, Stein — *Introduction to Algorithms* (Polish: *Wprowadzenie do algorytmów*, PWN 2018); K. Mehlhorn, P. Sanders — *Algorithms and Data Structures. The Basic Toolbox*, Springer 2008; G. Mirkowska et al. — *Algorytmy i struktury danych — zadania*, PJWSTK 2005 (problem book, partly with solutions); L. Banachowski, K. Diks, W. Rytter — *Algorytmy i struktury danych*, PWN 2018. Others from the slides: N. Wirth — *Algorithms + Data Structures = Programs*; A. Aho, J. Hopcroft, J. Ullman — *Data Structures and Algorithms*; W. Lipski — *Kombinatoryka dla programistów*; for deeper study: D. Knuth — *The Art of Computer Programming*, Ch. Papadimitriou — *Computational Complexity*.

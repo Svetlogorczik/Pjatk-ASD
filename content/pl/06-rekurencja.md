@@ -10,7 +10,7 @@ exercises: asd 05.pdf (zad. 3), asd 06.pdf (zad. 2)
 ---
 
 :::exam Sprawdzian 2026/2027
-Algorytmy z tego tematu są w zakresie **sprawdzianu praktycznego 2026/2027**. Obowiązują **wersje ze slajdów M. Sydowa** — mogą się różnić w szczegółach od opisanych tu wersji z 2025/2026. Wersje zgodne z oficjalnymi przykładowymi odpowiedziami i zadania treningowe: [Sprawdziany 2026/2027](page:exams).
+Ten temat powstał na podstawie wykładów 2025/2026. **Na sprawdzianach 2026/2027 obowiązują wersje ze slajdów M. Sydowa** — znajdziesz je w sekcji [„Wersja z wykładu 2026/2027”](topic:t06#wersja-z-wykładu-2026-2027-m-sydow-sortowanie-1-mergesort-i-) na końcu tematu (kod przepisany ze slajdów). Zadania dopuszczeniowe i zadania treningowe: [Sprawdziany 2026/2027](page:exams).
 :::
 
 ## Czym jest rekursja?
@@ -239,7 +239,106 @@ Kto „wygrywa”: praca rozdzielona na liście drzewa rekursji (n^(log_b a)) cz
 Twierdzenie **nie obejmuje** równań typu T(n) = T(n − 1) + n (podział „1 ; n−1”) — tam nie ma dzielenia przez b. Takie równania rozwiązujemy rozwijaniem: T(n) = n + (n−1) + … = Θ(n²).
 :::
 
+
+## Wersja z wykładu 2026/2027 (M. Sydow) — „Sortowanie 1” (MergeSort) i „Rekurencja”
+
+:::exam
+Na sprawdzianach obowiązuje poniższy **mergeSort(S, len)** ze slajdów: **m = len/2**, więc przy nieparzystej długości **lewa połowa jest krótsza** (7 → 3 | 4). `merge` używa ostrej nierówności `a1[i] < a2[j]`. Zadanie dopuszczeniowe: liczba porównań i ciągi przy ostatnim `merge()` — rozwiązane na stronie [Sprawdziany 2026/2027](page:exams).
+:::
+
+**Merge Sort** — „dziel i rządź”: (1) podziel ciąg na 2 połowy, (2) posortuj każdą połówkę oddzielnie (rekurencyjnie, dopóki mają długość > 1), (3) połącz posortowane połówki — złączenie dwóch posortowanych ciągów wymaga tylko liniowo wielu porównań.
+
+```pseudo
+mergeSort(S, len){
+  if(len <= 1) return S[0:len]
+  m = len/2
+  return merge(mergeSort(S[0:m], m), m,
+               mergeSort(S[m:len], len-m), len-m)
+}
+```
+
+S[a:b] (notacja jak w Pythonie) to podciąg elementów S[i], a ≤ i < b; `merge(a1, len1, a2, len2)` złącza dwa posortowane podciągi i zwraca połączony posortowany ciąg:
+
+```pseudo
+merge(a1, len1, a2, len2){
+
+  i = j = k = 0;
+  result[len1 + len2] // (alokacja pamięci)
+
+  while((i < len1) && (j < len2))
+    if(a1[i] < a2[j]) result[k++] = a1[i++];
+    else result[k++] = a2[j++];
+
+  while(i < len1) result[k++] = a1[i++];
+
+  while(j < len2) result[k++] = a2[j++];
+
+  return result;
+}
+```
+
+**Analiza merge:** operacja dominująca — porównanie 2 elementów lub indeksów; rozmiar danych n = len1 + len2; **W(n) = A(n) = Θ(n)**; niestety **S(n) = Θ(n)** (alokujemy tablicę na połączone ciągi — można tego uniknąć na **listach dowiązaniowych**). **Analiza mergeSort:** na każdym poziomie rekurencji wywołania merge działają na ciągach o łącznej długości len, a poziomów jest log₂(len): **W(len) = A(len) = Θ(len·log len)** — złożoność **liniowo-logarytmiczna**. Przykład ze slajdów: 100 mln logów, 10⁹ porównań/s: insertionSort ≈ (10⁸)²/10⁹ s = 10⁷ s (**115 dni**), mergeSort ≈ 2,65·10⁹/10⁹ s (**2,65 sekundy**).
+
+**Listy dowiązaniowe w mergeSort.** Węzły połączone dowiązaniami (wskaźnikami): `początek -> (2)-> (3)-> (5)-> (8)-> null`. Wystarczą listy **jednokierunkowe** (merge przechodzi każdą listę w jednym kierunku). Merge na listach tylko przestawia dowiązania, więc **nie zużywa dodatkowej pamięci** (poza stosem rekurencji), przy tej samej złożoności czasowej. Tablice: szybki dostęp bezpośredni, mało pamięci, ale wstawienie w środek — liniowe; listy: wstawienie/usunięcie podlisty w czasie **stałym**, ale wolny (liniowy) dostęp i pamięć na dowiązania.
+
+### Rekurencja (wykład „Rekurencja”)
+
+Aspekty rekurencji: **matematyczny** (definicja odwołująca się do samej siebie — niezbędny **przypadek bazowy**), **algorytmiczny** (technika „dziel i zwyciężaj”) i **programistyczny** (rekursja — funkcja wywołująca samą siebie). Przykład: n! = (n−1)!·n, 0! = 1 — bez przypadku bazowego definicja „rozwija się w nieskończoność” (2! = 1!·2 = 0!·1·2 = (−1)!·0·1·2…).
+
+**Fibonacci:** F(0) = 0, F(1) = 1, F(n+1) = F(n) + F(n−1): 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, …
+
+```pseudo
+fibonacci(n){
+   if (n < 2) return n;
+   else return (fibonacci(n-1) + fibonacci(n-2));
+}
+```
+
+Liczba wywołań rekurencyjnych jest **wykładniczą** funkcją n — fibonacci(50) liczy się zaskakująco długo (może zabraknąć pamięci na stos). Lepszy jest wzór **nierekurencyjny**. Rekurencji należy unikać, jeśli to możliwe i nie komplikuje bardzo algorytmu (koszt czasowy i pamięciowy — stos wywołań).
+
+:::def Liniowe równanie rekurencyjne 2. rzędu
+Jeśli sₙ = a·sₙ₋₁ + b·sₙ₋₂, rozwiązujemy **równanie charakterystyczne** x² − ax − b = 0:
+1. jeden pierwiastek r: **sₙ = c₁rⁿ + c₂nrⁿ**,
+2. dwa pierwiastki r₁, r₂: **sₙ = c₁r₁ⁿ + c₂r₂ⁿ**,
+
+stałe c₁, c₂ wyznaczamy z wartości bazowych (n = 0, n = 1). Dla Fibonacciego (a = b = 1) daje to **wzór Bineta**: F(n) = (1/√5)·(((1+√5)/2)ⁿ − ((1−√5)/2)ⁿ); F(50) = 12 586 269 025.
+:::
+
+**Wieże Hanoi.** n krążków na drążku A (największy na dole), przenieść na C, jeden ruch = jeden krążek z wierzchu, nigdy większy na mniejszym, pomocniczy drążek B. hanoi(0) = 0, hanoi(1) = 1, hanoi(2) = 3. Rekurencyjnie: przenieś n−1 krążków na B, największy na C, n−1 krążków z B na C: **hanoi(1) = 1, hanoi(n) = 2·hanoi(n−1) + 1**. „Rozwijanie sumy”: hanoi(n) = Σ_{i=0}^{n−1} 2ⁱ = **2ⁿ − 1**; hanoi(10) = 1023 (rośnie szybciej niż Fibonacci). Wzór dało się wyznaczyć **dzięki rekurencyjnemu ujęciu problemu**.
+
+### Trzy często spotykane przypadki (n = 2ᵏ, t(1) = 0, c > 0 stała)
+
+| Równanie | Rozwiązanie | Przykład |
+|---|---|---|
+| t(n) = t(n/2) + c | c·log n = **Θ(log n)** | rekurencyjny binSearch |
+| t(n) = t(⌊n/2⌋) + t(⌈n/2⌉) + c | c(n − 1) = **Θ(n)** | rekurencyjne maksimum (max z lewej i prawej połowy) |
+| t(n) = t(⌊n/2⌋) + t(⌈n/2⌉) + c·n | c·n·log n = **Θ(n log n)** | mergeSort |
+
+:::def Twierdzenie o rekurencji uniwersalnej
+T(n) = a·T(n/b) + f(n), a ≥ 1, b > 1 stałe, n/b to ⌊n/b⌋ lub ⌈n/b⌉, f asymptotycznie dodatnia:
+1. f(n) = O(n^(log_b a − ε)) dla pewnego ε > 0 ⇒ **T(n) = Θ(n^(log_b a))**,
+2. f(n) = Θ(n^(log_b a)) ⇒ **T(n) = Θ(n^(log_b a)·log n)**,
+3. f(n) = Ω(n^(log_b a + ε)) dla pewnego ε > 0 i a·f(n/b) ≤ c·f(n) dla pewnego c < 1 („warunek regularności”) ⇒ **T(n) = Θ(f(n))**.
+
+Interpretacja: porównujemy rząd narzutu f(n) z n^(log_b a) — wyższy z nich wyznacza rząd T(n); przy równych dochodzi czynnik Θ(log n). (Dowód: Cormen i in., rozdz. 4.4.) MergeSort: a = 2, b = 2, f(n) = Θ(n) → przypadek 2 → Θ(n log n).
+:::
+
+### Zadania ze slajdów
+
+- Pozytywne i negatywne aspekty rekurencji; rekurencyjna definicja Fibonacciego i pierwsze wyrazy; sekwencja ruchów Hanoi dla n = 3 i n = 4.
+- Twierdzenie o równaniach liniowych 2. rzędu dla Fibonacciego; 3 schematy równań z przykładami algorytmów.
+- Rekurencyjny binSearch i rekurencyjne minimum: kod, złożoność czasowa i pamięciowa, porównanie z wersją nierekurencyjną.
+- Twierdzenie o rekurencji uniwersalnej dla mergeSort i rekurencyjnego binSearch (od autora strony: a = 1, b = 2, f = Θ(1) → przypadek 2 → Θ(log n)).
+
 === summary ===
+
+## Wersja 2026/2027 (M. Sydow)
+
+- mergeSort(S, len): m = len/2 (lewa krótsza), merge z `<`; merge: W = A = Θ(n), S = Θ(n); mergeSort Θ(len log len).
+- Hanoi: hanoi(n) = 2·hanoi(n−1) + 1 = 2ⁿ − 1. Fibonacci rekurencyjnie — wykładniczo wiele wywołań; wzór Bineta.
+- t(n/2) + c → Θ(log n); 2t(n/2) + c → Θ(n); 2t(n/2) + cn → Θ(n log n).
+- Tw. uniwersalne: f vs n^(log_b a): mniejszy → Θ(n^(log_b a)); równy → ·log n; większy (+ regularność) → Θ(f).
+
 
 ## Rekursja
 

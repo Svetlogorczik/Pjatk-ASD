@@ -10,7 +10,7 @@ exercises: asd 03.pdf (zad. 3), asd 05.pdf (zad. 4)
 ---
 
 :::exam Sprawdzian 2026/2027
-Algorytmy z tego tematu są w zakresie **sprawdzianu praktycznego 2026/2027**. Obowiązują **wersje ze slajdów M. Sydowa** — mogą się różnić w szczegółach od opisanych tu wersji z 2025/2026. Wersje zgodne z oficjalnymi przykładowymi odpowiedziami i zadania treningowe: [Sprawdziany 2026/2027](page:exams).
+Ten temat powstał na podstawie wykładów 2025/2026. **Na sprawdzianach 2026/2027 obowiązują wersje ze slajdów M. Sydowa** — znajdziesz je w sekcji [„Wersja z wykładu 2026/2027”](topic:t04#wersja-z-wykładu-2026-2027-m-sydow-wyszukiwanie) na końcu tematu (kod przepisany ze slajdów). Zadania dopuszczeniowe i zadania treningowe: [Sprawdziany 2026/2027](page:exams).
 :::
 
 ## Problem wyszukiwania
@@ -231,7 +231,78 @@ Starsze slajdy (2009, „Problem wyszukania II”) wspominają algorytm **„mag
 Na ćwiczeniach często trzeba „przedstawić działanie algorytmu Hoare'a” — czyli wypisać **kolejne wywołania partition**: przedział (l, p), pivot, wynikową pozycję j, stan tablicy po podziale i nowe k. Zapisuj to w tabelce — tak jak w rozwiązaniu zadania 3 poniżej.
 :::
 
+
+## Wersja z wykładu 2026/2027 (M. Sydow) — „Wyszukiwanie”
+
+:::exam
+Na sprawdzianach 2026/2027 obowiązują poniższe specyfikacje i kod ze slajdów. Kod `search` (wyszukiwanie binarne) trzeba umieć **napisać z pamięci** i **zasymulować** na danych — patrz też [Sprawdziany 2026/2027](page:exams).
+:::
+
+**Dziel i rządź** — technika **projektowania** algorytmów: dzielimy problem na podproblemy (mniejsze dane) i wyjaśniamy, jak z ich rozwiązań otrzymać rozwiązanie całości. Często implementowana za pomocą **rekursji** (technika **programowania**: funkcja wywołuje samą siebie dla mniejszych danych).
+
+:::def Problem wyszukiwania — search(S, len, key)
+- **Input:** S — ciąg liczb całkowitych; len — długość ciągu; key (klucz) — liczba całkowita.
+- **Output:** indeks (liczba naturalna mniejsza od len), pod którym w S znajduje się key (S[index] == key), **albo −1**, jeśli klucza nie ma.
+- Przykład: S = (3,5,8,2,1,8,4,2,9): search(S, 9, 2) → 3; search(S, 9, 7) → −1.
+:::
+
+Naturalna **operacja dominująca** to **porównanie** klucza z elementem, **rozmiar danych** — długość ciągu len (może też obejmować inne parametry, np. k w algorytmie skoków). **Wyszukiwanie sekwencyjne** (indeksy 0..len−1) ma **W(len) = len**, i tej pesymistycznej złożoności **nie poprawi** zmiana kolejności przeglądania — szukany element zawsze może być pod ostatnim sprawdzanym indeksem.
+
+**Ciąg posortowany.** Dodatkowa własność — **uporządkowanie** — pozwala szukać szybciej. Zmieniona specyfikacja: Input: S — ciąg **niemalejąco posortowanych** liczb całkowitych (wartości mogą się powtarzać), indeksowanych od 0; reszta bez zmian.
+
+**Algorytm skoków co k.** Sprawdzamy co k-ty indeks (pomijając k−1 elementów w każdym „skoku”); po znalezieniu pierwszego elementu większego od klucza wystarczy sprawdzić ostatnie „przeskoczone” k−1 elementów. Dla len → ∞ jest w przeciętnym przypadku **asymptotycznie k razy szybszy** od sekwencyjnego (dla niewielkich k). Przy dobrym k (ćwiczenie: k = √len) W(len) = (1/k)·Θ(len) — ale to **wciąż złożoność liniowa**, tego samego rzędu.
+
+**Wyszukiwanie binarne — idea:** (1) dopóki długość ciągu jest dodatnia: (2) porównaj klucz ze środkowym elementem; (3) równość → zwróć bieżący indeks; (4) klucz mniejszy → szukaj tylko w lewym podciągu; (5) większy → tylko w prawym; (6) wróć do 1; (7) długość spadła do zera → klucza nie ma.
+
+```pseudo
+search(S, len, key){
+
+  l = 0
+  r = len - 1
+
+  while(l <= r){
+    m = (l + r)/2
+    if(S[m] == key) return m
+    else
+      if(S[m] > key) r = m - 1
+      else l = m + 1
+  }
+
+  return -1
+}
+```
+
+Zakłada się, że cały ciąg jest w **pamięci RAM** (o dostępie swobodnym) — sprawdzenie dowolnego S[m] ma czas stały. **Analiza:** rozmiar danych — len; operacja dominująca — porównanie `S[m] == key`; z każdą iteracją bieżący ciąg staje się **2 razy krótszy**, więc **W(len) = Θ(log₂ len)**, **A(len) = Θ(log₂ len)**, **S(len) = O(1)**. (Na liście dowiązaniowej lub „wolnym” dysku dostęp do S[m] nie jest stały — wtedy ta analiza nie działa.)
+
+### Statystyki pozycyjne
+
+**k-ta statystyka pozycyjna** — k-ty najmniejszy (lub największy) element ciągu; minimum to przypadek k = 1. W ciągu posortowanym zadanie jest trywialne, więc rozważamy ciągi **nieuporządkowane**.
+
+**Drugi najmniejszy — second(S, len)** (elementy różne). Rozwiązanie proste: znajdź minimum, usuń je, znajdź minimum ponownie — **2·len − 1** porównań. **Algorytm turniejowy (dziel i rządź):** elementy grają w parach, mniejszy przechodzi dalej; zwycięzca = minimum. Drugi najmniejszy jest wśród elementów, które **przegrały ze zwycięzcą** (tylko z nim mógł przegrać). Turniej to drzewo binarne o **Θ(log₂ len)** poziomach; w pierwszej fazie **len − 1** porównań (każde porównanie eliminuje dokładnie jeden element), w drugiej szukamy minimum wśród ok. log₂ len kandydatów: **W(len) = len − 1 + Θ(log₂ len)** — asymptotycznie 2 razy szybciej niż dwukrotne szukanie minimum.
+
+**k-ty najmniejszy — kthSmallest(S, len, k)** (1 ≤ k ≤ len, nic nie zakładamy o S). Naiwnie: k razy szukamy minimum — ok. k·len porównań.
+
+:::def Procedura partition(S, l, r)
+Bierze **pierwszy** element m podciągu S[l..r] i przestawia elementy tak, że na lewo od m są elementy **niewiększe**, a na prawo **niemniejsze** (niekoniecznie posortowane). **Zwraca** ostateczną pozycję i elementu m. Operacja dominująca: porównanie 2 elementów; rozmiar danych n = r − l + 1; można ją zaprojektować z **W(n) = n + O(1)** i **S(n) = O(1)** (kod — w wykładzie o QuickSort, [temat 7](topic:t07)).
+:::
+
+**Algorytm Hoare'a:** wykonaj partition; jeśli zwrócony indeks i = k, zwróć S[k]; jeśli i < k — powtarzaj na części na prawo od i, w przeciwnym razie na lewo („dziel i rządź”, jak w binSearch, ale podział rzadko jest w połowie). Dzięki liniowej partition **przeciętna** złożoność jest **liniowa — Θ(n) niezależnie od k**. Pesymistycznie jest **kwadratowa** (gdy partition za każdym razem trafia na koniec podciągu, który maleje tylko o 1).
+
+### Przykładowe pytania ze slajdów
+
+- Specyfikacja problemu wyszukiwania; algorytm skoków co k (specyfikacja, działanie, poprawność, złożoność, symulacja).
+- Wyszukiwanie binarne: specyfikacja, działanie, **kod z pamięci (wersja z wykładu)**, poprawność, złożoność, symulacja.
+- Statystyka pozycyjna; algorytm turniejowy; specyfikacja i złożoność partition; idea algorytmu Hoare'a; **dlaczego Hoare ma kwadratową pesymistyczną złożoność?**
+
 === summary ===
+
+## Wersja 2026/2027 (M. Sydow)
+
+- search: l = 0, r = len − 1, m = (l + r)/2; równość → m; S[m] > key → r = m − 1, wpp. l = m + 1; brak → −1.
+- binarne: W = A = Θ(log len), S = O(1) (zakładamy RAM); sekwencyjne W = len; skoki co k: liniowo, ~k razy szybciej (k = √len).
+- drugi najmniejszy: proste 2len − 1; turniej len − 1 + Θ(log len).
+- partition: W(n) = n + O(1), S = O(1); Hoare: A = Θ(n) niezależnie od k, W = Θ(n²).
+
 
 ## Wyszukiwanie
 

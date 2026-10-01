@@ -14,6 +14,11 @@ desc: Lista plików wykładowych i zestawów ćwiczeń, z których korzysta stro
 |---|---|---|
 | correctness1-pl.pdf — *(1) Poprawność algorytmów* | organizacja, pseudokod, specyfikacja, poprawność całkowita i częściowa, własność stopu, niezmienniki | [2](topic:t02) (sekcja „wersja z wykładu 2026/2027”) |
 | complexity2-pl.pdf — *Złożoność obliczeniowa algorytmów* | operacje dominujące, rozmiar danych, W(n), A(n), S(n), 5 notacji asymptotycznych, rzędy funkcji | [3](topic:t03) (sekcja „wersja z wykładu 2026/2027”) |
+| searching3-pl.pdf — *Wyszukiwanie* | dziel i rządź, wyszukiwanie sekwencyjne, skoki co k, wyszukiwanie binarne (kod `search`), statystyki pozycyjne, turniej, partition, algorytm Hoare'a | [4](topic:t04) (sekcja „wersja z wykładu 2026/2027”) |
+| sortOne4-pl.pdf — *Sortowanie 1* | problem sortowania, SelectionSort, InsertionSort, MergeSort i merge, listy dowiązaniowe | [5](topic:t05), [6](topic:t06) |
+| sortTwo5-pl.pdf — *Sortowanie 2* | stabilność, QuickSort i partition, dolna granica n log n, CountSort, RadixSort | [7](topic:t07) |
+| recursion6-pl.pdf — *Rekurencja* | silnia, Fibonacci, równania liniowe 2. rzędu, wieże Hanoi, 3 schematy rekurencji, twierdzenie o rekurencji uniwersalnej | [6](topic:t06) |
+| listsAndArrays7-pl.pdf — *Listy i tablice* | listy jedno-/dwukierunkowe i cykliczne, splice, abstrakcyjne struktury danych: stos, kolejka, kolejka dwustronna | [9](topic:t09) |
 | Treści zadań dopuszczeniowych, przykładowe dane z rozwiązaniami, wskazówki do części teoretycznej | typy zadań na sprawdzian praktyczny, zakres sprawdzianu wiedzy | [Sprawdziany 2026/2027](page:exams) |
 
 **Literatura polecana w 2026/2027:** Cormen, Leiserson, Rivest, Stein — *Wprowadzenie do algorytmów*, PWN 2018 (ang. *Introduction to Algorithms*); K. Mehlhorn, P. Sanders — *Algorithms and Data Structures. The Basic Toolbox*, Springer 2008; G. Mirkowska i in. — *Algorytmy i struktury danych — zadania*, PJWSTK 2005 (zbiór zadań, częściowo z rozwiązaniami); L. Banachowski, K. Diks, W. Rytter — *Algorytmy i struktury danych*, PWN 2018. Inne ze slajdów: N. Wirth — *Algorytmy + struktury danych = programy*; A. Aho, J. Hopcroft, J. Ullman — *Algorytmy i struktury danych*; W. Lipski — *Kombinatoryka dla programistów*; do pogłębienia: D. Knuth — *The Art of Computer Programming*, Ch. Papadimitriou — *Computational Complexity*.

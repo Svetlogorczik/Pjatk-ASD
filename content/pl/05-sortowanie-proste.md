@@ -10,7 +10,7 @@ exercises: asd 05.pdf (zad. 1)
 ---
 
 :::exam Sprawdzian 2026/2027
-Algorytmy z tego tematu są w zakresie **sprawdzianu praktycznego 2026/2027**. Obowiązują **wersje ze slajdów M. Sydowa** — mogą się różnić w szczegółach od opisanych tu wersji z 2025/2026. Wersje zgodne z oficjalnymi przykładowymi odpowiedziami i zadania treningowe: [Sprawdziany 2026/2027](page:exams).
+Ten temat powstał na podstawie wykładów 2025/2026. **Na sprawdzianach 2026/2027 obowiązują wersje ze slajdów M. Sydowa** — znajdziesz je w sekcji [„Wersja z wykładu 2026/2027”](topic:t05#wersja-z-wykładu-2026-2027-m-sydow-sortowanie-1) na końcu tematu (kod przepisany ze slajdów). Zadania dopuszczeniowe i zadania treningowe: [Sprawdziany 2026/2027](page:exams).
 :::
 
 ## Problem sortowania
@@ -183,7 +183,71 @@ Wskazówki autora strony do zadań typu „przedstaw działanie algorytmu … na
 - W InsertionSort podaj **wstawiany element x** i ile elementów przesunięto.
 - Na końcu policz porównania — prowadzący często o to pytają.
 
+
+## Wersja z wykładu 2026/2027 (M. Sydow) — „Sortowanie 1”
+
+:::exam
+Na sprawdzianach obowiązują poniższe wersje **selectionSort** i **insertionSort** ze slajdów (tablice od 0, licznik `next`, warunek `temp < arr[curr - 1]`). Pytania ze slajdów: pomysł, działanie, **kod** i analiza każdego algorytmu.
+:::
+
+:::def Problem sortowania
+- **Input:** S — ciąg elementów, które można uporządkować relacją porządku liniowego ≤_R (np. liczby naturalne); len — długość ciągu (liczba naturalna).
+- **Output:** S' — ciąg z tych samych elementów co S, uporządkowany **niemalejąco** (∀ 0 < i < len: S[i−1] ≤_R S[i]).
+:::
+
+W kursie dla prostoty sortujemy liczby naturalne — poza CountSort nie ma to wpływu na algorytmy. Sortowanie przyspiesza wyszukiwanie i operacje na bazach danych, pomaga w wizualizacji i obliczaniu statystyk.
+
+**Selection Sort** — znajdujemy minimum, zamieniamy je z pierwszym elementem i powtarzamy na ciągu od kolejnego indeksu, dopóki bieżący ciąg ma więcej niż 1 element.
+
+```pseudo
+selectionSort(S, len){
+  i = 0
+  while(i < len){
+    mini = indexOfMin(S, i, len)
+    swap(S, i, mini)
+    i++
+  }
+}
+```
+
+`indexOfMin(S, i, len)` zwraca indeks minimum wśród S[j], i ≤ j < len; `swap(S, i, mini)` zamienia S[i] i S[mini]. **Analiza:** operacja dominująca — porównanie 2 elementów; rozmiar danych — len. W i-tej iteracji szukamy minimum w ciągu długości len − i: **W(len) = Σ_{i=1}^{len−1} i = len(len−1)/2 = Θ(len²)**. **A(len) = W(len)** — algorytm zawsze wykonuje tyle samo porównań, **nawet dla ciągu już posortowanego**.
+
+**Insertion Sort** — od drugiej pozycji (`next`) „przepychamy” bieżący element wstecz (porównując), aż znajdzie właściwe miejsce i pierwsze next + 1 elementów jest posortowane.
+
+```pseudo
+insertionSort(arr, len){
+
+  for(next = 1; next < len; next++){
+
+    curr = next;
+    temp = arr[next];
+
+    while((curr > 0) && (temp < arr[curr - 1])){
+
+      arr[curr] = arr[curr - 1];
+      curr--;
+    }
+
+    arr[curr] = temp;
+  }
+}
+```
+
+Niezmiennik pętli zewnętrznej — analogiczny jak w SelectionSort (początkowy fragment jest posortowany). **Najgorszy przypadek:** dane **odwrotnie posortowane**: **W(n) = n(n−1)/2 = ½n² + Θ(n) = Θ(n²)**. Dla danych **już posortowanych** wystarczy **n − 1** porównań — algorytm „**dostosowuje ilość pracy**” do stopnia posortowania. **Przeciętnie** (każda permutacja liczb 1..n jednakowo prawdopodobna) w i-tej iteracji średnio (1/i)·Σ_{j=1}^{i} j = (i+1)/2 porównań, łącznie **A(n) = Σ_{i=1}^{n−1} (i+1)/2 = ¼n² + Θ(n) = Θ(n²)** — 2 razy szybciej niż SelectionSort, ale wciąż kwadratowo (3 razy więcej danych → ok. 9 razy dłużej).
+
+Kwadratowa złożoność jest za wysoka dla dużych danych — np. miliard liczb to tylko 8 GB w RAM. Rozwiązanie: **MergeSort** ([temat 6](topic:t06)).
+
+### Przykładowe pytania ze slajdów
+
+Istota problemu sortowania i zastosowania; selectionSort, insertionSort, mergeSort — pomysł, działanie, kod, analiza; listy kontra tablice (wady i zalety); funkcja merge na listach zamiast tablic.
+
 === summary ===
+
+## Wersja 2026/2027 (M. Sydow)
+
+- Selection: W = A = len(len−1)/2 = Θ(len²) — także dla posortowanych.
+- Insertion: W = n(n−1)/2 (odwrotnie posortowane), posortowane: n − 1, A = ¼n² + Θ(n).
+
 
 ## Pojęcia
 

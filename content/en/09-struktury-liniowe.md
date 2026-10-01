@@ -9,6 +9,10 @@ sources: asd6.pdf (stack); asd7.pdf (lists); Wyklady 2009/asd 09 wyklad_7.pdf (l
 exercises: asd 07.pdf (tasks 1–3)
 ---
 
+:::exam 2026/2027 tests
+This topic was written from the 2025/2026 lectures. **The 2026/2027 tests use the versions from M. Sydow's slides** — you will find them in the section ["2026/2027 lecture version"](topic:t09#2026-2027-lecture-version-m-sydow-lists-and-arrays-ads) at the end of the topic (code copied from the slides). Qualifying tasks and practice tasks: [Tests 2026/2027](page:exams).
+:::
+
 ## Abstract data type
 
 Lecture asd6 introduces an important idea: **first define what a structure can do** (which operations it has and how they behave), and **only then**, separately, how to implement it.
@@ -200,7 +204,80 @@ An interesting variant of MergeSort without recursion: put one-element lists int
 @include t09-list-algorithms.java
 ```
 
+
+## 2026/2027 lecture version (M. Sydow) — "Lists and arrays, ADS"
+
+:::exam
+The knowledge test covers: the definition of an **abstract data structure** and how it differs from concrete structures, the interfaces of a stack, queue and double-ended queue, and their implementations (table below) with complexities.
+:::
+
+Operations on sequences are of two types: **absolute access** (by index) and **modification** (at a place identified by a concrete element). **Arrays** give absolute access in constant time, but inserting in the middle is linear (shifting). **Linked lists** give fast modifications: adding/removing the first or last element, an element after/before a given one, inserting/removing a subsequence, joining sequences, reversing.
+
+A **linked list** is a concrete structure made of **nodes** (holding elements) connected by **links** (pointers). Variants: singly linked, doubly linked, cyclic.
+
+```pseudo
+Class SLNode<Type>{
+ Type element
+ SLNode<Type> next //wskazuje kolejny węzeł w liście
+}
+
+Class SList<Type>{
+ SLNode<Type> head //wskazuje początek listy (jedyny dostęp do listy)
+}
+
+print(SList l){
+ node = l.head
+ while(node not null)
+   print node.element
+   node = node.next
+}
+```
+
+The last pointer always points to NULL; in an empty list head = NULL. Typical for list algorithms: `while(node not null)` (works for an empty list too) and the step `node = node.next`. A **doubly linked** list (`DLNode`: next and prev; sometimes an extra pointer to the end) uses 2 times more memory for links but allows moving both ways. A control question from the slides: which list for a linked version of InsertionSort? (Answer by the site author: doubly linked — the element is "pushed" backwards.) A **cyclic list** — the last node is linked to the first; in a doubly linked cyclic list always (next.prev) == (prev.next) == this. Similarly "cyclic arrays" — indices modulo n (e.g. a queue on an array).
+
+**Operations on sequences:** isEmpty, first, last, insertAfter/insertBefore, moveAfter/moveBefore, removeAfter/removeBefore, pushBack/pushFront, popBack/popFront, concat, splice, size, findNext. Most modifications are a special case of **splice(a, b, t)** — cut out the sublist (a,…,b) and insert it right after t; on a doubly linked list it has **constant complexity**, e.g. moveAfter(a, b) = splice(a, a, b).
+
+```pseudo
+splice(a,b,t){
+ // cut out (a,...,b):
+ a' = a.prev; b' = b.next; a'.next = b'; b'.prev = a'
+ // insert (a,...,b) after t:
+ t'= t.next;  b.next = t'; a.prev = t; t.next = a; t'.prev = b
+}
+```
+
+**Lists vs arrays:** + modifications in constant time (arrays: linear), + dynamic size; − memory overhead for links (up to 8 bytes per link on 64 bits), − slow (linear) absolute access.
+
+:::def Abstract data structure
+An **ADS** is defined by a **set of operations** that can be performed on the data, without going into how they are implemented — it hides the implementation (lists, arrays, trees…) and exposes only an **interface**.
+- **Stack (LIFO):** push(Type e), Type pop() (remove and return the most recently added — modifying), Type top() (return without removing).
+- **Queue (FIFO):** inject(Type e), Type out() (remove the least recently added — modifying), Type front() (return without removing). Names vary (e.g. in instead of inject), the meaning is always this.
+- **Double-ended queue (deque):** first(), last(), pushFront(Type), pushBack(Type), popFront(), popBack() — a generalisation of a stack and a queue.
+:::
+
+| ADS | Implementation (all operations in **constant** time) |
+|---|---|
+| Stack | singly linked list, array |
+| Queue | singly linked list (with a tail pointer), cyclic array |
+| Deque | doubly linked list, cyclic array |
+
+A conscious choice of implementation can significantly affect the complexity of operations. Why? (explanation by the site author) Stack: everything happens at one end (list head / array end). Queue: add at the end, remove from the front — in a plain array we would have to shift, in a cyclic one indices "wrap" modulo n. Deque: popBack on a singly linked list would require traversing the whole list, hence doubly linked.
+
+### Sample tasks from the slides
+
+- Describe singly, doubly linked and cyclic lists; pseudocode of the classes; simple functions (add at the end, number of elements).
+- Examples of algorithms where a singly linked list suffices and where a doubly linked one is needed; compare lists and arrays.
+- Implement a queue and a stack on a list and on an array, compare (complexity, pros/cons).
+- Design an ADS — a queue with an extra fast **reverse order** operation (idea by the site author: a deque on a doubly linked list + a "reversed" flag that swaps the roles of both ends — reversal in O(1)).
+
 === summary ===
+
+## 2026/2027 version (M. Sydow)
+
+- ADS = a set of operations (interface). Stack: push/pop/top (LIFO). Queue: inject/out/front (FIFO). Deque: first/last/pushFront/pushBack/popFront/popBack.
+- Stack: singly linked list/array; queue: singly linked list/cyclic array; deque: doubly linked list/cyclic array — all O(1).
+- splice(a, b, t) on a doubly linked list — O(1).
+
 
 ## ADT
 

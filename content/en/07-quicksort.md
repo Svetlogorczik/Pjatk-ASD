@@ -9,8 +9,8 @@ sources: asd5.pdf (§2 QuickSort, §3 CountSort, RadixSort); asd6.pdf (QuickSort
 exercises: asd 05.pdf (tasks 2, 5), asd 06.pdf (tasks 1, 3)
 ---
 
-:::exam 2026/2027 practical test
-The algorithms in this topic are within the scope of the **2026/2027 practical test**. **The versions from M. Sydow's slides** apply — they may differ in details from the 2025/2026 versions described here. Versions that reproduce the official sample answers, plus practice tasks: [Tests 2026/2027](page:exams).
+:::exam 2026/2027 tests
+This topic was written from the 2025/2026 lectures. **The 2026/2027 tests use the versions from M. Sydow's slides** — you will find them in the section ["2026/2027 lecture version"](topic:t07#2026-2027-lecture-version-m-sydow-sorting-2) at the end of the topic (code copied from the slides). Qualifying tasks and practice tasks: [Tests 2026/2027](page:exams).
 :::
 
 ## QuickSort — quick sort (Hoare, 1960)
@@ -227,7 +227,90 @@ A summary table prepared by the site author from the lecture results.
 | CountingSort | O(n + m) | O(n + m) | O(n + m) | yes |
 | RadixSort | O(d(n + k)) | O(d(n + k)) | O(n + k) | yes |
 
+
+## 2026/2027 lecture version (M. Sydow) — "Sorting 2"
+
+:::exam
+The tests use the **partition / quicksort / countSort** code from the slides below. The qualifying tasks (partition, CountSort) are solved step by step on the [Tests 2026/2027](page:exams) page.
+:::
+
+:::def Stability
+A sorting algorithm is **stable** ⇔ it keeps the original relative order of elements with equal values. E.g. 4, 2ₐ, 3, 1, 2_b, 5, 2_c → 1, 2ₐ, 2_b, 2_c, 3, 4, 5. Useful for sorting multi-attribute records by several attributes one after another (e.g. age, salary) — sorting by the next attribute does not destroy the result of the previous one.
+:::
+
+**QuickSort** (C.A.R. Hoare, "divide and conquer"): partition picks the **pivot** — in this lecture the **first** element — and rearranges the elements so that those to the left are not greater and those to the right not smaller; it returns the pivot's index. Example: 5,2,1,7,2,6,1,3,4,8,6,0 → 3,2,1,0,2,4,1,**5**,6,8,6,7 (returns 7). Then the parts left and right of the pivot are sorted recursively (if the pivot lands at an end, one part is empty).
+
+```pseudo
+partition(a, l, r){
+
+  i = l + 1;
+  j = r;
+  p = a[l]; //"pivot"
+  temp;
+
+  do{
+    while((i < r) && (a[i] <= p)) i++;
+    while((j > i) && (a[j] >= p)) j--;
+    if(i < j) {temp = a[i]; a[i] = a[j]; a[j] = temp;}
+  }while(i < j);
+  // when (i==r):
+  if(a[i] > p) {a[l] = a[i - 1]; a[i - 1] = p; return i - 1;}
+  else {a[l] = a[i]; a[i] = p; return i;}
+}
+
+quicksort(a, l, r){
+
+    if(l >= r) return;
+    k = partition(a, l, r);
+    quicksort(a, l, k - 1);
+    quicksort(a, k + 1, r);
+}
+```
+
+**Analysis of partition:** index i moves right until it meets a number greater than p, j moves left until it meets a smaller one — then they are swapped; at the end p is swapped with the last element of the "left" part. A comparison is made once per index position — as many as the elements minus one: **W(n) = A(n) = Θ(n)**, **S(n) = O(1)** (works **in place**).
+
+**Analysis of QuickSort:** each recursion level costs Θ(n) comparisons in total, so everything depends on the **recursion depth**. Pivot always in the middle → depth Θ(log n) → **Θ(n log n)**. Pivot always at an end (e.g. a **sorted or reverse-sorted** sequence) → the sequence shrinks by only 1, depth Θ(n) → **W(n) = Θ(n²)**. On average (every permutation equally likely) depth Θ(log n): **A(n) = Θ(n log n)** with a constant of about **1.44** — QuickSort is on average faster than MergeSort. The basic version is **not stable**; improvements exist (guaranteed n log n, stability).
+
+**Lower bound.** Sorting by comparisons is a **decision tree**: each node is a comparison "a < b?", the leaves are all **n!** permutations. The height of a binary tree with n! leaves is at least log₂(n!) = **Θ(n log n)** — no comparison sort has a lower order of **average and worst-case** complexity than Θ(n log n). Faster is only possible **without comparisons** — at the cost of memory ("**time vs memory**").
+
+**CountSort** (direct addressing, data in RAM). Elements are **natural** numbers. Auxiliary arrays: **counts** (length = the maximum + 1) and **result**. Three phases: (1) count occurrences, (2) cumulative summing from left to right (how many elements are not greater than a given one), (3) traverse the input again and send each element to result at the address from counts (the counter is decremented before use); **for stability the input is traversed "from the back"**.
+
+```pseudo
+countSort(a, l){
+
+    max = maxValue(a, l);
+    l1 = max + 1;
+    counts[l1];
+    result[l];
+    for(i = 0; i < l1; i++) counts[i] = 0;
+
+    for(i = 0; i < l; i++) counts[a[i]]++;
+    for(i = 1; i < l1; i++) counts[i] += counts[i - 1];
+    for(i = l - 1; i >= 0; i--)
+       result[--counts[a[i]]] = a[i];
+}
+```
+
+Example from the slides: (3,2,5,1,2,6,8,1,2,4), max = 8 → counts after phase 1: 0,2,3,1,1,1,1,0,1; after phase 2: 0,2,5,6,7,8,9,9,10. **Analysis:** dominant operation — assigning a value in an array; data size: n (length) and **m (maximum value)**; **A(n,m) = W(n,m) = 2n + 2m = Θ(n + m)** — linear; **S(n,m) = n + m = Θ(n + m)**. A poor choice when m ≫ n (e.g. the sequence (10⁹, 1) — a billion steps and an array of length 10⁹).
+
+**RadixSort** — a scheme for sorting fixed-length multi-element objects (strings, multi-digit numbers) using an auxiliary **stable** algorithm: first by the **last** position, then the second to last, … up to the first. For a small alphabet (digits 0–9, letters) CountSort is a good auxiliary algorithm. Example: (212, 305, 115, 202, 131) → by the last: (131, 212, 202, 305, 115) → by the middle: (202, 305, 212, 115, 131) → by the first: (115, 131, 202, 212, 305).
+
+### Sample questions from the slides
+
+- The definition of stability and what it is for; for each of the 5 algorithms — is it stable and **which place in the code** decides it.
+- The specification of partition and its result on a given array; analysis (time, memory). QuickSort pseudocode, analysis, improvements.
+- The lower bound for comparison sorting.
+- CountSort on a given sequence — the final content of counts; analysis. Pairwise comparison of the 5 sorting algorithms.
+- Extending CountSort to integers (negative too). RadixSort on 3-digit numbers; complexity for d-digit numbers (answer by the site author: d passes of CountSort, i.e. Θ(d·(n + 10))).
+
 === summary ===
+
+## 2026/2027 version (M. Sydow)
+
+- partition (pivot = first): W = A = Θ(n), S = O(1); QuickSort A = Θ(n log n) (≈1.44), W = Θ(n²) for sorted input.
+- Lower bound for comparison sorting: log₂ n! = Θ(n log n).
+- CountSort: W = A = Θ(n + m), S = Θ(n + m), stable (phase 3 from the back). RadixSort: from the last position, stable auxiliary sort.
+
 
 ## QuickSort
 
