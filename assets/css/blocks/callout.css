@@ -1,0 +1,64 @@
+/* Block: callout — coloured boxes (definition, tip, own addition, exam note...). */
+.callout {
+  --callout-c: var(--c-info);
+  --callout-bg: var(--c-info-soft);
+  padding: 14px 18px 16px;
+  border: 1px solid color-mix(in srgb, var(--callout-c) 28%, transparent);
+  border-left: 4px solid var(--callout-c);
+  border-radius: var(--radius-m);
+  background: var(--callout-bg);
+  font-size: .96em;
+}
+
+.callout__title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+  color: var(--callout-c);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: .02em;
+  text-transform: uppercase;
+}
+
+.callout__icon {
+  display: inline-grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--callout-c);
+  color: var(--c-surface);
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1;
+  text-transform: none;
+}
+.callout__icon::before { content: "i"; }
+
+.callout__body { line-height: 1.7; }
+
+.callout--own { --callout-c: var(--c-own); --callout-bg: var(--c-own-soft); border-style: dashed; border-left-style: solid; }
+.callout--own .callout__icon::before { content: "✎"; }
+
+.callout--analogy { --callout-c: var(--c-own); --callout-bg: var(--c-own-soft); border-style: dashed; border-left-style: solid; }
+.callout--analogy .callout__icon::before { content: "≈"; }
+
+.callout--tip { --callout-c: var(--c-tip); --callout-bg: var(--c-tip-soft); }
+.callout--tip .callout__icon::before { content: "✓"; }
+
+.callout--warn { --callout-c: var(--c-warn); --callout-bg: var(--c-warn-soft); }
+.callout--warn .callout__icon::before { content: "!"; }
+
+.callout--info .callout__icon::before { content: "i"; }
+
+.callout--exam { --callout-c: var(--c-exam); --callout-bg: var(--c-exam-soft); }
+.callout--exam .callout__icon::before { content: "★"; }
+
+.callout--def { --callout-c: var(--c-def); --callout-bg: var(--c-def-soft); }
+.callout--def .callout__icon::before { content: "≡"; }
+
+.callout--example { --callout-c: var(--c-example); --callout-bg: var(--c-example-soft); }
+.callout--example .callout__icon::before { content: "→"; }

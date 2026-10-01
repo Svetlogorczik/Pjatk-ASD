@@ -1,0 +1,28 @@
+/* Block: lang-switch (PL / EN / RU segmented control). */
+.lang-switch {
+  display: inline-flex;
+  padding: 3px;
+  border: 1px solid var(--c-border);
+  border-radius: 999px;
+  background: var(--c-surface);
+}
+
+.lang-switch__button {
+  min-width: 38px;
+  padding: 5px 9px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--c-text-muted);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .03em;
+  transition: background-color .15s var(--ease), color .15s var(--ease);
+}
+.lang-switch__button:hover { color: var(--c-text); }
+
+.lang-switch__button--active {
+  background: var(--c-accent);
+  color: var(--c-accent-text);
+}
+.lang-switch__button--active:hover { color: var(--c-accent-text); }

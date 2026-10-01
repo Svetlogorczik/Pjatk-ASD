@@ -1,0 +1,43 @@
+/* Block: pager — previous / next topic links. */
+.pager {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 64px;
+}
+
+.pager__link {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px 18px;
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-m);
+  background: var(--c-surface);
+  text-decoration: none;
+  transition: border-color .15s var(--ease), box-shadow .15s var(--ease);
+}
+.pager__link:hover {
+  border-color: var(--c-accent);
+  box-shadow: var(--shadow-m);
+}
+
+.pager__link--next {
+  grid-column: 2;
+  text-align: right;
+}
+
+.pager__hint {
+  color: var(--c-text-faint);
+  font-size: 13px;
+}
+
+.pager__title {
+  color: var(--c-accent);
+  font-weight: 600;
+}
+
+@media (max-width: 600px) {
+  .pager { grid-template-columns: 1fr; }
+  .pager__link--next { grid-column: 1; }
+}

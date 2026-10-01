@@ -1,0 +1,22 @@
+/* Block: toast — short status message (e.g. copy failed). */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  z-index: 80;
+  max-width: calc(100% - 32px);
+  padding: 10px 16px;
+  border-radius: var(--radius-m);
+  background: var(--c-text);
+  color: var(--c-bg);
+  font-size: 14px;
+  box-shadow: var(--shadow-m);
+  opacity: 0;
+  transform: translate(-50%, 8px);
+  transition: opacity .2s var(--ease), transform .2s var(--ease);
+}
+
+.toast--visible {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}

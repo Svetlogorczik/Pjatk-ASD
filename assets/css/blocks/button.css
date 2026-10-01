@@ -1,0 +1,49 @@
+/* Block: button. */
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 8px 16px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-m);
+  background: var(--c-surface-2);
+  color: var(--c-text);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.2;
+  text-decoration: none;
+  transition: background-color .15s var(--ease), border-color .15s var(--ease), color .15s var(--ease), transform .15s var(--ease);
+}
+.button:hover { background: var(--c-surface-3); }
+.button:active { transform: translateY(1px); }
+
+.button--primary {
+  background: var(--c-accent);
+  color: var(--c-accent-text);
+}
+.button--primary:hover { background: var(--c-accent-hover); }
+
+.button--ghost {
+  border-color: var(--c-border-strong);
+  background: transparent;
+}
+.button--ghost:hover { background: var(--c-surface-2); }
+
+.button--icon {
+  width: 40px;
+  padding: 0;
+  background: transparent;
+}
+.button--icon:hover { background: var(--c-surface-2); }
+
+.button__icon {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}

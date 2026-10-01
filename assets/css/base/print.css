@@ -1,0 +1,25 @@
+/* Print: only the article (or only the "konspekt" panel when printed from it). */
+@media print {
+  :root { --c-bg: #fff; --c-surface: #fff; --c-text: #000; }
+
+  .header,
+  .sidebar,
+  .toc,
+  .pager,
+  .article__actions,
+  .code-block__copy,
+  .page__skip { display: none !important; }
+
+  .page__layout { display: block; }
+  .page__main { padding: 0; }
+  .task__reveal { border: 0; }
+  .task__reveal:not([open]) { display: none; }
+  .code-block, .task, .callout, .diagram { break-inside: avoid; box-shadow: none; }
+
+  .page--print-drawer .page__layout { display: none; }
+  .page--print-drawer .drawer { position: static; }
+  .page--print-drawer .drawer__backdrop,
+  .page--print-drawer .drawer__actions { display: none; }
+  .page--print-drawer .drawer__panel { position: static; width: auto; box-shadow: none; transform: none; }
+  .page--print-drawer .drawer__body { overflow: visible; }
+}

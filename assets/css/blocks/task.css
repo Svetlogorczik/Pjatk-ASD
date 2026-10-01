@@ -1,0 +1,103 @@
+/* Block: task — exercise card with collapsible hint and solution. */
+.task {
+  padding: 20px 22px;
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-l);
+  background: var(--c-surface);
+  box-shadow: var(--shadow-s);
+}
+.task + .task { margin-top: 20px; }
+
+.task__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 10px;
+  margin-bottom: 10px;
+  font-size: 12.5px;
+}
+
+.task__number {
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--c-accent);
+  color: var(--c-accent-text);
+  font-weight: 700;
+}
+
+.task__level {
+  color: var(--c-warn);
+  letter-spacing: 1px;
+}
+
+.task__level-text {
+  color: var(--c-text-muted);
+  letter-spacing: 0;
+}
+
+.task__source {
+  color: var(--c-text-faint);
+}
+
+.task__source--own {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--c-own-soft);
+  color: var(--c-own);
+  font-weight: 600;
+}
+
+.task__title {
+  margin-bottom: 8px;
+  font-size: 1.12em;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.task__body { font-size: .98em; }
+
+.task__reveal {
+  margin-top: 14px;
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-m);
+  background: var(--c-bg);
+}
+
+.task__toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  font-size: 14px;
+  font-weight: 700;
+  list-style: none;
+  cursor: pointer;
+  user-select: none;
+}
+.task__toggle::-webkit-details-marker { display: none; }
+.task__toggle::before {
+  content: "+";
+  display: inline-grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--c-surface-3);
+  font-size: 15px;
+  line-height: 1;
+  transition: transform .2s var(--ease);
+}
+.task__reveal[open] > .task__toggle::before { content: "−"; }
+
+.task__reveal--hint > .task__toggle { color: var(--c-tip); }
+.task__reveal--solution > .task__toggle { color: var(--c-accent); }
+
+.task__content {
+  padding: 4px 16px 16px;
+  font-size: .96em;
+}
+
+@media (max-width: 600px) {
+  .task { padding: 16px 14px; }
+  .task__content { padding: 4px 12px 14px; }
+}

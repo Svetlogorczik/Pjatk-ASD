@@ -1,0 +1,88 @@
+/* Block: code-block — highlighted code with language label and copy button. */
+.code-block {
+  overflow: hidden;
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-m);
+  background: var(--c-code-bg);
+  box-shadow: var(--shadow-s);
+}
+
+.code-block__header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 38px;
+  padding: 4px 6px 4px 14px;
+  border-bottom: 1px solid var(--c-border);
+  background: var(--c-code-header);
+  font-size: 12px;
+}
+
+.code-block__lang {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--c-accent-soft);
+  color: var(--c-accent);
+  font-weight: 700;
+  letter-spacing: .03em;
+}
+
+.code-block__title {
+  overflow: hidden;
+  color: var(--c-text-muted);
+  font-family: var(--font-mono);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.code-block__copy {
+  margin-left: auto;
+  padding: 5px 12px;
+  border: 1px solid var(--c-border-strong);
+  border-radius: 999px;
+  background: var(--c-surface);
+  color: var(--c-text-muted);
+  font-size: 12px;
+  font-weight: 600;
+  transition: color .15s var(--ease), border-color .15s var(--ease), background-color .15s var(--ease);
+}
+.code-block__copy:hover {
+  border-color: var(--c-accent);
+  color: var(--c-accent);
+}
+
+.code-block__copy--done,
+.code-block__copy--done:hover {
+  border-color: var(--c-success);
+  background: var(--c-success-soft);
+  color: var(--c-success);
+}
+
+.code-block__pre {
+  margin: 0;
+  overflow-x: auto;
+  padding: 16px 18px;
+  color: var(--c-code-text);
+  font-family: var(--font-mono);
+  font-size: 13.5px;
+  line-height: 1.65;
+  tab-size: 4;
+  scrollbar-width: thin;
+}
+
+.code-block__code { font-family: inherit; }
+
+.code-block--plain .code-block__pre { color: var(--c-text); }
+
+.code-block__token--keyword { color: var(--c-tok-keyword); font-weight: 600; }
+.code-block__token--string { color: var(--c-tok-string); }
+.code-block__token--number { color: var(--c-tok-number); }
+.code-block__token--comment { color: var(--c-tok-comment); font-style: italic; }
+.code-block__token--function { color: var(--c-tok-function); }
+.code-block__token--type { color: var(--c-tok-type); }
+.code-block__token--literal { color: var(--c-tok-literal); font-weight: 600; }
+.code-block__token--operator { color: var(--c-tok-operator); }
+
+@media (max-width: 600px) {
+  .code-block__pre { padding: 14px; font-size: 12.5px; }
+}
